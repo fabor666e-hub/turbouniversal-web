@@ -12,6 +12,7 @@ const enlaces = [
   { href: "/", texto: "Inicio" },
   { href: "/productos", texto: "Productos" },
   { href: "/nosotros", texto: "Nosotros" },
+  { href: "/puntos-de-venta", texto: "Puntos de venta" },
 ];
 
 export function Header() {
@@ -75,7 +76,7 @@ export function Header() {
         </div>
 
         {/* Menú en celular */}
-        <nav className="mt-3 flex justify-center gap-8 text-sm font-medium text-[#1a2150] md:hidden">
+        <nav className="mt-3 flex flex-wrap justify-center gap-x-5 gap-y-1 text-sm font-medium text-[#1a2150] md:hidden">
           {enlaces.map((e) => (
             <Link
               key={e.href}
@@ -121,6 +122,7 @@ export function Footer() {
           <p className="font-semibold">Contacto</p>
           <p className="mt-3 text-sm text-white/70">WhatsApp: +57 313 827 5485</p>
           <a
+            data-track="whatsapp-pie"
             href={`https://wa.me/${NUMERO_WHATSAPP}`}
             target="_blank"
             rel="noopener noreferrer"
@@ -142,11 +144,12 @@ export function WhatsAppFlotante() {
     <div className="fixed bottom-6 right-6 z-30 flex flex-col items-end gap-3">
       <div className="flex gap-3">
         <a
+          data-track="instagram"
           href={INSTAGRAM}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Instagram de Turboman"
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-red shadow-lg backdrop-blur transition hover:bg-[#e8233b]"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#1a2150] shadow-lg transition hover:bg-[#e8233b] hover:text-white"
         >
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
             <rect x="3" y="3" width="18" height="18" rx="5" />
@@ -155,11 +158,12 @@ export function WhatsAppFlotante() {
           </svg>
         </a>
         <a
+          data-track="facebook"
           href={FACEBOOK}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Facebook de Turboman"
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-red shadow-lg backdrop-blur transition hover:bg-[#e8233b]"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#1a2150] shadow-lg transition hover:bg-[#e8233b] hover:text-white"
         >
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
             <path d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H7v4h3v8h4v-8h3l1-4h-4V8z" />
@@ -168,6 +172,7 @@ export function WhatsAppFlotante() {
       </div>
 
       <a
+        data-track="whatsapp-flotante"
         href={`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent("Hola, necesito ayuda con una cotización.")}`}
         target="_blank"
         rel="noopener noreferrer"
@@ -199,7 +204,7 @@ export function PanelCotizacion() {
       `Nombre: ${nombre}`,
       `Teléfono: ${telefono}`,
     ].join("\n");
-        guardarCotizacion({
+    guardarCotizacion({
       nombre: nombre.trim(),
       telefono: telefono.trim(),
       items: items.map((i) => ({
@@ -312,7 +317,7 @@ export function PanelCotizacion() {
               Enviar cotización por WhatsApp
             </button>
             <p className="text-center text-xs text-slate-400">
-              Precios de ejemplo. La disponibilidad final se confirma con un asesor.
+              Usaremos tus datos solo para responder tu cotización. Precios de ejemplo; la disponibilidad final se confirma con un asesor.
             </p>
           </div>
         )}
