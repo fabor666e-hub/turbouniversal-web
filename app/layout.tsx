@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Proveedor } from "./components/Cotizacion";
 import { Header, Footer, PanelCotizacion, WhatsAppFlotante } from "./components/Estructura";
+<RastreoClics />
+import RastreoClics from "./components/RastreoClics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

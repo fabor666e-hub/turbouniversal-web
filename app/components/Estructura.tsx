@@ -8,10 +8,12 @@ import { FACEBOOK, INSTAGRAM, LINK_CATALOGO, NUMERO_WHATSAPP, precio } from "@/l
 import { usarCotizacion } from "./Cotizacion";
 import { guardarCotizacion } from "@/lib/rastreo";
 
+
 const enlaces = [
   { href: "/", texto: "Inicio" },
   { href: "/productos", texto: "Productos" },
   { href: "/nosotros", texto: "Nosotros" },
+  { href: "/asistente", texto: "Asistente" },
   { href: "/puntos-de-venta", texto: "Puntos de venta" },
 ];
 

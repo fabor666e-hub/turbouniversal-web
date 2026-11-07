@@ -32,6 +32,13 @@ export default async function Inicio() {
             Busca por referencia, marca o vehículo
           </p>
           <BuscadorHero />
+          <Link
+            href="/asistente"
+            data-track="inicio_asistente"
+            className="mt-5 inline-block rounded-full bg-[#e8233b] px-6 py-3 font-semibold text-white transition hover:scale-105 hover:brightness-90"
+          >
+            ¿No sabes cuál turbo? Usa el asistente →
+          </Link>
         </Reveal>
       </section>
 

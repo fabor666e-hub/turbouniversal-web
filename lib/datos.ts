@@ -35,7 +35,7 @@ export async function obtenerProductos(): Promise<Producto[]> {
   }
   return (data as Fila[]).map(mapear);
 }
-
+ 
 export async function obtenerProducto(referencia: string): Promise<Producto | undefined> {
   if (!supabase) return locales.find((p) => p.referencia === referencia);
   const { data, error } = await supabase

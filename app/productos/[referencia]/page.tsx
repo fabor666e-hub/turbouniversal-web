@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { categorias } from "@/data/productos";
 import { obtenerProducto } from "@/lib/datos";
 import { NUMERO_WHATSAPP, fotoDe, precio } from "@/lib/utils";
+import RegistrarVista from "../../components/RegistrarVista";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,7 @@ export default async function PaginaProducto({
 
   return (
     <main className="mx-auto max-w-5xl px-8 py-12">
+      <RegistrarVista referencia={p.referencia} />
       <p className="mb-6 text-sm text-slate-400">
         <Link href="/productos" className="hover:text-[#e8233b]">← Volver al catálogo</Link>
         {" · "}
