@@ -14,6 +14,7 @@ const sedes = [
     nombre: "Sede principal",
     direccion: "Calle 7 No. 16-22, La Estanzuela",
     ciudad: "Bogotá",
+    telefono: "322 449 4190",
     horarios: [
       "Lunes a viernes: 8:00 a. m. a 6:00 p. m.",
       "Sábados: 8:00 a. m. a 1:00 p. m.",
@@ -23,8 +24,10 @@ const sedes = [
     nombre: "Sede Medellín",
     direccion: "Calle 45A No. 59-52, Barrio Triste",
     ciudad: "Medellín",
+    telefono: "304 317 3143",
     horarios: [
-      "Escríbenos por WhatsApp para confirmar el horario.",
+      "Lunes a viernes: 8:00 a. m. a 6:00 p. m.",
+      "Sábados: 8:00 a. m. a 1:00 p. m.",
     ],
   },
 ];
@@ -60,6 +63,12 @@ export default function PuntosDeVenta() {
                     {s.direccion}
                   </p>
                   <p className="text-slate-500">{s.ciudad}, Colombia</p>
+                  <a
+                    href={`tel:+57${s.telefono.replace(/\s/g, "")}`}
+                    className="mt-2 inline-block font-semibold text-[#1a2150] hover:text-[#e8233b]"
+                  >
+                    Tel. {s.telefono}
+                  </a>
 
                   <p className="mt-6 text-sm font-bold uppercase tracking-widest text-[#e8233b]">
                     Horario

@@ -18,16 +18,16 @@ const marcas = [
     nombre: "Turboman",
     etiqueta: "Nuestra marca",
     texto:
-      "Marca registrada en Colombia de turboalimentadores completos con calidad de equipo original. Turbos, cartridges, kits de reparación y más para vehículos livianos, de carga y maquinaria.",
-    logo: "",
+      "Marca registrada en Colombia de turboalimentadores completos con calidad de equipo original. Somos distribuidores oficiales: turbos, cartridges, kits de reparación y más para vehículos livianos, de carga y maquinaria.",
+    logo: "/marcas/turboman.png",
     fondo: "from-[#e8233b] to-[#b3162c]",
   },
   {
     nombre: "Master Power",
-    etiqueta: "Marca aliada",
+    etiqueta: "Distribuidor oficial",
     texto:
-      "Marca aliada que complementa nuestro portafolio de turboalimentadores y repuestos. Consulta con un asesor las referencias disponibles.",
-    logo: "",
+      "Somos distribuidores oficiales de Master Power Turbo en Colombia. Turboalimentadores y repuestos con garantía; consulta con un asesor las referencias disponibles.",
+    logo: "/marcas/master-power.png",
     fondo: "from-[#1a2150] to-[#2a3580]",
   },
 ];
@@ -60,16 +60,21 @@ export default async function Marcas() {
           return (
             <Reveal key={m.nombre} delay={i * 120}>
               <article className="flex h-full flex-col overflow-hidden rounded-3xl rounded-br-[5rem] bg-white shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-                <div className={`flex h-48 items-center justify-center bg-gradient-to-br ${m.fondo} p-8`}>
+                <div
+                  className={`relative flex h-48 items-center justify-center p-8 ${
+                    m.logo ? "bg-white" : `bg-gradient-to-br ${m.fondo}`
+                  }`}
+                >
                   {m.logo ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={m.logo} alt={`Logo ${m.nombre}`} className="max-h-28 w-auto object-contain" />
+                    <img src={m.logo} alt={`Logo ${m.nombre}`} className="max-h-28 w-auto max-w-full object-contain" />
                   ) : (
                     <span className="text-4xl font-extrabold uppercase italic tracking-wider text-white md:text-5xl">
                       {m.nombre}
                     </span>
                   )}
                 </div>
+                <span className={`block h-2 bg-gradient-to-r ${m.fondo}`} />
                 <div className="flex flex-1 flex-col p-8">
                   <p className="text-sm font-semibold uppercase tracking-widest text-[#e8233b]">
                     {m.etiqueta}
