@@ -2,7 +2,9 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { obtenerProductos } from "@/lib/datos";
+import Link from "next/link";
 import { categorias } from "@/data/productos";
+import { sesionValida } from "@/lib/sesionPanel";
 import { precio } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -88,8 +90,7 @@ function Lista({
 
 export default async function Panel() {
   const clave = process.env.PANEL_CLAVE;
-  const autorizado =
-    !!clave && (await cookies()).get("panel")?.value === clave;
+  const autorizado = await sesionValida();
 
   if (!autorizado) {
     return (
@@ -175,11 +176,19 @@ export default async function Panel() {
     <main className="mx-auto max-w-6xl px-8 py-10">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-extrabold text-[#1a2150]">Panel de datos</h1>
-        <form action={salir}>
-          <button className="text-sm font-semibold text-slate-500 underline hover:text-[#e8233b]">
-            Salir
-          </button>
-        </form>
+        <div className="flex items-center gap-5">
+          <Link
+            href="/panel/productos"
+            className="rounded-full bg-[#e8233b] px-5 py-2 text-sm font-semibold text-white transition hover:brightness-90"
+          >
+            Administrar productos
+          </Link>
+          <form action={salir}>
+            <button className="text-sm font-semibold text-slate-500 underline hover:text-[#e8233b]">
+              Salir
+            </button>
+          </form>
+        </div>
       </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

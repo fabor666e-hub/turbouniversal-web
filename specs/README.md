@@ -38,5 +38,5 @@ Pídele a la IA que lea primero `specs/constitucion.md`, `specs/arquitectura.md`
 | 002 | Cotización en línea | Implementado |
 | 003 | Asistente por vehículo | Implementado |
 | 004 | Panel de analítica | Implementado |
-| 005 | Administrador de productos | Pendiente |
+| 005 | Administrador de productos | Implementado (falta probar con Supabase) |
 | 006 | Marcas, sedes y páginas institucionales | Implementado |
