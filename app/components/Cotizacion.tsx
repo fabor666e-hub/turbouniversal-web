@@ -25,6 +25,8 @@ const Ctx = createContext<Contexto | null>(null);
 const CLAVE = "turbo-universal-cotizacion";
 
 export function usarCotizacion() {
+  // Es un hook personalizado con nombre en español (no empieza por "use").
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const c = useContext(Ctx);
   if (!c) throw new Error("Falta el Proveedor en layout.tsx");
   return c;
@@ -50,7 +52,6 @@ export function Proveedor({ children }: { children: ReactNode }) {
     } catch {
       // Si el navegador no deja leer, se empieza con la cotización vacía
     }
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCargado(true);
   }, []);
 
