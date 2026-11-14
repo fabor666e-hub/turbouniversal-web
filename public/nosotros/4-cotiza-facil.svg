@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8233b"/><stop offset="1" stop-color="#b3162c"/></linearGradient></defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<circle cx="500" cy="140" r="150" fill="#ffffff" opacity="0.07"/>
+<circle cx="90" cy="480" r="140" fill="#1a2150" opacity="0.25"/>
+<rect x="190" y="70" width="220" height="420" rx="34" fill="#1a2150"/>
+<rect x="206" y="100" width="188" height="360" rx="18" fill="#ffffff"/>
+<rect x="270" y="82" width="60" height="8" rx="4" fill="#ffffff" opacity="0.4"/>
+<rect x="206" y="100" width="188" height="44" rx="18" fill="#1a2150" opacity="0.08"/>
+<text x="300" y="129" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#1a2150">Mi cotización</text>
+<g font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#1a2150">
+<rect x="220" y="160" width="160" height="46" rx="10" fill="#f1f3f9"/>
+<circle cx="242" cy="183" r="12" fill="#e8233b"/><text x="262" y="181" font-weight="700">Turbo NPR</text><text x="262" y="197" fill="#64748b">x 1</text>
+<rect x="220" y="214" width="160" height="46" rx="10" fill="#f1f3f9"/>
+<circle cx="242" cy="237" r="12" fill="#1a2150"/><text x="262" y="235" font-weight="700">Kit reparación</text><text x="262" y="251" fill="#64748b">x 2</text>
+<rect x="220" y="268" width="160" height="46" rx="10" fill="#f1f3f9"/>
+<circle cx="242" cy="291" r="12" fill="#e8233b"/><text x="262" y="289" font-weight="700">Actuador</text><text x="262" y="305" fill="#64748b">x 1</text>
+</g>
+<rect x="220" y="400" width="160" height="40" rx="20" fill="#16a34a"/>
+<text x="300" y="426" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#ffffff">Enviar</text>
+<!-- burbuja -->
+<path d="M400 170 h120 a20 20 0 0 1 20 20 v50 a20 20 0 0 1 -20 20 h-90 l-25 22 v-22 h-5 a20 20 0 0 1 -20 -20 z" fill="#ffffff" transform="translate(25 -55)"/>
+<path d="M425 175 l16 16 l32 -34" fill="none" stroke="#16a34a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" transform="translate(30 -35)"/>
+<text x="300" y="545" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" fill="#ffffff" letter-spacing="6">COTIZA EN LÍNEA</text>
+</svg>

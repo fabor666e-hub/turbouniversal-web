@@ -12,15 +12,20 @@ export const metadata = {
 const sedes = [
   {
     nombre: "Sede principal",
-    direccion: " Calle 7 No. 16-22 La estanzuela",
-    ciudad: "BOGOTA",
+    direccion: "Calle 7 No. 16-22, La Estanzuela",
+    ciudad: "Bogotá",
     horarios: [
-      "Lunes a viernes 8:00am a 6:00pm Sábados 8:00am a 1:00pm",
-    
+      "Lunes a viernes: 8:00 a. m. a 6:00 p. m.",
+      "Sábados: 8:00 a. m. a 1:00 p. m.",
     ],
-    
-
-        
+  },
+  {
+    nombre: "Sede Medellín",
+    direccion: "Calle 45A No. 59-52, Barrio Triste",
+    ciudad: "Medellín",
+    horarios: [
+      "Escríbenos por WhatsApp para confirmar el horario.",
+    ],
   },
 ];
 
@@ -43,7 +48,7 @@ export default function PuntosDeVenta() {
       {/* Sedes */}
       <section className="mx-auto max-w-5xl space-y-12 px-8 py-12">
         {sedes.map((s) => {
-          const consulta = `${s.direccion}, ${s.ciudad}`;
+          const consulta = `${s.direccion}, ${s.ciudad}, Colombia`;
           return (
             <Reveal key={s.nombre}>
               <article className="overflow-hidden rounded-3xl rounded-br-[5rem] bg-white shadow-lg">
@@ -54,7 +59,7 @@ export default function PuntosDeVenta() {
                   <p className="mt-6 text-lg font-semibold text-slate-700">
                     {s.direccion}
                   </p>
-                  <p className="text-slate-500">{s.ciudad}</p>
+                  <p className="text-slate-500">{s.ciudad}, Colombia</p>
 
                   <p className="mt-6 text-sm font-bold uppercase tracking-widest text-[#e8233b]">
                     Horario
@@ -75,7 +80,7 @@ export default function PuntosDeVenta() {
                       📍 Cómo llegar
                     </a>
                     <a
-                      href={`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent("Hola, quiero información sobre la sede " + s.nombre)}`}
+                      href={`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(`Hola, quiero información sobre la ${s.nombre} (${s.ciudad}).`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="rounded-full border-2 border-green-600 px-6 py-3 text-sm font-semibold text-green-700 transition hover:bg-green-600 hover:text-white"
@@ -100,4 +105,4 @@ export default function PuntosDeVenta() {
       </section>
     </main>
   );
-}
+}

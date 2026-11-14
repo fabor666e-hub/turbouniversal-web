@@ -14,6 +14,7 @@ const enlaces = [
   { href: "/productos", texto: "Productos" },
   { href: "/nosotros", texto: "Nosotros" },
   { href: "/asistente", texto: "Asistente" },
+  { href: "/marcas", texto: "Marcas" },
   { href: "/puntos-de-venta", texto: "Puntos de venta" },
 ];
 
@@ -112,6 +113,8 @@ export function Footer() {
             <li><Link className="hover:text-white" href="/">Inicio</Link></li>
             <li><Link className="hover:text-white" href="/productos">Productos</Link></li>
             <li><Link className="hover:text-white" href="/nosotros">Nosotros</Link></li>
+            <li><Link className="hover:text-white" href="/asistente">Asistente por vehículo</Link></li>
+            <li><Link className="hover:text-white" href="/marcas">Marcas</Link></li>
             <li><Link className="hover:text-white" href="/puntos-de-venta">Puntos de venta</Link></li>
             <li>
               <a className="hover:text-white" href={LINK_CATALOGO} target="_blank" rel="noopener noreferrer">
@@ -326,4 +329,4 @@ export function PanelCotizacion() {
       </aside>
     </>
   );
-}
+}

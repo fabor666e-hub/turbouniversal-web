@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, type CSSProperties, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import type { Producto } from "@/data/productos";
 import { ROJO } from "@/lib/utils";
 import { registrar } from "@/lib/rastreo";
@@ -22,6 +22,7 @@ type Contexto = {
 };
 
 const Ctx = createContext<Contexto | null>(null);
+const CLAVE = "turbo-universal-cotizacion";
 
 export function usarCotizacion() {
   const c = useContext(Ctx);
@@ -33,13 +34,43 @@ export function Proveedor({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<ItemCotizacion[]>([]);
   const [abierto, setAbierto] = useState(false);
   const [acento, setAcento] = useState(ROJO);
+  const [cargado, setCargado] = useState(false);
+
+  // Al abrir la página: recupera la cotización guardada en el navegador
+  useEffect(() => {
+    try {
+      const guardado = localStorage.getItem(CLAVE);
+      if (guardado) {
+        const lista = JSON.parse(guardado) as ItemCotizacion[];
+        if (Array.isArray(lista)) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setItems(lista.filter((i) => i?.p?.referencia && i.cantidad > 0));
+        }
+      }
+    } catch {
+      // Si el navegador no deja leer, se empieza con la cotización vacía
+    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCargado(true);
+  }, []);
+
+  // Cada vez que cambia la cotización: la guarda en el navegador
+  useEffect(() => {
+    if (!cargado) return;
+    try {
+      if (items.length > 0) localStorage.setItem(CLAVE, JSON.stringify(items));
+      else localStorage.removeItem(CLAVE);
+    } catch {
+      // Si el navegador no deja guardar, la cotización sigue funcionando sin guardarse
+    }
+  }, [items, cargado]);
 
   const cantidadDe = (ref: string) => items.find((i) => i.p.referencia === ref)?.cantidad ?? 0;
   const totalUnidades = items.reduce((s, i) => s + i.cantidad, 0);
   const totalPrecio = items.reduce((s, i) => s + i.cantidad * i.p.precio, 0);
 
   const agregar = (p: Producto) => {
-     registrar("agregar_cotizacion", p.referencia);
+    registrar("agregar_cotizacion", p.referencia);
     setItems((prev) => {
       const existe = prev.find((i) => i.p.referencia === p.referencia);
       if (existe) {
@@ -93,4 +124,4 @@ export function Proveedor({ children }: { children: ReactNode }) {
       </div>
     </Ctx.Provider>
   );
-}
+}

@@ -9,29 +9,33 @@ type Paso = {
   src?: string; // ruta de la foto en /public, ej: "/nosotros-1.jpg"
 };
 
-// EDITA estos textos y agrega las fotos reales cuando las tengas
+// EDITA estos textos. Para usar fotos reales, cambia src por la ruta de la foto en /public
 const pasos: Paso[] = [
   {
     etiqueta: "Quiénes somos",
     titulo: "Importadora Turbo Universal",
+    src: "/nosotros/1-bodega.jpg",
     texto:
       "Somos una empresa colombiana especializada en la comercialización y distribución de turboalimentadores y repuestos para sistemas de turbo.",
   },
   {
     etiqueta: "Turboman",
     titulo: "Calidad de equipo original",
+    src: "/nosotros/2-turbo.jpg",
     texto:
       "Turboman es nuestra marca registrada en Colombia de turboalimentadores completos con calidad de equipo original.",
   },
   {
     etiqueta: "Cobertura",
     titulo: "Para cualquier tipo de vehículo",
+    src: "/nosotros/3-carretera.jpg",
     texto:
       "Vehículos agrícolas, maquinaria pesada y cualquier tipo de vehículo: encuentra el turbo que necesitas por referencia, marca o vehículo.",
   },
   {
     etiqueta: "Cotiza fácil",
     titulo: "Rápido y sin complicaciones",
+    src: "/nosotros/4-cotizacion-whatsapp.jpg",
     texto:
       "Arma tu cotización en línea, revisa la disponibilidad de cada producto y envíala directo a un asesor por WhatsApp.",
   },
@@ -143,4 +147,4 @@ export default function Nosotros() {
       </div>
     </section>
   );
-}
+}
