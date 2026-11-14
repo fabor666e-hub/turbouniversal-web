@@ -100,6 +100,8 @@ export function Header() {
 const SEDES = [
   { ciudad: "Bogotá", direccion: "Calle 7 No. 16-22, La Estanzuela", telefono: "322 449 4190" },
   { ciudad: "Medellín", direccion: "Calle 45A No. 59-52, Barrio Triste", telefono: "304 317 3143" },
+  { ciudad: "Cali", direccion: "Calle 34 No. 3-33, local 101", telefono: "" },
+  { ciudad: "Duitama", direccion: "Carrera 42 No. 14-33, Sevilla 2", telefono: "" },
 ];
 const CORREO = "fe.turbouniversal@gmail.com";
 const telefonoVisible = (n: string) => `+${n.slice(0, 2)} ${n.slice(2, 5)} ${n.slice(5, 8)} ${n.slice(8)}`;
@@ -167,7 +169,7 @@ export function Footer() {
 
         <div>
           <p className="font-semibold">Sedes</p>
-          <ul className="mt-3 space-y-4 text-sm text-white/70">
+          <ul className="mt-3 space-y-3 text-sm text-white/70">
             {SEDES.map((s) => (
               <li key={s.ciudad}>
                 <Link href="/puntos-de-venta" className={`flex gap-2 ${enlace}`}>
@@ -178,13 +180,15 @@ export function Footer() {
                     {s.direccion}
                   </span>
                 </Link>
-                <a
-                  href={`tel:+57${s.telefono.replace(/\s/g, "")}`}
-                  className={`mt-1 flex items-center gap-2 pl-6 ${enlace}`}
-                >
-                  <IconoTelefono className="h-3.5 w-3.5" />
-                  {s.telefono}
-                </a>
+                {s.telefono && (
+                  <a
+                    href={`tel:+57${s.telefono.replace(/\s/g, "")}`}
+                    className={`mt-1 flex items-center gap-2 pl-6 ${enlace}`}
+                  >
+                    <IconoTelefono className="h-3.5 w-3.5" />
+                    {s.telefono}
+                  </a>
+                )}
               </li>
             ))}
           </ul>

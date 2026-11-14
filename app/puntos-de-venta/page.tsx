@@ -10,7 +10,16 @@ export const metadata = {
 
 // EDITA estos datos con la información real de la empresa.
 // Para agregar otra sede, copia un bloque { ... } completo dentro de la lista.
-const sedes = [
+// "telefono" es opcional: si una sede no tiene, no se muestra.
+type Sede = {
+  nombre: string;
+  direccion: string;
+  ciudad: string;
+  telefono?: string;
+  horarios: string[];
+};
+
+const sedes: Sede[] = [
   {
     nombre: "Sede principal",
     direccion: "Calle 7 No. 16-22, La Estanzuela",
@@ -31,6 +40,18 @@ const sedes = [
       "Sábados: 8:00 a. m. a 1:00 p. m.",
     ],
   },
+  {
+    nombre: "Sede Cali",
+    direccion: "Calle 34 No. 3-33, local 101, Tecnicentro Santamónica",
+    ciudad: "Cali, Valle del Cauca",
+    horarios: ["Escríbenos por WhatsApp para confirmar el horario."],
+  },
+  {
+    nombre: "Sede Duitama",
+    direccion: "Carrera 42 No. 14-33, Sevilla 2, Autopista Central del Norte",
+    ciudad: "Duitama, Boyacá",
+    horarios: ["Escríbenos por WhatsApp para confirmar el horario."],
+  },
 ];
 
 export default function PuntosDeVenta() {
@@ -50,26 +71,28 @@ export default function PuntosDeVenta() {
       </section>
 
       {/* Sedes */}
-      <section className="mx-auto max-w-5xl space-y-12 px-8 py-12">
+      <section className="mx-auto grid max-w-6xl gap-8 px-6 py-12 sm:px-8 md:grid-cols-2">
         {sedes.map((s) => {
           const consulta = `${s.direccion}, ${s.ciudad}, Colombia`;
           return (
-            <Reveal key={s.nombre}>
-              <article className="overflow-hidden rounded-3xl rounded-br-[5rem] bg-white shadow-lg">
+            <Reveal key={s.nombre} className="h-full">
+              <article className="flex h-full flex-col overflow-hidden rounded-3xl rounded-br-[5rem] bg-white shadow-lg">
                 <div className="p-8 text-center">
-                  <h2 className="text-3xl font-extrabold text-[#1a2150]">{s.nombre}</h2>
+                  <h2 className="text-2xl font-extrabold text-[#1a2150] md:text-3xl">{s.nombre}</h2>
                   <span className="mx-auto mt-2 block h-1 w-16 rounded-full bg-[#e8233b]" />
 
                   <p className="mt-6 text-lg font-semibold text-slate-700">
                     {s.direccion}
                   </p>
                   <p className="text-slate-500">{s.ciudad}, Colombia</p>
-                  <a
-                    href={`tel:+57${s.telefono.replace(/\s/g, "")}`}
-                    className="mt-2 inline-block font-semibold text-[#1a2150] hover:text-[#e8233b]"
-                  >
-                    Tel. {s.telefono}
-                  </a>
+                  {s.telefono && (
+                    <a
+                      href={`tel:+57${s.telefono.replace(/\s/g, "")}`}
+                      className="mt-2 inline-block font-semibold text-[#1a2150] hover:text-[#e8233b]"
+                    >
+                      Tel. {s.telefono}
+                    </a>
+                  )}
 
                   <p className="mt-6 text-sm font-bold uppercase tracking-widest text-[#e8233b]">
                     Horario
@@ -106,7 +129,7 @@ export default function PuntosDeVenta() {
                 <iframe
                   title={`Mapa de ${s.nombre}`}
                   src={`https://www.google.com/maps?q=${encodeURIComponent(consulta)}&output=embed`}
-                  className="h-96 w-full border-0"
+                  className="mt-auto h-72 w-full border-0"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                 />
