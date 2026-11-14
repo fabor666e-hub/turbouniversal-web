@@ -12,7 +12,7 @@ Ciclo de cada tarea: implementar UNA → probar en el navegador → commit → m
 - [x] 1.7 F2 · Contexto de cotización y panel lateral con cantidades
 - [x] 1.8 F2 · Envío por WhatsApp con nombre y teléfono
 - [x] 1.9 F2 · Cotización guardada al recargar (localStorage)
-- [x] 1.10 F1 · Páginas Nosotros (scroll con imágenes) y Puntos de venta (Bogotá y Medellín con mapa)
+- [x] 1.10 F1 · Páginas Nosotros (scroll con imágenes) y Puntos de venta (Bogotá, Medellín, Cali y Duitama con mapa)
 - [x] 1.11 F1 · Página Marcas con logos de Turboman y Master Power
 - [x] 1.12 F3 · Asistente por vehículo en 3 pasos
 - [x] 1.13 F1 · Página 404 propia y pantalla de carga
@@ -35,4 +35,4 @@ Ciclo de cada tarea: implementar UNA → probar en el navegador → commit → m
 - [ ] 3.1 Contraste AA: botones rojos con texto pequeño a `#d91e34` y botones de WhatsApp a `#15803d`
 - [ ] 3.2 Reemplazar las fotos de Nosotros que muestran logotipos de otras marcas
 - [ ] 3.4 Política de tratamiento de datos (Ley 1581) y casilla en la cotización
-- [ ] 3.5 Confirmar con la empresa el número de WhatsApp y la dirección de Medellín
+- [ ] 3.5 Confirmar con la empresa el número de WhatsApp, la dirección de Medellín y teléfono y horario de Cali y Duitama
