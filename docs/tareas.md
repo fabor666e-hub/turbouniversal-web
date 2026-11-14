@@ -18,6 +18,10 @@ Ciclo de cada tarea: implementar UNA → probar en el navegador → commit → m
 - [x] 1.13 F1 · Página 404 propia y pantalla de carga
 - [x] 1.14 Variantes de la pantalla principal en /prototipo/a, /b, /c y elección (docs/decisiones.md)
 - [x] 1.15 Publicación en Vercel con despliegue continuo
+- [x] 1.16 Íconos SVG de la marca en lugar de emojis
+- [x] 1.17 Ícono de pestaña (favicon) e imagen para compartir el enlace (Open Graph)
+- [x] 1.18 Franja de marcas (Turboman y Master Power) en el inicio
+- [x] 1.19 Pie de página con sedes, teléfonos, correo, horario y redes
 
 ## Datos y panel (adelantado de la U4)
 - [x] 2.1 Conexión a Supabase con respaldo en datos mock
@@ -30,6 +34,5 @@ Ciclo de cada tarea: implementar UNA → probar en el navegador → commit → m
 ## Pendientes
 - [ ] 3.1 Contraste AA: botones rojos con texto pequeño a `#d91e34` y botones de WhatsApp a `#15803d`
 - [ ] 3.2 Reemplazar las fotos de Nosotros que muestran logotipos de otras marcas
-- [ ] 3.3 Íconos SVG en lugar de emojis
 - [ ] 3.4 Política de tratamiento de datos (Ley 1581) y casilla en la cotización
 - [ ] 3.5 Confirmar con la empresa el número de WhatsApp y la dirección de Medellín

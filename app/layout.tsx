@@ -16,9 +16,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://turboman-web.vercel.app"),
   title: "Turbo Universal | Turboalimentadores Turboman",
   description:
     "Importadora Turbo Universal: turboalimentadores y repuestos con calidad de equipo original en Colombia. Busca, revisa disponibilidad y cotiza en línea.",
+  openGraph: {
+    siteName: "Importadora Turbo Universal",
+    locale: "es_CO",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

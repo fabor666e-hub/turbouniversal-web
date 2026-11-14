@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { Producto } from "@/data/productos";
 import { fotoDe, precio } from "@/lib/utils";
 import { usarCotizacion } from "./Cotizacion";
+import { IconoTurbo } from "./Iconos";
 
 // Aparece suavemente al hacer scroll
 export function Reveal({
@@ -94,7 +95,7 @@ export function TarjetaProducto({ p }: { p: Producto }) {
             className="h-full w-full object-contain p-2 transition duration-500 hover:scale-105"
           />
         ) : (
-          <span className="text-4xl text-slate-300">⚙️</span>
+          <IconoTurbo className="h-16 w-16 text-slate-300" />
         )}
       </div>
       <div className="mb-2 flex items-start justify-between gap-2">

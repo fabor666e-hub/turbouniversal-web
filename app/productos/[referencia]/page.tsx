@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { categorias } from "@/data/productos";
 import { obtenerProducto } from "@/lib/datos";
 import { NUMERO_WHATSAPP, fotoDe, precio } from "@/lib/utils";
+import { IconoTurbo } from "../../components/Iconos";
 import RegistrarVista from "../../components/RegistrarVista";
 
 export const dynamic = "force-dynamic";
@@ -58,7 +59,7 @@ export default async function PaginaProducto({
             <img src={foto} alt={p.nombre} className="h-full w-full object-contain p-6" />
           ) : (
             <div className="text-center text-slate-300">
-              <p className="text-6xl">⚙️</p>
+              <IconoTurbo className="mx-auto h-24 w-24 text-slate-300" />
               <p className="mt-3 text-sm">Foto próximamente</p>
             </div>
           )}

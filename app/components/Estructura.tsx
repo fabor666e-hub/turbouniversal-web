@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { FACEBOOK, INSTAGRAM, LINK_CATALOGO, NUMERO_WHATSAPP, precio } from "@/lib/utils";
 import { usarCotizacion } from "./Cotizacion";
 import { guardarCotizacion } from "@/lib/rastreo";
+import { IconoCorreo, IconoReloj, IconoTelefono, IconoUbicacion, IconoWhatsApp } from "./Iconos";
 
 
 const enlaces = [
@@ -95,50 +96,136 @@ export function Header() {
   );
 }
 
+// Datos de contacto que se muestran en el pie (fuente: turbouniversal.com.co)
+const SEDES = [
+  { ciudad: "Bogotá", direccion: "Calle 7 No. 16-22, La Estanzuela", telefono: "322 449 4190" },
+  { ciudad: "Medellín", direccion: "Calle 45A No. 59-52, Barrio Triste", telefono: "304 317 3143" },
+];
+const CORREO = "fe.turbouniversal@gmail.com";
+const telefonoVisible = (n: string) => `+${n.slice(0, 2)} ${n.slice(2, 5)} ${n.slice(5, 8)} ${n.slice(8)}`;
+
 export function Footer() {
+  const enlace = "transition hover:text-white";
   return (
-    <footer id="contacto" className="mt-16 bg-[#1a2150] px-8 py-12 text-white">
-      <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-3">
+    <footer id="contacto" className="mt-16 bg-[#1a2150] px-8 pb-8 pt-14 text-white">
+      <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <p className="text-xl font-extrabold">
             TURBO <span className="text-[#ff6b7d]">UNIVERSAL</span>
           </p>
           <p className="mt-3 text-sm text-white/70">
-            Importadora de turboalimentadores y repuestos con calidad de equipo original. Marca Turboman.
+            Importadora de turboalimentadores y repuestos con calidad de equipo original. Distribuidores
+            oficiales de Turboman y Master Power.
           </p>
+          <div className="mt-5 flex gap-3">
+            <a
+              data-track="instagram-pie"
+              href={INSTAGRAM}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram de Turboman"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-[#e8233b]"
+            >
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
+              </svg>
+            </a>
+            <a
+              data-track="facebook-pie"
+              href={FACEBOOK}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook de Turboman"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-[#e8233b]"
+            >
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
+                <path d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H7v4h3v8h4v-8h3l1-4h-4V8z" />
+              </svg>
+            </a>
+          </div>
         </div>
+
         <div>
           <p className="font-semibold">Enlaces</p>
           <ul className="mt-3 space-y-2 text-sm text-white/70">
-            <li><Link className="hover:text-white" href="/">Inicio</Link></li>
-            <li><Link className="hover:text-white" href="/productos">Productos</Link></li>
-            <li><Link className="hover:text-white" href="/nosotros">Nosotros</Link></li>
-            <li><Link className="hover:text-white" href="/asistente">Asistente por vehículo</Link></li>
-            <li><Link className="hover:text-white" href="/marcas">Marcas</Link></li>
-            <li><Link className="hover:text-white" href="/puntos-de-venta">Puntos de venta</Link></li>
+            {enlaces.map((e) => (
+              <li key={e.href}>
+                <Link className={enlace} href={e.href}>
+                  {e.href === "/asistente" ? "Asistente por vehículo" : e.texto}
+                </Link>
+              </li>
+            ))}
             <li>
-              <a className="hover:text-white" href={LINK_CATALOGO} target="_blank" rel="noopener noreferrer">
-                Catálogo completo
+              <a className={enlace} href={LINK_CATALOGO} target="_blank" rel="noopener noreferrer">
+                Catálogo completo (PDF)
               </a>
             </li>
           </ul>
         </div>
+
+        <div>
+          <p className="font-semibold">Sedes</p>
+          <ul className="mt-3 space-y-4 text-sm text-white/70">
+            {SEDES.map((s) => (
+              <li key={s.ciudad}>
+                <Link href="/puntos-de-venta" className={`flex gap-2 ${enlace}`}>
+                  <IconoUbicacion className="mt-0.5 h-4 w-4 shrink-0 text-[#ff6b7d]" />
+                  <span>
+                    <b className="text-white">{s.ciudad}</b>
+                    <br />
+                    {s.direccion}
+                  </span>
+                </Link>
+                <a
+                  href={`tel:+57${s.telefono.replace(/\s/g, "")}`}
+                  className={`mt-1 flex items-center gap-2 pl-6 ${enlace}`}
+                >
+                  <IconoTelefono className="h-3.5 w-3.5" />
+                  {s.telefono}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <div>
           <p className="font-semibold">Contacto</p>
-          <p className="mt-3 text-sm text-white/70">WhatsApp: +57 313 827 5485</p>
+          <ul className="mt-3 space-y-3 text-sm text-white/70">
+            <li className="flex items-center gap-2">
+              <IconoWhatsApp className="h-4 w-4 shrink-0" />
+              WhatsApp: {telefonoVisible(NUMERO_WHATSAPP)}
+            </li>
+            <li>
+              <a href={`mailto:${CORREO}`} className={`flex items-center gap-2 break-all ${enlace}`}>
+                <IconoCorreo className="h-4 w-4 shrink-0" />
+                {CORREO}
+              </a>
+            </li>
+            <li className="flex gap-2">
+              <IconoReloj className="mt-0.5 h-4 w-4 shrink-0" />
+              <span>
+                Lunes a viernes: 8:00 a. m. a 6:00 p. m.
+                <br />
+                Sábados: 8:00 a. m. a 1:00 p. m.
+              </span>
+            </li>
+          </ul>
           <a
             data-track="whatsapp-pie"
             href={`https://wa.me/${NUMERO_WHATSAPP}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 inline-block rounded-full bg-[#e8233b] px-5 py-2 text-sm font-semibold transition hover:bg-[#c71c32]"
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#d91e34] px-5 py-2.5 text-sm font-semibold transition hover:bg-[#c71c32]"
           >
+            <IconoWhatsApp className="h-4 w-4" />
             Escríbenos
           </a>
         </div>
       </div>
-      <p className="mx-auto mt-10 max-w-6xl border-t border-white/10 pt-6 text-center text-xs text-white/50">
-        © 2026 Importadora Turbo Universal. Todos los derechos reservados.
+      <p className="mx-auto mt-12 max-w-6xl border-t border-white/10 pt-6 text-center text-xs text-white/50">
+        © {new Date().getFullYear()} Importadora Turbo Universal. Todos los derechos reservados.
       </p>
     </footer>
   );
@@ -182,9 +269,9 @@ export function WhatsAppFlotante() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Escríbenos por WhatsApp"
-        className="pulso flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-2xl text-white shadow-lg transition hover:scale-110"
+        className="pulso flex h-14 w-14 items-center justify-center rounded-full bg-green-600 text-white shadow-lg transition hover:scale-110"
       >
-        💬
+        <IconoWhatsApp className="h-7 w-7" />
       </a>
     </div>
   );

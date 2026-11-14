@@ -4,6 +4,7 @@ import { obtenerProductos } from "@/lib/datos";
 import { NUMERO_WHATSAPP, colores, fotoCategoria } from "@/lib/utils";
 import { Reveal, TarjetaProducto, TurboAnimado } from "./components/Comunes";
 import BuscadorHero from "./components/BuscadorHero";
+import { IconoCaja, IconoEscudo, IconoLista } from "./components/Iconos";
 
 export const dynamic = "force-dynamic";
 
@@ -46,19 +47,55 @@ export default async function Inicio() {
       <section className="mx-auto max-w-6xl px-8 py-10">
         <div className="grid gap-4 md:grid-cols-3">
           {[
-            { icono: "✅", titulo: "Calidad de equipo original", texto: "Turboalimentadores Turboman, marca registrada en Colombia." },
-            { icono: "📋", titulo: "Cotización en línea", texto: "Arma tu lista y envíala a un asesor por WhatsApp." },
-            { icono: "📦", titulo: "Disponibilidad a la vista", texto: "Consulta cuántas unidades hay de cada producto." },
+            { Icono: IconoEscudo, titulo: "Calidad de equipo original", texto: "Turboalimentadores Turboman, marca registrada en Colombia." },
+            { Icono: IconoLista, titulo: "Cotización en línea", texto: "Arma tu lista y envíala a un asesor por WhatsApp." },
+            { Icono: IconoCaja, titulo: "Disponibilidad a la vista", texto: "Consulta cuántas unidades hay de cada producto." },
           ].map((v, i) => (
             <Reveal key={v.titulo} delay={i * 100}>
               <div className="h-full rounded-2xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-                <span className="text-3xl">{v.icono}</span>
+                <span
+                  className={`flex h-12 w-12 items-center justify-center rounded-xl text-white ${
+                    i % 2 === 0 ? "bg-[#e8233b]" : "bg-[#1a2150]"
+                  }`}
+                >
+                  <v.Icono className="h-6 w-6" />
+                </span>
                 <h3 className="mt-3 font-bold text-[#1a2150]">{v.titulo}</h3>
                 <p className="mt-1 text-sm text-slate-500">{v.texto}</p>
               </div>
             </Reveal>
           ))}
         </div>
+      </section>
+
+      {/* Marcas que distribuimos */}
+      <section className="mx-auto max-w-6xl px-8 py-6">
+        <Reveal>
+          <div className="flex flex-col items-center gap-6 rounded-3xl bg-white px-6 py-8 shadow-sm md:flex-row md:justify-between md:px-10">
+            <div className="text-center md:text-left">
+              <p className="text-sm font-semibold uppercase tracking-widest text-[#e8233b]">
+                Distribuidores oficiales
+              </p>
+              <p className="mt-1 text-lg font-bold text-[#1a2150]">Marcas con respaldo y garantía</p>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-8">
+              {[
+                { src: "/marcas/turboman.png", alt: "Turboman" },
+                { src: "/marcas/master-power.png", alt: "Master Power Turbo" },
+              ].map((m) => (
+                <Link
+                  key={m.alt}
+                  href="/marcas"
+                  data-track={`inicio-marca-${m.alt.toLowerCase().replace(/\s+/g, "-")}`}
+                  className="transition duration-300 hover:scale-105"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={m.src} alt={m.alt} className="h-14 w-auto object-contain md:h-16" />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </Reveal>
       </section>
 
       {/* Categorías (llevan al catálogo) */}

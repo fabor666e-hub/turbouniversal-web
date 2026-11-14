@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { IconoBuscar } from "./Iconos";
 
 export default function BuscadorHero() {
   const [q, setQ] = useState("");
@@ -21,7 +22,7 @@ export default function BuscadorHero() {
         }}
         className="mt-10 flex items-center rounded-full bg-white p-2 shadow-[0_10px_40px_rgba(232,35,59,0.45)] ring-4 ring-[#e8233b]/60"
       >
-        <span className="pl-5 text-2xl text-slate-400">🔍</span>
+        <span className="pl-5 text-slate-400"><IconoBuscar className="h-6 w-6" /></span>
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}

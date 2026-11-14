@@ -1,5 +1,6 @@
 import { Reveal } from "../components/Comunes";
 import { NUMERO_WHATSAPP } from "@/lib/utils";
+import { IconoUbicacion, IconoWhatsApp } from "../components/Iconos";
 
 export const metadata = {
   title: "Puntos de venta | Turbo Universal",
@@ -84,16 +85,18 @@ export default function PuntosDeVenta() {
                       href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(consulta)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-full bg-[#1a2150] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#e8233b]"
+                      className="inline-flex items-center gap-2 rounded-full bg-[#1a2150] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#e8233b]"
                     >
-                      📍 Cómo llegar
+                      <IconoUbicacion className="h-4 w-4" />
+                      Cómo llegar
                     </a>
                     <a
                       href={`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(`Hola, quiero información sobre la ${s.nombre} (${s.ciudad}).`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-full border-2 border-green-600 px-6 py-3 text-sm font-semibold text-green-700 transition hover:bg-green-600 hover:text-white"
+                      className="inline-flex items-center gap-2 rounded-full border-2 border-green-700 px-6 py-3 text-sm font-semibold text-green-700 transition hover:bg-green-700 hover:text-white"
                     >
+                      <IconoWhatsApp className="h-4 w-4" />
                       Escribir por WhatsApp
                     </a>
                   </div>

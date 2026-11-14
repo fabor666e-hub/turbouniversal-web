@@ -39,6 +39,11 @@ Geist (Google Fonts, cargada con `next/font`). Títulos en 700–800 (`font-bold
 - Movimiento con propósito: turbo animado que gira y flota, tarjetas que aparecen al hacer scroll, cambio de color de acento.
 - Mobile first: se diseña a 390 px y se amplía con `sm:`, `md:` y `lg:`.
 
+## Íconos
+- Íconos SVG de trazo redondeado en `app/components/Iconos.tsx` (buscar, escudo, lista, caja, ubicación, teléfono, correo, reloj, WhatsApp, turbo). Heredan el color con `currentColor`; no se usan emojis como íconos.
+- Ícono de la pestaña: rueda de turbo blanca con centro rojo sobre círculo azul (`app/favicon.ico`, `app/apple-icon.png`).
+- Imagen para compartir el enlace: `app/opengraph-image.png` (1200 × 630).
+
 ## Logos
 - Turbo Universal: `public/logo.png` (encabezado).
 - Turboman y Master Power: `public/marcas/` (solo en la página Marcas, sin deformar ni recolorear).

@@ -1,5 +1,6 @@
 "use client";
 
+import { IconoBuscar, IconoLibro } from "./Iconos";
 import { useEffect, useState } from "react";
 import { categorias, type Producto } from "@/data/productos";
 import {
@@ -99,7 +100,7 @@ export default function Catalogo({
             className="mt-8 flex items-center rounded-full bg-white p-2 transition-all duration-700"
             style={{ boxShadow: `0 0 0 4px ${acento}99, 0 10px 40px ${acento}73` }}
           >
-            <span className="pl-5 text-2xl text-slate-400">🔍</span>
+            <span className="pl-5 text-slate-400"><IconoBuscar className="h-6 w-6" /></span>
             <input
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
@@ -151,7 +152,8 @@ export default function Catalogo({
           rel="noopener noreferrer"
           className="mb-6 inline-block rounded-full border-2 border-[#1a2150] px-5 py-2 text-sm font-semibold text-[#1a2150] transition hover:bg-[#1a2150] hover:text-white"
         >
-          📖 Ver catálogo completo
+          <IconoLibro className="mr-2 inline h-4 w-4 align-[-2px]" />
+          Ver catálogo completo
         </a>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {categorias.map((c, i) => {
