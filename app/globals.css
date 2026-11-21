@@ -33,3 +33,15 @@ body {
     linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
   background-size: 48px 48px;
 }
+
+/* Barra deslizable de marcas */
+@keyframes deslizar {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.barra-marcas-pista { animation: deslizar 40s linear infinite; }
+.barra-marcas:hover .barra-marcas-pista,
+.barra-marcas:focus-within .barra-marcas-pista { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .barra-marcas-pista { animation: none; }
+}

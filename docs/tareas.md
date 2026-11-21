@@ -24,6 +24,8 @@ Ciclo de cada tarea: implementar UNA → probar en el navegador → commit → m
 - [x] 1.19 Pie de página con sedes, teléfonos, correo, horario y redes
 - [x] 1.20 Rediseño con línea corporativa manteniendo rojo y azul
 - [x] 1.21 Sección de videos de YouTube en el inicio (carga el reproductor solo al hacer clic)
+- [x] 1.22 Empresas aliadas (Turbotec y Uniturbos) en el inicio y en Marcas
+- [x] 1.23 Barra deslizable con las marcas de vehículos en el inicio
 
 ## Datos y panel (adelantado de la U4)
 - [x] 2.1 Conexión a Supabase con respaldo en datos mock

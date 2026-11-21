@@ -6,6 +6,7 @@ import { NUMERO_WHATSAPP, fotoCategoria } from "@/lib/utils";
 import { Reveal, TarjetaProducto } from "./components/Comunes";
 import BuscadorHero from "./components/BuscadorHero";
 import VideosTurbo from "./components/VideosTurbo";
+import BarraMarcas from "./components/BarraMarcas";
 import {
   IconoCaja,
   IconoEscudo,
@@ -121,6 +122,9 @@ export default async function Inicio() {
           ))}
         </div>
       </section>
+
+      {/* Marcas de vehículos (barra deslizable) */}
+      <BarraMarcas />
 
       {/* Categorías (llevan al catálogo) */}
       <section className="mx-auto max-w-6xl px-6 py-16">
