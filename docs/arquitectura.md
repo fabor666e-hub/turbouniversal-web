@@ -61,3 +61,51 @@ WhatsApp (`wa.me`), Google Maps (iframe), Flipsnack (catálogo anterior), Instag
 ## Despliegue
 - Front y acciones de servidor: Vercel, proyecto `turbouniversal-web` (turboman-web.vercel.app).
 - Base de datos: Supabase (plan gratuito; se pausa por inactividad).
+
+## Backend (U4) · API REST en Render
+> Contrato completo: docs/contratos/api.md · Specs: docs/specs/B1 a B5.
+
+```
+Navegador ──► Next.js (Vercel) ──► API NestJS (Render) ──► PostgreSQL
+                                     /api/...                (Supabase, proyecto "turboman")
+```
+
+| Capa | Tecnología | Dónde |
+|---|---|---|
+| API REST | NestJS 11 + TypeScript (Node 22) | `backend/` → Render (Web Service) |
+| Acceso a datos | TypeORM + driver `pg` | `backend/src/**/*.entity.ts` |
+| Base de datos | PostgreSQL | Supabase (Session pooler con SSL); se puede cambiar a otra base con `DATABASE_URL` |
+| Validación | class-validator | DTOs en `backend/src/**/dto/` |
+| Autenticación | JWT (8 h) firmado con `JWT_SECRETO` | `POST /api/auth/login` |
+| Límite de peticiones | @nestjs/throttler | eventos y login |
+
+### Estructura de `backend/`
+```
+backend/
+  src/
+    main.ts                 arranque, CORS, prefijo /api, validación global
+    app.module.ts           conexión a PostgreSQL y módulos
+    comun/                  filtro de errores con el formato del contrato, utilidades
+    productos/              B1 + B4: entidad, DTOs, servicio, controlador
+    cotizaciones/           B2
+    eventos/                B3
+    panel/                  B3: resumen para el administrador
+    auth/                   B4: login y guardia JWT
+    base-de-datos/          migración inicial y semilla con los 12 productos
+  test/                     pruebas de cada criterio contra PostgreSQL real
+  render.yaml               despliegue en Render (Blueprint)
+```
+
+### Variables de entorno del backend
+| Variable | Uso | Secreta |
+|---|---|---|
+| `DATABASE_URL` | Conexión a PostgreSQL | Sí |
+| `JWT_SECRETO` | Firma de los tokens del panel | Sí |
+| `PANEL_CLAVE` | Clave del administrador | Sí |
+| `ORIGEN_FRONT` | Dominio permitido por CORS (ej. https://turboman-web.vercel.app) | No |
+| `PORT` | Puerto (Render lo asigna) | No |
+
+### Cambios en el front al conectar la API
+- `lib/datos.ts` y `lib/rastreo.ts` llaman a `NEXT_PUBLIC_API_URL` en lugar de Supabase.
+- El panel y el administrador usan el token de `POST /api/auth/login` guardado en una cookie httpOnly.
+- Supabase deja de ser necesario cuando todo funcione con la API (o queda solo como base de datos).

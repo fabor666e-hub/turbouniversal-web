@@ -1,0 +1,27 @@
+# Despliegue en Render (Blueprint). Render lo lee desde la raíz del repositorio.
+# Crea solo la API (carpeta backend/). La base de datos es la de Supabase (proyecto "turboman"),
+# así no se vence a los 30 días como la base gratuita de Render y se conservan los datos.
+services:
+  - type: web
+    name: turbouniversal-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm run start:prod
+    healthCheckPath: /api/salud
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      # Cadena del "Session pooler" de Supabase (Connect → Session pooler), con tu contraseña.
+      # Render la pide al crear el Blueprint; nunca se escribe aquí.
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_SSL
+        value: "true"
+      - key: JWT_SECRETO
+        generateValue: true
+      - key: PANEL_CLAVE
+        sync: false
+      - key: ORIGEN_FRONT
+        value: https://turboman-web.vercel.app,http://localhost:3000

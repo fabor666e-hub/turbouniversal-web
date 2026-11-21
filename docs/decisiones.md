@@ -14,6 +14,12 @@
 | 2026-11 | Administrador de productos con acciones de servidor y clave secreta | No se abren permisos de escritura al público en Supabase. |
 | 2026-11 | Fotos de Nosotros generadas con IA | La empresa no tiene fotos propias; pendiente reemplazar las que muestran logotipos de otras marcas. |
 | 2026-11 | Rediseño con línea más corporativa, manteniendo rojo y azul | La empresa necesita transmitir seriedad y confianza: se quitaron cortes diagonales, píldoras, rebotes y giros; se usan bordes rectos, cuadrícula técnica y botones sobrios. |
+| 2026-11 | Backend con NestJS + TypeScript | El profesor lo incluyó en el stack del curso; usa el mismo lenguaje del front, es liviano para el plan gratuito de Render y sigue una estructura por módulos fácil de explicar. Spring Boot queda como alternativa del diplomado. |
+| 2026-11 | API publicada en Render | Indicación del profesor; despliega desde GitHub como Vercel y tiene plan gratuito para el MVP. |
+| 2026-11 | PostgreSQL detrás de `DATABASE_URL` | Funciona igual con Render PostgreSQL o con Supabase; si la base gratuita de Render vence (30 días), se cambia una variable y no el código. |
+| 2026-11 | El precio de la cotización lo calcula el servidor | Evita que alguien modifique precios desde el navegador. |
+| 2026-11 | Contrato de la API antes del código (docs/contratos/api.md) | Método SDD: front y back se ponen de acuerdo en un documento; las specs B1 a B5 tienen criterios verificables con curl o Postman. |
+| 2026-11 | La API en Render usa la base de Supabase (no una base nueva en Render) | La base gratuita de Render vence a los 30 días; Supabase ya tiene los datos y solo se pausa por inactividad. Se conecta por el Session pooler (IPv4) con SSL. |
 
 ## Rúbrica de las variantes (1 = bajo, 3 = alto)
 

@@ -35,6 +35,19 @@ Ciclo de cada tarea: implementar UNA → probar en el navegador → commit → m
 - [x] 2.5 F5 · Administrador de productos (crear, editar, stock, borrar)
 - [ ] 2.6 Probar F5 con Supabase activo
 
+## Back (U4) · API en Render
+- [x] 4.1 Contrato de la API (docs/contratos/api.md) y specs B1 a B5
+- [x] 4.2 Proyecto NestJS en `backend/` con conexión a PostgreSQL, CORS, prefijo /api y formato de errores
+- [x] 4.3 Migración inicial (productos, eventos, cotizaciones) y semilla con los 12 productos
+- [x] 4.4 B1 · Productos, categorías y vehículos (lectura pública)
+- [x] 4.5 B4 · Login con JWT y guardia para rutas de administración
+- [x] 4.6 B4 · Crear, editar, cambiar stock y borrar productos
+- [x] 4.7 B2 · Cotizaciones con precio calculado en el servidor
+- [x] 4.8 B3 · Eventos con límite por IP y resumen del panel
+- [x] 4.9 Pruebas automáticas de los criterios B1 a B4 contra PostgreSQL
+- [ ] 4.10 B5 · Despliegue en Render (render.yaml listo; falta crear el servicio en render.com)
+- [ ] 4.11 Conectar el front a la API (`NEXT_PUBLIC_API_URL`)
+
 ## Pendientes
 - [ ] 3.2 Reemplazar las fotos de Nosotros que muestran logotipos de otras marcas
 - [ ] 3.4 Política de tratamiento de datos (Ley 1581) y casilla en la cotización

@@ -1,0 +1,10 @@
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Evento } from './evento.entity';
+import { EventosController } from './eventos.controller';
+
+@Module({
+  imports: [TypeOrmModule.forFeature([Evento])],
+  controllers: [EventosController],
+})
+export class EventosModule {}
