@@ -20,6 +20,7 @@
 | 2026-11 | El precio de la cotización lo calcula el servidor | Evita que alguien modifique precios desde el navegador. |
 | 2026-11 | Contrato de la API antes del código (docs/contratos/api.md) | Método SDD: front y back se ponen de acuerdo en un documento; las specs B1 a B5 tienen criterios verificables con curl o Postman. |
 | 2026-11 | La API en Render usa la base de Supabase (no una base nueva en Render) | La base gratuita de Render vence a los 30 días; Supabase ya tiene los datos y solo se pausa por inactividad. Se conecta por el Session pooler (IPv4) con SSL. |
+| 2026-11 | El front pasa por la API y Supabase queda como respaldo | La API valida y calcula precios en el servidor. Render gratis tarda ~50 s en despertar: las lecturas esperan 4 s y luego leen Supabase directo; eventos y cotizaciones se guardan directo si la API falla. Las escrituras del administrador no se repiten en Supabase si la API tarda, para no duplicar cambios. |
 
 ## Rúbrica de las variantes (1 = bajo, 3 = alto)
 

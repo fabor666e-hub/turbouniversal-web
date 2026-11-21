@@ -1,5 +1,6 @@
 import { productos as locales, type Producto } from "@/data/productos";
 import { supabase } from "./supabase";
+import { API_URL, ErrorApi, pedirApi } from "./api";
 
 type Fila = {
   referencia: string;
@@ -23,7 +24,23 @@ const mapear = (f: Fila) => ({
   imagen: f.imagen ?? undefined,
 });
 
+// Orden: 1) API en Render  2) Supabase directo  3) datos locales.
+// La API tiene 4 s para responder (en el plan gratis tarda ~50 s en despertar);
+// si no alcanza, la página usa Supabase y no se queda esperando.
+const LECTURA = { espera: 4000, next: { revalidate: 60, tags: ["productos"] } };
+
 export async function obtenerProductos(): Promise<Producto[]> {
+  if (API_URL) {
+    try {
+      return (await pedirApi<Fila[]>("/productos", LECTURA)).map(mapear);
+    } catch (e) {
+      console.warn("API no disponible, leyendo Supabase:", (e as Error).message);
+    }
+  }
+  return productosSupabase();
+}
+
+async function productosSupabase(): Promise<Producto[]> {
   if (!supabase) return locales;
   const { data, error } = await supabase
     .from("productos")
@@ -37,6 +54,14 @@ export async function obtenerProductos(): Promise<Producto[]> {
 }
  
 export async function obtenerProducto(referencia: string): Promise<Producto | undefined> {
+  if (API_URL) {
+    try {
+      return mapear(await pedirApi<Fila>(`/productos/${encodeURIComponent(referencia)}`, LECTURA));
+    } catch (e) {
+      if (e instanceof ErrorApi && e.estado === 404) return undefined;
+      console.warn("API no disponible, leyendo Supabase:", (e as Error).message);
+    }
+  }
   if (!supabase) return locales.find((p) => p.referencia === referencia);
   const { data, error } = await supabase
     .from("productos")

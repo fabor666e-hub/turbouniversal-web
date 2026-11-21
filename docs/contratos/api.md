@@ -109,6 +109,7 @@ Cuerpo `{ "delta": 1 }` o `{ "delta": -1 }`. El stock nunca baja de 0. **200** `
 {
   "totales": { "vistas": 120, "busquedas": 45, "agregados": 18, "cotizaciones": 6 },
   "masVistos": [{ "valor": "TB-1002", "cantidad": 30 }],
+  "masAgregados": [{ "valor": "TB-1002", "cantidad": 7 }],
   "masBuscados": [{ "valor": "npr", "cantidad": 12 }],
   "categorias": [{ "valor": "cartridge", "cantidad": 9 }],
   "clics": [{ "valor": "whatsapp-pie", "cantidad": 5 }],

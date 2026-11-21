@@ -45,8 +45,8 @@ Ciclo de cada tarea: implementar UNA → probar en el navegador → commit → m
 - [x] 4.7 B2 · Cotizaciones con precio calculado en el servidor
 - [x] 4.8 B3 · Eventos con límite por IP y resumen del panel
 - [x] 4.9 Pruebas automáticas de los criterios B1 a B4 contra PostgreSQL
-- [ ] 4.10 B5 · Despliegue en Render (render.yaml listo; falta crear el servicio en render.com)
-- [ ] 4.11 Conectar el front a la API (`NEXT_PUBLIC_API_URL`)
+- [x] 4.10 B5 · Despliegue en Render: https://turbouniversal-api-evth.onrender.com/api (Supabase por Session pooler)
+- [x] 4.11 Conectar el front a la API (`NEXT_PUBLIC_API_URL`), con respaldo a Supabase directo si la API no responde
 
 ## Pendientes
 - [ ] 3.2 Reemplazar las fotos de Nosotros que muestran logotipos de otras marcas

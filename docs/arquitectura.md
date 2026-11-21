@@ -53,7 +53,8 @@ Tipos de evento: `vista_producto`, `busqueda`, `categoria`, `clic`, `agregar_cot
 | `NEXT_PUBLIC_SUPABASE_URL` | URL del proyecto | No |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Lectura pública limitada por RLS | No |
 | `SUPABASE_SERVICE_ROLE_KEY` | Panel y administrador (solo servidor) | Sí |
-| `PANEL_CLAVE` | Contraseña del panel | Sí |
+| `PANEL_CLAVE` | Contraseña del panel (igual a la de Render) | Sí |
+| `NEXT_PUBLIC_API_URL` | URL de la API, ej. `https://turbouniversal-api-evth.onrender.com/api` | No |
 
 ## Servicios externos
 WhatsApp (`wa.me`), Google Maps (iframe), Flipsnack (catálogo anterior), Instagram y Facebook.
@@ -105,7 +106,10 @@ backend/
 | `ORIGEN_FRONT` | Dominio permitido por CORS (ej. https://turboman-web.vercel.app) | No |
 | `PORT` | Puerto (Render lo asigna) | No |
 
-### Cambios en el front al conectar la API
-- `lib/datos.ts` y `lib/rastreo.ts` llaman a `NEXT_PUBLIC_API_URL` en lugar de Supabase.
-- El panel y el administrador usan el token de `POST /api/auth/login` guardado en una cookie httpOnly.
-- Supabase deja de ser necesario cuando todo funcione con la API (o queda solo como base de datos).
+### Conexión del front con la API (tarea 4.11)
+- `lib/api.ts`: cliente de la API (`NEXT_PUBLIC_API_URL`), con tiempo límite y errores del contrato.
+- `lib/datos.ts`: lee productos de la API (espera 4 s, caché de 60 s con la etiqueta `productos`); si no responde, lee Supabase y, si tampoco, los datos locales.
+- `lib/rastreo.ts`: eventos y cotizaciones van a `POST /api/eventos` y `POST /api/cotizaciones` (con `aceptaDatos`, Ley 1581); si la API no responde, se guardan directo en Supabase.
+- `lib/apiAdmin.ts` (solo servidor): inicia sesión con `PANEL_CLAVE` y reutiliza el token de 8 h. Lo usan el panel (`GET /api/panel/resumen`, `GET /api/cotizaciones`) y las acciones del administrador.
+- El panel muestra de dónde salieron los datos: "API en Render → Supabase" o "Supabase directo".
+- `PANEL_CLAVE` debe ser la misma en Vercel y en Render.

@@ -36,6 +36,7 @@ export class PanelController {
         cotizaciones: Number(cotizaciones),
       },
       masVistos: await this.top('vista_producto'),
+      masAgregados: await this.top('agregar_cotizacion'),
       masBuscados: await this.top('busqueda'),
       categorias: await this.top('categoria'),
       clics: await this.top('clic'),
