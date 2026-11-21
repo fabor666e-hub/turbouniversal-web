@@ -306,8 +306,11 @@ export function PanelCotizacion() {
   const { items, abierto, setAbierto, totalPrecio, cambiar, quitar } = usarCotizacion();
   const [nombre, setNombre] = useState("");
   const [telefono, setTelefono] = useState("");
+  const [aceptaDatos, setAceptaDatos] = useState(false);
 
-  const formularioCompleto = nombre.trim().length > 1 && telefono.trim().length >= 7;
+  const digitos = telefono.replace(/\D/g, "").length;
+  const formularioCompleto =
+    nombre.trim().length > 1 && digitos >= 7 && digitos <= 15 && aceptaDatos;
 
   const enviarWhatsApp = () => {
     const lineas = items.map(
@@ -324,6 +327,7 @@ export function PanelCotizacion() {
     guardarCotizacion({
       nombre: nombre.trim(),
       telefono: telefono.trim(),
+      aceptaDatos,
       items: items.map((i) => ({
         referencia: i.p.referencia,
         nombre: i.p.nombre,
@@ -426,6 +430,18 @@ export function PanelCotizacion() {
               inputMode="tel"
               className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-[#e8233b]"
             />
+            <label className="flex items-start gap-2 text-xs text-slate-500">
+              <input
+                type="checkbox"
+                checked={aceptaDatos}
+                onChange={(e) => setAceptaDatos(e.target.checked)}
+                className="mt-0.5 h-4 w-4 accent-[#1a2150]"
+              />
+              <span>
+                Autorizo a Turbo Universal a usar mi nombre y teléfono solo para responder esta
+                cotización (Ley 1581 de 2012).
+              </span>
+            </label>
             <button
               onClick={enviarWhatsApp}
               disabled={!formularioCompleto}
@@ -434,11 +450,11 @@ export function PanelCotizacion() {
               Enviar cotización por WhatsApp
             </button>
             <p className="text-center text-xs text-slate-400">
-              Usaremos tus datos solo para responder tu cotización. Precios de ejemplo; la disponibilidad final se confirma con un asesor.
+              Precios de ejemplo; la disponibilidad final se confirma con un asesor.
             </p>
           </div>
         )}
       </aside>
     </>
   );
-}
+}

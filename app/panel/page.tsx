@@ -6,6 +6,7 @@ import Link from "next/link";
 import { categorias } from "@/data/productos";
 import { sesionValida } from "@/lib/sesionPanel";
 import { precio } from "@/lib/utils";
+import { hayApi, pedirAdmin } from "@/lib/apiAdmin";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -40,7 +41,7 @@ type Cotizacion = {
   telefono: string;
   items: { referencia: string; nombre: string; cantidad: number; precio: number }[];
   total: number;
-  creado_en: string;
+  creadoEn: string;
 };
 
 function contar(eventos: Evento[], tipo: string): [string, number][] {
@@ -49,6 +50,95 @@ function contar(eventos: Evento[], tipo: string): [string, number][] {
     if (e.tipo === tipo && e.detalle) m.set(e.detalle, (m.get(e.detalle) ?? 0) + 1);
   }
   return [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
+}
+
+type Filas = [string, number][];
+type Datos = {
+  fuente: "api" | "supabase";
+  totales: { vistas: number; busquedas: number; agregados: number; cotizaciones: number };
+  vistas: Filas;
+  agregados: Filas;
+  busquedas: Filas;
+  categorias: Filas;
+  clics: Filas;
+  stockBajo: { referencia: string; nombre: string; stock: number }[];
+  cotizaciones: Cotizacion[];
+};
+
+type Top = { valor: string; cantidad: number }[];
+const aFilas = (t: Top = []): Filas => t.map((f) => [f.valor, f.cantidad]);
+
+// 1) API en Render: resumen calculado por el backend (GET /api/panel/resumen)
+async function datosDesdeApi(): Promise<Datos | null> {
+  if (!hayApi()) return null;
+  try {
+    const [r, cot] = await Promise.all([
+      pedirAdmin<{
+        totales: Datos["totales"];
+        masVistos: Top;
+        masAgregados?: Top;
+        masBuscados: Top;
+        categorias: Top;
+        clics: Top;
+        stockBajo: Datos["stockBajo"];
+      }>("/panel/resumen", { espera: 8000 }),
+      pedirAdmin<Cotizacion[]>("/cotizaciones?limite=30", { espera: 8000 }),
+    ]);
+    return {
+      fuente: "api",
+      totales: r.totales,
+      vistas: aFilas(r.masVistos),
+      agregados: aFilas(r.masAgregados),
+      busquedas: aFilas(r.masBuscados),
+      categorias: aFilas(r.categorias),
+      clics: aFilas(r.clics),
+      stockBajo: r.stockBajo,
+      cotizaciones: cot,
+    };
+  } catch (e) {
+    console.warn("Panel: API no disponible, leyendo Supabase:", (e as Error).message);
+    return null;
+  }
+}
+
+// 2) Respaldo: Supabase directo con la clave de servidor
+async function datosDesdeSupabase(): Promise<Datos | null> {
+  if (!supabaseAdmin) return null;
+  const productos = await obtenerProductos();
+  const { data: ev } = await supabaseAdmin
+    .from("eventos")
+    .select("tipo, detalle, creado_en")
+    .order("creado_en", { ascending: false })
+    .limit(5000);
+  const { data: cot } = await supabaseAdmin
+    .from("cotizaciones")
+    .select("*")
+    .order("creado_en", { ascending: false })
+    .limit(30);
+  const eventos = (ev ?? []) as Evento[];
+  const cotizaciones = ((cot ?? []) as (Omit<Cotizacion, "creadoEn"> & { creado_en: string })[]).map(
+    ({ creado_en, ...c }) => ({ ...c, creadoEn: creado_en })
+  );
+  const total = (tipo: string) => eventos.filter((e) => e.tipo === tipo).length;
+  return {
+    fuente: "supabase",
+    totales: {
+      vistas: total("vista_producto"),
+      busquedas: total("busqueda"),
+      agregados: total("agregar_cotizacion"),
+      cotizaciones: cotizaciones.length,
+    },
+    vistas: contar(eventos, "vista_producto"),
+    agregados: contar(eventos, "agregar_cotizacion"),
+    busquedas: contar(eventos, "busqueda"),
+    categorias: contar(eventos, "categoria"),
+    clics: contar(eventos, "clic"),
+    stockBajo: productos
+      .filter((p) => p.stock <= 3)
+      .sort((a, b) => a.stock - b.stock)
+      .map(({ referencia, nombre, stock }) => ({ referencia, nombre, stock })),
+    cotizaciones,
+  };
 }
 
 function Lista({
@@ -116,30 +206,19 @@ export default async function Panel() {
     );
   }
 
-  if (!supabaseAdmin) {
+  const productos = await obtenerProductos();
+  const datos = (await datosDesdeApi()) ?? (await datosDesdeSupabase());
+  if (!datos) {
     return (
       <main className="mx-auto max-w-xl px-8 py-20">
         <p className="text-red-600">
-          Falta SUPABASE_SERVICE_ROLE_KEY en .env.local (y reiniciar el servidor).
+          No se pudo conectar ni a la API (NEXT_PUBLIC_API_URL) ni a Supabase
+          (SUPABASE_SERVICE_ROLE_KEY). Revisa las variables de entorno.
         </p>
       </main>
     );
   }
-
-  const productos = await obtenerProductos();
-  const { data: ev } = await supabaseAdmin
-    .from("eventos")
-    .select("tipo, detalle, creado_en")
-    .order("creado_en", { ascending: false })
-    .limit(5000);
-  const { data: cot } = await supabaseAdmin
-    .from("cotizaciones")
-    .select("*")
-    .order("creado_en", { ascending: false })
-    .limit(30);
-
-  const eventos = (ev ?? []) as Evento[];
-  const cotizaciones = (cot ?? []) as Cotizacion[];
+  const { fuente, totales, cotizaciones } = datos;
 
   const nombreProducto = (ref: string) => {
     const p = productos.find((x) => x.referencia === ref);
@@ -148,34 +227,32 @@ export default async function Panel() {
   const nombreCategoria = (slug: string) =>
     categorias.find((c) => c.slug === slug)?.nombre ?? slug;
 
-  const vistas = contar(eventos, "vista_producto").map(
-    ([r, n]) => [nombreProducto(r), n] as [string, number]
-  );
-  const agregados = contar(eventos, "agregar_cotizacion").map(
-    ([r, n]) => [nombreProducto(r), n] as [string, number]
-  );
-  const busquedas = contar(eventos, "busqueda");
-  const cats = contar(eventos, "categoria").map(
-    ([s, n]) => [nombreCategoria(s), n] as [string, number]
-  );
-  const clics = contar(eventos, "clic");
-
-  const total = (tipo: string) => eventos.filter((e) => e.tipo === tipo).length;
-  const stockBajo = productos
-    .filter((p) => p.stock <= 3)
-    .sort((a, b) => a.stock - b.stock);
+  const vistas = datos.vistas.map(([r, n]) => [nombreProducto(r), n] as [string, number]);
+  const agregados = datos.agregados.map(([r, n]) => [nombreProducto(r), n] as [string, number]);
+  const busquedas = datos.busquedas;
+  const cats = datos.categorias.map(([s, n]) => [nombreCategoria(s), n] as [string, number]);
+  const clics = datos.clics;
+  const stockBajo = datos.stockBajo;
 
   const resumen = [
-    { titulo: "Vistas de productos", valor: total("vista_producto") },
-    { titulo: "Búsquedas", valor: total("busqueda") },
-    { titulo: "Agregados a cotización", valor: total("agregar_cotizacion") },
-    { titulo: "Cotizaciones enviadas", valor: cotizaciones.length },
+    { titulo: "Vistas de productos", valor: totales.vistas },
+    { titulo: "Búsquedas", valor: totales.busquedas },
+    { titulo: "Agregados a cotización", valor: totales.agregados },
+    { titulo: "Cotizaciones enviadas", valor: totales.cotizaciones },
   ];
 
   return (
     <main className="mx-auto max-w-6xl px-8 py-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-[#1a2150]">Panel de datos</h1>
+        <div>
+          <h1 className="text-3xl font-bold text-[#1a2150]">Panel de datos</h1>
+          <p className="mt-1 text-xs text-slate-500">
+            Datos obtenidos de:{" "}
+            <span className="font-semibold">
+              {fuente === "api" ? "API en Render → Supabase" : "Supabase directo (la API no respondió)"}
+            </span>
+          </p>
+        </div>
         <div className="flex items-center gap-5">
           <Link
             href="/panel/productos"
@@ -248,7 +325,7 @@ export default async function Panel() {
                 {cotizaciones.map((c) => (
                   <tr key={c.id} className="border-t align-top">
                     <td className="py-3 pr-4 whitespace-nowrap">
-                      {new Date(c.creado_en).toLocaleString("es-CO", {
+                      {new Date(c.creadoEn).toLocaleString("es-CO", {
                         timeZone: "America/Bogota",
                       })}
                     </td>
