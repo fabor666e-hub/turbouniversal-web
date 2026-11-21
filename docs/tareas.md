@@ -22,6 +22,8 @@ Ciclo de cada tarea: implementar UNA → probar en el navegador → commit → m
 - [x] 1.17 Ícono de pestaña (favicon) e imagen para compartir el enlace (Open Graph)
 - [x] 1.18 Franja de marcas (Turboman y Master Power) en el inicio
 - [x] 1.19 Pie de página con sedes, teléfonos, correo, horario y redes
+- [x] 1.20 Rediseño con línea corporativa manteniendo rojo y azul
+- [x] 1.21 Sección de videos de YouTube en el inicio (carga el reproductor solo al hacer clic)
 
 ## Datos y panel (adelantado de la U4)
 - [x] 2.1 Conexión a Supabase con respaldo en datos mock
@@ -32,7 +34,6 @@ Ciclo de cada tarea: implementar UNA → probar en el navegador → commit → m
 - [ ] 2.6 Probar F5 con Supabase activo
 
 ## Pendientes
-- [ ] 3.1 Contraste AA: botones rojos con texto pequeño a `#d91e34` y botones de WhatsApp a `#15803d`
 - [ ] 3.2 Reemplazar las fotos de Nosotros que muestran logotipos de otras marcas
 - [ ] 3.4 Política de tratamiento de datos (Ley 1581) y casilla en la cotización
 - [ ] 3.5 Confirmar con la empresa el número de WhatsApp, la dirección de Medellín y teléfono y horario de Cali y Duitama

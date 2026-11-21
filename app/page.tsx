@@ -5,6 +5,7 @@ import { obtenerProductos } from "@/lib/datos";
 import { NUMERO_WHATSAPP, fotoCategoria } from "@/lib/utils";
 import { Reveal, TarjetaProducto } from "./components/Comunes";
 import BuscadorHero from "./components/BuscadorHero";
+import VideosTurbo from "./components/VideosTurbo";
 import {
   IconoCaja,
   IconoEscudo,
@@ -17,6 +18,12 @@ import {
 export const dynamic = "force-dynamic";
 
 const SEDES = ["Bogotá", "Medellín", "Cali", "Duitama"];
+
+// Aliados que la empresa muestra en su sitio actual
+const ALIADOS = [
+  { nombre: "Importadora Turbotec", sigla: "TT", detalle: "Villavicencio, Meta" },
+  { nombre: "Uniturbos", sigla: "UT", detalle: "Expertos en turboalimentadores · Zipaquirá, Cundinamarca" },
+];
 
 function Titulo({ etiqueta, children, accion }: { etiqueta: string; children: ReactNode; accion?: ReactNode }) {
   return (
@@ -169,9 +176,30 @@ export default async function Inicio() {
         </div>
       </section>
 
+      {/* Videos */}
+      <section className="mx-auto max-w-6xl px-6 py-16">
+        <Titulo
+          etiqueta="Aprende sobre turbos"
+          accion={
+            <a
+              href="https://www.youtube.com/channel/UCQfjSN6oOd0jt2t5-2hUWtg/featured"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track="inicio-canal-youtube"
+              className="text-sm font-semibold text-[#1a2150] hover:text-[#e8233b]"
+            >
+              Ver canal de YouTube →
+            </a>
+          }
+        >
+          Conoce cómo funciona un turbo
+        </Titulo>
+        <VideosTurbo />
+      </section>
+
       {/* Marcas que distribuimos */}
-      <section className="mx-auto max-w-6xl px-6 py-14">
-        <div className="flex flex-col items-center gap-8 md:flex-row md:justify-between">
+      <section className="border-t border-slate-200 bg-white">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-8 px-6 py-14 md:flex-row md:justify-between">
           <div className="text-center md:text-left">
             <p className="text-xs font-semibold uppercase tracking-wider text-[#e8233b]">Distribuidores oficiales</p>
             <p className="mt-1 text-xl font-bold text-[#1a2150]">Marcas con respaldo y garantía</p>
@@ -190,6 +218,28 @@ export default async function Inicio() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={m.src} alt={m.alt} className="max-h-14 w-full object-contain" />
               </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Aliados */}
+      <section className="bg-white">
+        <div className="mx-auto max-w-6xl px-6 pb-14">
+          <p className="text-center text-xs font-semibold uppercase tracking-wider text-slate-500 md:text-left">
+            Empresas aliadas que confían en nosotros
+          </p>
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            {ALIADOS.map((a) => (
+              <div key={a.nombre} className="flex items-center gap-4 rounded-lg border border-slate-200 p-4">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-[#1a2150] text-sm font-bold text-white">
+                  {a.sigla}
+                </span>
+                <div>
+                  <p className="font-semibold text-[#1a2150]">{a.nombre}</p>
+                  <p className="text-sm text-slate-500">{a.detalle}</p>
+                </div>
+              </div>
             ))}
           </div>
         </div>

@@ -32,6 +32,12 @@ const marcas = [
   },
 ];
 
+// Empresas aliadas que la empresa muestra en su sitio actual (turbouniversal.com.co)
+const aliados = [
+  { nombre: "Importadora Turbotec", sigla: "TT", detalle: "Villavicencio, Meta" },
+  { nombre: "Uniturbos", sigla: "UT", detalle: "Expertos en turboalimentadores · Zipaquirá, Cundinamarca" },
+];
+
 const normalizar = (t: string) =>
   t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/\s+/g, "");
 
@@ -58,7 +64,7 @@ export default async function Marcas() {
           const total = cuantos(m.nombre);
           return (
             <Reveal key={m.nombre} delay={i * 120}>
-              <article className="flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-lg transition duration-300 hover:shadow-md">
+              <article className="flex h-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white transition duration-300 hover:shadow-md">
                 <div
                   className={`relative flex h-48 items-center justify-center p-8 ${
                     m.logo ? "bg-white" : `bg-gradient-to-br ${m.fondo}`
@@ -106,6 +112,27 @@ export default async function Marcas() {
             </Reveal>
           );
         })}
+      </section>
+
+      {/* Empresas aliadas */}
+      <section className="mx-auto max-w-5xl px-8 pb-16">
+        <div className="border-t border-slate-200 pt-10">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#e8233b]">Red de aliados</p>
+          <h2 className="mt-1 text-2xl font-bold tracking-tight text-[#1a2150]">Los que confían en nosotros</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            {aliados.map((a) => (
+              <div key={a.nombre} className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-5">
+                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-md bg-[#1a2150] font-bold text-white">
+                  {a.sigla}
+                </span>
+                <div>
+                  <p className="font-semibold text-[#1a2150]">{a.nombre}</p>
+                  <p className="text-sm text-slate-500">{a.detalle}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
     </main>
   );
