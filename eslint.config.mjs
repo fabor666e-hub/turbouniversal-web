@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // El backend (NestJS) tiene su propio proyecto; y los reportes de pruebas no se revisan
+    "backend/**",
+    "playwright-report/**",
+    "test-results/**",
   ]),
 ]);
 

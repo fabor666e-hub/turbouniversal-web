@@ -1,0 +1,88 @@
+# Integración continua de Turbo Universal.
+# Corre en cada pull request y en cada push a main. La rama main está protegida:
+# no se puede fusionar un PR si alguno de estos dos trabajos falla.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  front:
+    name: Front · lint, tipos, unitarias, build y e2e
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # Sin variables de Supabase ni de la API: el sitio usa los datos locales
+      # (data/productos.ts) y las pruebas siempre dan el mismo resultado.
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Tipos (TypeScript)
+        run: npm run typecheck
+      - name: Pruebas unitarias (F1–F3, regla crítica)
+        run: npm test
+      - name: Build de producción
+        run: npm run build
+      - name: Navegador para las pruebas e2e
+        run: npx playwright install --with-deps chromium
+      - name: Pruebas e2e (F1–F3, regla crítica y acceso cruzado)
+        run: npm run e2e
+      - name: Reporte de Playwright
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-playwright
+          path: playwright-report/
+          retention-days: 7
+
+  back:
+    name: Back · pruebas de la API contra PostgreSQL
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: turbouniversal_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      # Base de PRUEBAS desechable del propio CI (nunca la de Supabase)
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/turbouniversal_test
+      JWT_SECRETO: secreto-de-prueba-ci
+      PANEL_CLAVE: clave-de-prueba-ci
+      ORIGEN_FRONT: http://localhost:3000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - name: Compilar
+        run: npm run build
+      - name: Pruebas B1–B4 (regla crítica y acceso cruzado incluidos)
+        run: npm test
