@@ -2,7 +2,7 @@
 export default function Cargando() {
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center gap-5">
-      <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#1a2150] shadow-xl">
+      <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#1a2150] shadow-md">
         <svg viewBox="0 0 200 200" className="h-16 w-16 animate-spin" aria-hidden="true">
           {Array.from({ length: 8 }).map((_, i) => (
             <path
@@ -15,7 +15,7 @@ export default function Cargando() {
           <circle cx="100" cy="100" r="16" fill="#e8233b" />
         </svg>
       </div>
-      <p className="text-sm font-semibold uppercase tracking-widest text-[#1a2150]">Cargando…</p>
+      <p className="text-sm font-semibold uppercase tracking-wider text-[#1a2150]">Cargando…</p>
     </div>
   );
 }

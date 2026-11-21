@@ -36,7 +36,7 @@ export default async function EditarProducto({
       <Link href="/panel/productos" className="text-sm text-slate-400 hover:text-[#e8233b]">
         ← Volver a productos
       </Link>
-      <h1 className="mb-6 mt-2 text-3xl font-extrabold text-[#1a2150]">
+      <h1 className="mb-6 mt-2 text-3xl font-bold text-[#1a2150]">
         Editar {producto.referencia}
       </h1>
       <FormularioProducto accion={editarProducto.bind(null, producto.referencia)} producto={producto} />

@@ -27,12 +27,33 @@ export function Header() {
 
   return (
     <>
-      <div className="bg-[#1a2150] px-4 py-2 text-center text-xs font-medium text-white sm:text-sm">
-        Arma tu cotización en línea y recibe respuesta de un asesor por WhatsApp
+      <div className="bg-[#11173a] px-4 py-2 text-xs text-white/80">
+        <div className="mx-auto flex max-w-6xl items-center justify-center gap-6 md:justify-between">
+          <span className="hidden md:inline">
+            Distribuidores oficiales <b className="font-semibold text-white">Turboman</b> y{" "}
+            <b className="font-semibold text-white">Master Power</b> en Colombia
+          </span>
+          <span className="flex items-center gap-5">
+            <a
+              href={`https://wa.me/${NUMERO_WHATSAPP}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track="whatsapp-barra-superior"
+              className="flex items-center gap-1.5 transition hover:text-white"
+            >
+              <IconoWhatsApp className="h-3.5 w-3.5" />
+              {telefonoVisible(NUMERO_WHATSAPP)}
+            </a>
+            <span className="hidden items-center gap-1.5 sm:flex">
+              <IconoReloj className="h-3.5 w-3.5" />
+              Lun. a vie. 8:00 a. m. – 6:00 p. m.
+            </span>
+          </span>
+        </div>
       </div>
 
-      <header className="sticky top-0 z-30 bg-white/90 px-4 py-3 shadow-sm backdrop-blur sm:px-8">
-        <div className="flex items-center justify-between">
+      <header className="sticky top-0 z-30 border-b border-slate-200 bg-white px-4 py-3 sm:px-8">
+        <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" aria-label="Turbo Universal, inicio">
             <Image
               src="/logo.png"
@@ -44,13 +65,13 @@ export function Header() {
             />
           </Link>
 
-          <nav className="hidden gap-8 text-sm font-medium text-[#1a2150] md:flex">
+          <nav className="hidden gap-7 text-sm font-medium text-[#1a2150] lg:flex">
             {enlaces.map((e) => (
               <Link
                 key={e.href}
                 href={e.href}
-                className={`transition-colors duration-500 hover:text-[#e8233b] ${
-                  activo(e.href) ? "font-bold text-[var(--acento)]" : ""
+                className={`border-b-2 py-2 transition-colors hover:text-[#e8233b] ${
+                  activo(e.href) ? "border-[#e8233b] font-semibold text-[#e8233b]" : "border-transparent"
                 }`}
               >
                 {e.texto}
@@ -61,7 +82,7 @@ export function Header() {
           <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={() => setAbierto(true)}
-              className="relative rounded-full border-2 border-[#1a2150] px-3 py-2 text-sm font-semibold text-[#1a2150] transition hover:bg-[#1a2150] hover:text-white sm:px-4"
+              className="relative rounded-md border border-[#1a2150] px-3 py-2 text-sm font-semibold text-[#1a2150] transition hover:bg-[#1a2150] hover:text-white sm:px-4"
             >
               Mi cotización
               {totalUnidades > 0 && (
@@ -72,7 +93,7 @@ export function Header() {
             </button>
             <a
               href="#contacto"
-              className="hidden rounded-full bg-[var(--acento)] px-5 py-2 text-sm font-semibold text-white transition duration-700 hover:brightness-90 sm:block"
+              className="hidden rounded-md bg-[#d91e34] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#b8172b] sm:block"
             >
               Contacto
             </a>
@@ -80,12 +101,12 @@ export function Header() {
         </div>
 
         {/* Menú en celular */}
-        <nav className="mt-3 flex flex-wrap justify-center gap-x-5 gap-y-1 text-sm font-medium text-[#1a2150] md:hidden">
+        <nav className="mt-3 flex flex-wrap justify-center gap-x-5 gap-y-1 text-sm font-medium text-[#1a2150] lg:hidden">
           {enlaces.map((e) => (
             <Link
               key={e.href}
               href={e.href}
-              className={activo(e.href) ? "font-bold text-[var(--acento)]" : ""}
+              className={activo(e.href) ? "font-semibold text-[#e8233b]" : ""}
             >
               {e.texto}
             </Link>
@@ -109,10 +130,10 @@ const telefonoVisible = (n: string) => `+${n.slice(0, 2)} ${n.slice(2, 5)} ${n.s
 export function Footer() {
   const enlace = "transition hover:text-white";
   return (
-    <footer id="contacto" className="mt-16 bg-[#1a2150] px-8 pb-8 pt-14 text-white">
+    <footer id="contacto" className="border-t-4 border-[#e8233b] bg-[#11173a] px-8 pb-8 pt-14 text-white">
       <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <p className="text-xl font-extrabold">
+          <p className="text-xl font-bold">
             TURBO <span className="text-[#ff6b7d]">UNIVERSAL</span>
           </p>
           <p className="mt-3 text-sm text-white/70">
@@ -221,7 +242,7 @@ export function Footer() {
             href={`https://wa.me/${NUMERO_WHATSAPP}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#d91e34] px-5 py-2.5 text-sm font-semibold transition hover:bg-[#c71c32]"
+            className="mt-5 inline-flex items-center gap-2 rounded-md bg-[#d91e34] px-5 py-2.5 text-sm font-semibold transition hover:bg-[#c71c32]"
           >
             <IconoWhatsApp className="h-4 w-4" />
             Escríbenos
@@ -273,7 +294,7 @@ export function WhatsAppFlotante() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Escríbenos por WhatsApp"
-        className="pulso flex h-14 w-14 items-center justify-center rounded-full bg-green-600 text-white shadow-lg transition hover:scale-110"
+        className="flex h-14 w-14 items-center justify-center rounded-full bg-green-600 text-white shadow-lg transition"
       >
         <IconoWhatsApp className="h-7 w-7" />
       </a>
@@ -408,7 +429,7 @@ export function PanelCotizacion() {
             <button
               onClick={enviarWhatsApp}
               disabled={!formularioCompleto}
-              className="w-full rounded-full bg-green-600 py-3 font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+              className="w-full rounded-md bg-green-600 py-3 font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-slate-300"
             >
               Enviar cotización por WhatsApp
             </button>

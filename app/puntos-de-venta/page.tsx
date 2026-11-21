@@ -59,11 +59,10 @@ export default function PuntosDeVenta() {
     <main>
       {/* Encabezado */}
       <section
-        className="bg-gradient-to-br from-[#1a2150] via-[#1a2150] to-[#2a3580] px-6 pb-20 pt-14 text-center text-white"
-        style={{ clipPath: "polygon(0 0, 100% 0, 100% 90%, 0 100%)" }}
+        className="fondo-marca border-b-4 border-[#e8233b] px-6 py-14 text-center text-white"
       >
         <Reveal>
-          <h1 className="text-4xl font-extrabold md:text-5xl">Puntos de venta</h1>
+          <h1 className="text-4xl font-bold md:text-5xl">Puntos de venta</h1>
           <p className="mt-3 text-lg text-white/70">
             Visítanos o escríbenos para cotizar tu turbo
           </p>
@@ -76,9 +75,9 @@ export default function PuntosDeVenta() {
           const consulta = `${s.direccion}, ${s.ciudad}, Colombia`;
           return (
             <Reveal key={s.nombre} className="h-full">
-              <article className="flex h-full flex-col overflow-hidden rounded-3xl rounded-br-[5rem] bg-white shadow-lg">
+              <article className="flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-lg">
                 <div className="p-8 text-center">
-                  <h2 className="text-2xl font-extrabold text-[#1a2150] md:text-3xl">{s.nombre}</h2>
+                  <h2 className="text-2xl font-bold text-[#1a2150] md:text-3xl">{s.nombre}</h2>
                   <span className="mx-auto mt-2 block h-1 w-16 rounded-full bg-[#e8233b]" />
 
                   <p className="mt-6 text-lg font-semibold text-slate-700">
@@ -94,7 +93,7 @@ export default function PuntosDeVenta() {
                     </a>
                   )}
 
-                  <p className="mt-6 text-sm font-bold uppercase tracking-widest text-[#e8233b]">
+                  <p className="mt-6 text-sm font-bold uppercase tracking-wider text-[#e8233b]">
                     Horario
                   </p>
                   <ul className="mt-2 space-y-1 text-slate-600">
@@ -108,7 +107,7 @@ export default function PuntosDeVenta() {
                       href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(consulta)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full bg-[#1a2150] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#e8233b]"
+                      className="inline-flex items-center gap-2 rounded-md bg-[#1a2150] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#e8233b]"
                     >
                       <IconoUbicacion className="h-4 w-4" />
                       Cómo llegar
@@ -117,7 +116,7 @@ export default function PuntosDeVenta() {
                       href={`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(`Hola, quiero información sobre la ${s.nombre} (${s.ciudad}).`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full border-2 border-green-700 px-6 py-3 text-sm font-semibold text-green-700 transition hover:bg-green-700 hover:text-white"
+                      className="inline-flex items-center gap-2 rounded-md border-2 border-green-700 px-6 py-3 text-sm font-semibold text-green-700 transition hover:bg-green-700 hover:text-white"
                     >
                       <IconoWhatsApp className="h-4 w-4" />
                       Escribir por WhatsApp

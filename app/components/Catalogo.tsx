@@ -4,10 +4,10 @@ import { IconoBuscar, IconoLibro } from "./Iconos";
 import { useEffect, useState } from "react";
 import { categorias, type Producto } from "@/data/productos";
 import {
-  AZUL, ROJO, LINK_CATALOGO, NUMERO_WHATSAPP,
+  ROJO, LINK_CATALOGO, NUMERO_WHATSAPP,
   colores, normalizar, fotoCategoria,
 } from "@/lib/utils";
-import { Reveal, TarjetaProducto, TurboAnimado } from "./Comunes";
+import { Reveal, TarjetaProducto } from "./Comunes";
 import { usarCotizacion } from "./Cotizacion";
 import { registrar } from "@/lib/rastreo";
 
@@ -20,10 +20,9 @@ export default function Catalogo({
   qInicial: string;
   catInicial: string | null;
 }) {
-  const { acento, setAcento } = usarCotizacion();
+  const { setAcento } = usarCotizacion();
   const [busqueda, setBusqueda] = useState(qInicial);
   const [categoria, setCategoria] = useState<string | null>(catInicial);
-  const modoAzul = acento === AZUL;
 
   // Si llegó desde el Inicio con una categoría, aplica su color y baja a la lista
   useEffect(() => {
@@ -79,57 +78,46 @@ export default function Catalogo({
     <>
       {/* Encabezado con buscador */}
       <section
-        className="relative overflow-hidden bg-gradient-to-br from-[#1a2150] via-[#1a2150] to-[#2a3580] px-6 pb-24 pt-14 text-white"
-        style={{ clipPath: "polygon(0 0, 100% 0, 100% 90%, 0 100%)" }}
+        className="relative overflow-hidden fondo-marca border-b-4 border-[#e8233b] px-6 py-14 text-white"
       >
-        <div
-          className="absolute inset-0 bg-gradient-to-br from-[#e8233b] via-[#e8233b] to-[#b3162c] transition-opacity duration-700"
-          style={{ opacity: modoAzul ? 1 : 0 }}
-        />
-        <div className="flotar pointer-events-none absolute -right-10 top-4 hidden opacity-25 md:block">
-          <TurboAnimado />
-        </div>
 
         <Reveal className="relative mx-auto max-w-4xl text-center">
-          <h1 className="text-4xl font-extrabold md:text-5xl">Catálogo de productos</h1>
+          <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Catálogo de productos</h1>
           <p className="mt-3 text-lg text-white/70">
             Busca por referencia, marca o vehículo
           </p>
 
-          <div
-            className="mt-8 flex items-center rounded-full bg-white p-2 transition-all duration-700"
-            style={{ boxShadow: `0 0 0 4px ${acento}99, 0 10px 40px ${acento}73` }}
-          >
-            <span className="pl-5 text-slate-400"><IconoBuscar className="h-6 w-6" /></span>
+          <div className="mt-8 flex items-center rounded-md bg-white p-1.5 shadow-lg ring-1 ring-black/5">
+            <span className="pl-3 text-slate-400"><IconoBuscar className="h-5 w-5" /></span>
             <input
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
               placeholder="Ej: HX35, Chevrolet NPR, Duster..."
-              className="w-full bg-transparent px-4 py-4 text-lg text-slate-800 outline-none placeholder:text-slate-400"
+              className="w-full min-w-0 bg-transparent px-3 py-3 text-base text-slate-800 outline-none placeholder:text-slate-400"
             />
             {busqueda && (
               <button
                 onClick={() => setBusqueda("")}
-                className="mr-2 rounded-full px-3 py-2 text-sm text-slate-400 hover:text-slate-700"
+                className="mr-2 rounded-md px-3 py-2 text-sm text-slate-400 hover:text-slate-700"
               >
                 ✕
               </button>
             )}
             <a
               href="#lista-productos"
-              className="rounded-full bg-[var(--acento)] px-8 py-4 font-semibold text-white transition duration-700 hover:brightness-90"
+              className="rounded-md bg-[#d91e34] px-6 py-3 font-semibold text-white transition hover:bg-[#b8172b]"
             >
               Buscar
             </a>
           </div>
 
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-sm">
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-sm">
             <span className="text-white/60">Prueba con:</span>
             {["HX35", "NPR", "Duster", "Kenworth", "CAT 3116"].map((s) => (
               <button
                 key={s}
                 onClick={() => setBusqueda(s)}
-                className="rounded-full border border-white/30 px-4 py-1.5 transition hover:border-white hover:bg-white hover:text-[#1a2150]"
+                className="rounded border border-white/25 px-3 py-1 text-white/85 transition hover:border-white hover:bg-white hover:text-[#1a2150]"
               >
                 {s}
               </button>
@@ -141,16 +129,16 @@ export default function Catalogo({
       {/* Categorías */}
       <section className="mx-auto max-w-6xl px-8 py-10">
         <Reveal>
-          <h2 className="mb-4 text-2xl font-bold text-[#1a2150]">
-            Categorías
-            <span className="mt-2 block h-1 w-16 rounded-full bg-[var(--acento)] transition-colors duration-700" />
-          </h2>
+          <p className="text-xs font-semibold uppercase tracking-wider text-[var(--acento)] transition-colors duration-500">
+            Filtrar por
+          </p>
+          <h2 className="mb-4 mt-1 text-2xl font-bold tracking-tight text-[#1a2150]">Categorías</h2>
         </Reveal>
         <a
           href={LINK_CATALOGO}
           target="_blank"
           rel="noopener noreferrer"
-          className="mb-6 inline-block rounded-full border-2 border-[#1a2150] px-5 py-2 text-sm font-semibold text-[#1a2150] transition hover:bg-[#1a2150] hover:text-white"
+          className="mb-6 inline-block rounded-md border border-[#1a2150] px-4 py-2 text-sm font-semibold text-[#1a2150] transition hover:bg-[#1a2150] hover:text-white"
         >
           <IconoLibro className="mr-2 inline h-4 w-4 align-[-2px]" />
           Ver catálogo completo
@@ -164,10 +152,10 @@ export default function Catalogo({
               <Reveal key={c.slug} delay={i * 70}>
                 <button
                   onClick={() => elegirCategoria(c.slug, activa)}
-                  className={`h-full w-full rounded-2xl rounded-br-[3rem] p-6 text-left transition duration-500 ${
+                  className={`h-full w-full rounded-lg border p-5 text-left transition duration-300 ${
                     activa
-                      ? "scale-[1.03] bg-[var(--acento)] text-white shadow-xl"
-                      : "bg-white text-[#1a2150] shadow hover:-translate-y-2 hover:shadow-xl"
+                      ? "border-[var(--acento)] bg-[var(--acento)] text-white shadow-md"
+                      : "border-slate-200 bg-white text-[#1a2150] hover:border-slate-300 hover:shadow-md"
                   }`}
                 >
                   {foto ? (
@@ -179,7 +167,7 @@ export default function Catalogo({
                       style={{ backgroundColor: activa ? "white" : colores[c.slug] }}
                     />
                   )}
-                  <span className="block text-lg font-semibold">{c.nombre}</span>
+                  <span className="block font-semibold">{c.nombre}</span>
                   <span className={`text-sm ${activa ? "text-white/80" : "text-slate-400"}`}>
                     {cantidad} producto{cantidad !== 1 && "s"}
                   </span>

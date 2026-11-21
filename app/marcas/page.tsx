@@ -43,11 +43,10 @@ export default async function Marcas() {
   return (
     <main>
       <section
-        className="bg-gradient-to-br from-[#1a2150] via-[#1a2150] to-[#2a3580] px-6 pb-20 pt-14 text-center text-white"
-        style={{ clipPath: "polygon(0 0, 100% 0, 100% 90%, 0 100%)" }}
+        className="fondo-marca border-b-4 border-[#e8233b] px-6 py-14 text-center text-white"
       >
         <Reveal>
-          <h1 className="text-4xl font-extrabold md:text-5xl">Nuestras marcas</h1>
+          <h1 className="text-4xl font-bold md:text-5xl">Nuestras marcas</h1>
           <p className="mt-3 text-lg text-white/70">
             Turboalimentadores y repuestos con calidad de equipo original
           </p>
@@ -59,7 +58,7 @@ export default async function Marcas() {
           const total = cuantos(m.nombre);
           return (
             <Reveal key={m.nombre} delay={i * 120}>
-              <article className="flex h-full flex-col overflow-hidden rounded-3xl rounded-br-[5rem] bg-white shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              <article className="flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-lg transition duration-300 hover:shadow-md">
                 <div
                   className={`relative flex h-48 items-center justify-center p-8 ${
                     m.logo ? "bg-white" : `bg-gradient-to-br ${m.fondo}`
@@ -67,16 +66,16 @@ export default async function Marcas() {
                 >
                   {m.logo ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={m.logo} alt={`Logo ${m.nombre}`} className="max-h-28 w-auto max-w-full object-contain" />
+                    <img src={m.logo} alt={`Logo ${m.nombre}`} className="max-h-28 w-full object-contain" />
                   ) : (
-                    <span className="text-4xl font-extrabold uppercase italic tracking-wider text-white md:text-5xl">
+                    <span className="text-4xl font-bold uppercase italic tracking-wider text-white md:text-5xl">
                       {m.nombre}
                     </span>
                   )}
                 </div>
                 <span className={`block h-2 bg-gradient-to-r ${m.fondo}`} />
                 <div className="flex flex-1 flex-col p-8">
-                  <p className="text-sm font-semibold uppercase tracking-widest text-[#e8233b]">
+                  <p className="text-sm font-semibold uppercase tracking-wider text-[#e8233b]">
                     {m.etiqueta}
                   </p>
                   <h2 className="mt-1 text-2xl font-bold text-[#1a2150]">{m.nombre}</h2>
@@ -86,7 +85,7 @@ export default async function Marcas() {
                       <Link
                         href={`/productos?q=${encodeURIComponent(m.nombre)}`}
                         data-track={`marcas-${normalizar(m.nombre)}`}
-                        className="inline-block rounded-full bg-[#1a2150] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#e8233b]"
+                        className="inline-block rounded-md bg-[#1a2150] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#e8233b]"
                       >
                         Ver {total} producto{total > 1 ? "s" : ""} →
                       </Link>
@@ -96,7 +95,7 @@ export default async function Marcas() {
                         target="_blank"
                         rel="noopener noreferrer"
                         data-track={`marcas-${normalizar(m.nombre)}-whatsapp`}
-                        className="inline-block rounded-full border-2 border-green-600 px-6 py-3 text-sm font-semibold text-green-700 transition hover:bg-green-600 hover:text-white"
+                        className="inline-block rounded-md border-2 border-green-600 px-6 py-3 text-sm font-semibold text-green-700 transition hover:bg-green-600 hover:text-white"
                       >
                         Consultar por WhatsApp
                       </a>

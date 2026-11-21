@@ -51,10 +51,10 @@ export default async function AdminProductos({
         ← Volver al panel
       </Link>
       <div className="mt-2 flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-extrabold text-[#1a2150]">Productos</h1>
+        <h1 className="text-3xl font-bold text-[#1a2150]">Productos</h1>
         <Link
           href="/panel/productos/nuevo"
-          className="rounded-full bg-[#e8233b] px-6 py-3 font-semibold text-white transition hover:brightness-90"
+          className="rounded-md bg-[#e8233b] px-6 py-3 font-semibold text-white transition hover:brightness-90"
         >
           + Nuevo producto
         </Link>
@@ -76,9 +76,9 @@ export default async function AdminProductos({
           name="q"
           defaultValue={q}
           placeholder="Buscar por referencia, nombre, marca o vehículo"
-          className="w-full rounded-full border border-slate-300 bg-white px-5 py-3 outline-none focus:border-[#e8233b]"
+          className="w-full rounded-md border border-slate-300 bg-white px-5 py-3 outline-none focus:border-[#e8233b]"
         />
-        <button className="rounded-full bg-[#1a2150] px-6 py-3 font-semibold text-white transition hover:bg-[#e8233b]">
+        <button className="rounded-md bg-[#1a2150] px-6 py-3 font-semibold text-white transition hover:bg-[#e8233b]">
           Buscar
         </button>
       </form>
@@ -92,7 +92,7 @@ export default async function AdminProductos({
         )}
       </p>
 
-      <div className="mt-4 overflow-x-auto rounded-2xl bg-white shadow-sm">
+      <div className="mt-4 overflow-x-auto rounded-lg bg-white shadow-sm">
         <table className="w-full min-w-[760px] text-left text-sm">
           <thead className="bg-slate-50 text-slate-500">
             <tr>

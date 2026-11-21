@@ -27,8 +27,8 @@ function Opcion({
   return (
     <button
       onClick={onClick}
-      style={{ animationDelay: `${i * 40}ms`, borderColor: i % 2 === 0 ? ROJO : AZUL }}
-      className="animate-[aparecer_0.4s_ease_both] rounded-2xl border-2 bg-white p-6 text-lg font-bold text-[#1a2150] shadow transition duration-300 hover:-translate-y-1 hover:bg-[#1a2150] hover:text-white hover:shadow-xl"
+      style={{ animationDelay: `${i * 40}ms`, borderLeftColor: i % 2 === 0 ? ROJO : AZUL }}
+      className="animate-[aparecer_0.4s_ease_both] rounded-lg border border-slate-200 border-l-4 bg-white p-5 text-left text-lg font-semibold text-[#1a2150] transition duration-200 hover:border-[#1a2150] hover:bg-[#1a2150] hover:text-white"
     >
       {texto}
     </button>
@@ -127,7 +127,7 @@ export default function Asistente({ productos }: { productos: Producto[] }) {
     <main className="mx-auto max-w-5xl px-4 py-10 sm:px-8">
       <style>{`@keyframes aparecer{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}`}</style>
 
-      <h1 className="text-3xl font-extrabold text-[#1a2150]">
+      <h1 className="text-3xl font-bold text-[#1a2150]">
         Asistente por <span className="text-[#e8233b]">vehículo</span>
       </h1>
       <p className="mt-2 text-slate-500">Responde 3 preguntas y te mostramos el turbo que le sirve a tu carro.</p>
@@ -183,7 +183,7 @@ export default function Asistente({ productos }: { productos: Producto[] }) {
               </div>
             </>
           ) : (
-            <div className="rounded-2xl bg-slate-50 p-8 text-center">
+            <div className="rounded-lg bg-slate-50 p-8 text-center">
               <p className="text-lg font-semibold text-[#1a2150]">
                 Aún no tenemos ese repuesto en la web para {vehiculoTexto}.
               </p>
@@ -193,7 +193,7 @@ export default function Asistente({ productos }: { productos: Producto[] }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-track="asistente_whatsapp"
-                className="mt-5 inline-block rounded-full bg-green-600 px-6 py-3 font-semibold text-white transition hover:bg-green-700"
+                className="mt-5 inline-block rounded-md bg-green-600 px-6 py-3 font-semibold text-white transition hover:bg-green-700"
               >
                 Preguntar por WhatsApp
               </a>
@@ -205,7 +205,7 @@ export default function Asistente({ productos }: { productos: Producto[] }) {
         {paso > 1 && (
           <button
             onClick={atras}
-            className="rounded-full border-2 border-[#1a2150] px-5 py-2 text-sm font-semibold text-[#1a2150] transition hover:bg-[#1a2150] hover:text-white"
+            className="rounded-md border-2 border-[#1a2150] px-5 py-2 text-sm font-semibold text-[#1a2150] transition hover:bg-[#1a2150] hover:text-white"
           >
             ← Atrás
           </button>
@@ -213,7 +213,7 @@ export default function Asistente({ productos }: { productos: Producto[] }) {
         {paso > 1 && (
           <button
             onClick={reiniciar}
-            className="rounded-full bg-[#e8233b] px-5 py-2 text-sm font-semibold text-white transition hover:brightness-90"
+            className="rounded-md bg-[#e8233b] px-5 py-2 text-sm font-semibold text-white transition hover:brightness-90"
           >
             Empezar de nuevo
           </button>

@@ -13,6 +13,7 @@
 | 2026-11 | La cotización se guarda en `localStorage` | Evita que el cliente pierda su lista al recargar. |
 | 2026-11 | Administrador de productos con acciones de servidor y clave secreta | No se abren permisos de escritura al público en Supabase. |
 | 2026-11 | Fotos de Nosotros generadas con IA | La empresa no tiene fotos propias; pendiente reemplazar las que muestran logotipos de otras marcas. |
+| 2026-11 | Rediseño con línea más corporativa, manteniendo rojo y azul | La empresa necesita transmitir seriedad y confianza: se quitaron cortes diagonales, píldoras, rebotes y giros; se usan bordes rectos, cuadrícula técnica y botones sobrios. |
 
 ## Rúbrica de las variantes (1 = bajo, 3 = alto)
 

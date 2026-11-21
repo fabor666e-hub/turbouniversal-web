@@ -31,12 +31,14 @@ Solo se usan el rojo y el azul como colores de marca; se alternan entre categor�
 ## Tipografía
 Geist (Google Fonts, cargada con `next/font`). Títulos en 700–800 (`font-bold`, `font-extrabold`), texto en 400, etiquetas en mayúsculas con `tracking-widest`.
 
-## Estilo de componentes
-- Tarjetas blancas con bordes redondeados (`rounded-2xl`) y una esquina inferior derecha más curva (`rounded-br-[3rem]` a `[6rem]`) como sello de la marca.
-- Hero azul con degradado y corte diagonal inferior (`clipPath`), que da sensación de velocidad.
-- Botones en forma de píldora (`rounded-full`); primario rojo, secundario con borde azul.
-- Sombras suaves que crecen al pasar el mouse y tarjetas que se elevan (`hover:-translate-y-2`).
-- Movimiento con propósito: turbo animado que gira y flota, tarjetas que aparecen al hacer scroll, cambio de color de acento.
+## Estilo de componentes (línea corporativa, nov. 2026)
+- Tono visual sobrio e industrial: azul de marca con una cuadrícula técnica sutil (`.fondo-marca` en `globals.css`) y una franja roja de 4 px como cierre de los encabezados.
+- Bordes rectos y radios pequeños: tarjetas `rounded-lg` con borde `slate-200`, botones `rounded-md`. Sin esquinas exageradas ni formas de píldora.
+- Botón primario rojo `#d91e34` (cumple AA con texto blanco); secundario con borde azul.
+- Títulos de sección con etiqueta pequeña en mayúsculas roja y título azul `font-bold tracking-tight`, separados por una línea gris.
+- Barra superior azul oscuro `#11173a` con WhatsApp y horario; menú blanco con subrayado rojo en la página activa.
+- Movimiento discreto: aparición suave al hacer scroll (3 px, 500 ms) y sombra al pasar el mouse. Sin rebotes, escalados, pulsos ni giros.
+- Referencias de producto en fuente monoespaciada, como en un catálogo técnico.
 - Mobile first: se diseña a 390 px y se amplía con `sm:`, `md:` y `lg:`.
 
 ## Íconos

@@ -17,7 +17,7 @@ export default async function NuevoProducto() {
       <Link href="/panel/productos" className="text-sm text-slate-400 hover:text-[#e8233b]">
         ← Volver a productos
       </Link>
-      <h1 className="mb-6 mt-2 text-3xl font-extrabold text-[#1a2150]">Nuevo producto</h1>
+      <h1 className="mb-6 mt-2 text-3xl font-bold text-[#1a2150]">Nuevo producto</h1>
       <FormularioProducto accion={crearProducto} />
     </main>
   );

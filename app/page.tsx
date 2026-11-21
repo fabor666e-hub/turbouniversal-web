@@ -1,12 +1,34 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { categorias } from "@/data/productos";
 import { obtenerProductos } from "@/lib/datos";
-import { NUMERO_WHATSAPP, colores, fotoCategoria } from "@/lib/utils";
-import { Reveal, TarjetaProducto, TurboAnimado } from "./components/Comunes";
+import { NUMERO_WHATSAPP, fotoCategoria } from "@/lib/utils";
+import { Reveal, TarjetaProducto } from "./components/Comunes";
 import BuscadorHero from "./components/BuscadorHero";
-import { IconoCaja, IconoEscudo, IconoLista } from "./components/Iconos";
+import {
+  IconoCaja,
+  IconoEscudo,
+  IconoLista,
+  IconoTurbo,
+  IconoUbicacion,
+  IconoWhatsApp,
+} from "./components/Iconos";
 
 export const dynamic = "force-dynamic";
+
+const SEDES = ["Bogotá", "Medellín", "Cali", "Duitama"];
+
+function Titulo({ etiqueta, children, accion }: { etiqueta: string; children: ReactNode; accion?: ReactNode }) {
+  return (
+    <div className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-slate-200 pb-4">
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-wider text-[#e8233b]">{etiqueta}</p>
+        <h2 className="mt-1 text-2xl font-bold tracking-tight text-[#1a2150] md:text-3xl">{children}</h2>
+      </div>
+      {accion}
+    </div>
+  );
+}
 
 export default async function Inicio() {
   const productos = await obtenerProductos();
@@ -15,117 +37,108 @@ export default async function Inicio() {
   return (
     <>
       {/* Hero */}
-      <section
-        className="relative overflow-hidden bg-gradient-to-br from-[#1a2150] via-[#1a2150] to-[#2a3580] px-6 pb-32 pt-16 text-white"
-        style={{ clipPath: "polygon(0 0, 100% 0, 100% 90%, 0 100%)" }}
-      >
-        <div className="flotar pointer-events-none absolute -right-10 top-8 hidden opacity-30 md:block">
-          <TurboAnimado />
+      <section className="fondo-marca border-b-4 border-[#e8233b] px-6 py-14 text-white md:py-20">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.5fr_1fr]">
+          <Reveal>
+            <p className="text-xs font-semibold uppercase tracking-wider text-[#ff8a98]">
+              Importadora de turboalimentadores · Colombia
+            </p>
+            <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight md:text-5xl">
+              Turbos y repuestos con calidad de equipo original
+            </h1>
+            <p className="mt-4 max-w-xl text-lg text-white/75">
+              Busca por referencia, marca o vehículo, revisa la disponibilidad y cotiza con un asesor.
+            </p>
+            <BuscadorHero alinear="izquierda" />
+            <Link
+              href="/asistente"
+              data-track="inicio_asistente"
+              className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white underline decoration-[#e8233b] decoration-2 underline-offset-4 transition hover:text-[#ff8a98]"
+            >
+              ¿No conoces la referencia? Busca por vehículo →
+            </Link>
+          </Reveal>
+
+          <Reveal delay={150} className="hidden lg:block">
+            <div className="rounded-lg border border-white/15 bg-white/5 p-8">
+              <p className="text-xs font-semibold uppercase tracking-wider text-white/60">Atención directa</p>
+              <p className="mt-2 text-xl font-semibold">4 sedes en Colombia</p>
+              <ul className="mt-5 space-y-3">
+                {SEDES.map((s) => (
+                  <li key={s} className="flex items-center gap-3 text-white/85">
+                    <IconoUbicacion className="h-4 w-4 text-[#ff8a98]" />
+                    {s}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-6 flex gap-3 border-t border-white/15 pt-6">
+                <a
+                  href={`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent("Hola, necesito asesoría con un turbo.")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-track="inicio-hero-whatsapp"
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-[#d91e34] px-4 py-3 text-sm font-semibold transition hover:bg-[#b8172b]"
+                >
+                  <IconoWhatsApp className="h-4 w-4" />
+                  Hablar con un asesor
+                </a>
+                <Link
+                  href="/puntos-de-venta"
+                  className="inline-flex items-center justify-center rounded-md border border-white/40 px-4 py-3 text-sm font-semibold transition hover:bg-white hover:text-[#1a2150]"
+                >
+                  Sedes
+                </Link>
+              </div>
+            </div>
+          </Reveal>
         </div>
-        <Reveal className="relative mx-auto max-w-4xl text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-white/80">
-            Turboalimentadores con calidad de equipo original
-          </p>
-          <h1 className="text-4xl font-extrabold md:text-6xl">
-            Encuentra tu turbo en segundos
-          </h1>
-          <p className="mt-4 text-lg text-white/70">
-            Busca por referencia, marca o vehículo
-          </p>
-          <BuscadorHero />
-          <Link
-            href="/asistente"
-            data-track="inicio_asistente"
-            className="mt-5 inline-block rounded-full bg-[#e8233b] px-6 py-3 font-semibold text-white transition hover:scale-105 hover:brightness-90"
-          >
-            ¿No sabes cuál turbo? Usa el asistente →
-          </Link>
-        </Reveal>
       </section>
 
       {/* Ventajas */}
-      <section className="mx-auto max-w-6xl px-8 py-10">
-        <div className="grid gap-4 md:grid-cols-3">
+      <section className="border-b border-slate-200 bg-white">
+        <div className="mx-auto grid max-w-6xl divide-y divide-slate-200 px-6 md:grid-cols-3 md:divide-x md:divide-y-0">
           {[
             { Icono: IconoEscudo, titulo: "Calidad de equipo original", texto: "Turboalimentadores Turboman, marca registrada en Colombia." },
             { Icono: IconoLista, titulo: "Cotización en línea", texto: "Arma tu lista y envíala a un asesor por WhatsApp." },
             { Icono: IconoCaja, titulo: "Disponibilidad a la vista", texto: "Consulta cuántas unidades hay de cada producto." },
-          ].map((v, i) => (
-            <Reveal key={v.titulo} delay={i * 100}>
-              <div className="h-full rounded-2xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-                <span
-                  className={`flex h-12 w-12 items-center justify-center rounded-xl text-white ${
-                    i % 2 === 0 ? "bg-[#e8233b]" : "bg-[#1a2150]"
-                  }`}
-                >
-                  <v.Icono className="h-6 w-6" />
-                </span>
-                <h3 className="mt-3 font-bold text-[#1a2150]">{v.titulo}</h3>
+          ].map((v) => (
+            <div key={v.titulo} className="flex gap-4 py-7 md:px-8 md:first:pl-0 md:last:pr-0">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-[#1a2150]/15 bg-[#1a2150]/5 text-[#1a2150]">
+                <v.Icono className="h-5 w-5" />
+              </span>
+              <div>
+                <h3 className="font-semibold text-[#1a2150]">{v.titulo}</h3>
                 <p className="mt-1 text-sm text-slate-500">{v.texto}</p>
               </div>
-            </Reveal>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* Marcas que distribuimos */}
-      <section className="mx-auto max-w-6xl px-8 py-6">
-        <Reveal>
-          <div className="flex flex-col items-center gap-6 rounded-3xl bg-white px-6 py-8 shadow-sm md:flex-row md:justify-between md:px-10">
-            <div className="text-center md:text-left">
-              <p className="text-sm font-semibold uppercase tracking-widest text-[#e8233b]">
-                Distribuidores oficiales
-              </p>
-              <p className="mt-1 text-lg font-bold text-[#1a2150]">Marcas con respaldo y garantía</p>
-            </div>
-            <div className="flex flex-wrap items-center justify-center gap-8">
-              {[
-                { src: "/marcas/turboman.png", alt: "Turboman" },
-                { src: "/marcas/master-power.png", alt: "Master Power Turbo" },
-              ].map((m) => (
-                <Link
-                  key={m.alt}
-                  href="/marcas"
-                  data-track={`inicio-marca-${m.alt.toLowerCase().replace(/\s+/g, "-")}`}
-                  className="transition duration-300 hover:scale-105"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={m.src} alt={m.alt} className="h-14 w-auto object-contain md:h-16" />
-                </Link>
-              ))}
-            </div>
-          </div>
-        </Reveal>
-      </section>
-
       {/* Categorías (llevan al catálogo) */}
-      <section className="mx-auto max-w-6xl px-8 py-10">
-        <Reveal>
-          <h2 className="mb-6 text-2xl font-bold text-[#1a2150]">
-            ¿Qué necesitas?
-            <span className="mt-2 block h-1 w-16 rounded-full bg-[#e8233b]" />
-          </h2>
-        </Reveal>
+      <section className="mx-auto max-w-6xl px-6 py-16">
+        <Titulo etiqueta="Catálogo">Líneas de producto</Titulo>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {categorias.map((c, i) => {
             const foto = fotoCategoria(c.slug);
             return (
-              <Reveal key={c.slug} delay={i * 70}>
+              <Reveal key={c.slug} delay={i * 50}>
                 <Link
                   href={`/productos?cat=${c.slug}`}
-                  className="block h-full rounded-2xl rounded-br-[3rem] bg-white p-6 text-[#1a2150] shadow transition duration-300 hover:-translate-y-2 hover:shadow-xl"
+                  className="group flex h-full items-center gap-4 rounded-lg border border-slate-200 border-l-4 border-l-transparent bg-white p-5 text-[#1a2150] transition hover:border-l-[#e8233b] hover:shadow-md"
                 >
                   {foto ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={foto} alt={c.nombre} className="mb-3 h-20 w-auto object-contain" />
+                    <img src={foto} alt={c.nombre} className="h-12 w-12 shrink-0 object-contain" />
                   ) : (
-                    <span
-                      className="mb-3 block h-1.5 w-10 rounded-full"
-                      style={{ backgroundColor: colores[c.slug] }}
-                    />
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-[#1a2150] text-white">
+                      <IconoTurbo className="h-8 w-8" />
+                    </span>
                   )}
-                  <span className="block text-lg font-semibold">{c.nombre}</span>
-                  <span className="text-sm text-slate-400">Ver productos →</span>
+                  <span>
+                    <span className="block font-semibold">{c.nombre}</span>
+                    <span className="text-sm text-slate-500 transition group-hover:text-[#e8233b]">Ver productos →</span>
+                  </span>
                 </Link>
               </Reveal>
             );
@@ -134,58 +147,82 @@ export default async function Inicio() {
       </section>
 
       {/* Destacados */}
-      <section className="mx-auto max-w-6xl px-8 py-10">
-        <Reveal>
-          <h2 className="mb-6 text-2xl font-bold text-[#1a2150]">
-            Productos destacados
-            <span className="mt-2 block h-1 w-16 rounded-full bg-[#e8233b]" />
-          </h2>
-        </Reveal>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {destacados.map((p, i) => (
-            <Reveal key={p.referencia} delay={i * 80}>
-              <TarjetaProducto p={p} />
-            </Reveal>
-          ))}
-        </div>
-        <div className="mt-8 text-center">
-          <Link
-            href="/productos"
-            className="inline-block rounded-full bg-[#1a2150] px-8 py-3 font-semibold text-white transition hover:bg-[#e8233b]"
+      <section className="bg-white py-16">
+        <div className="mx-auto max-w-6xl px-6">
+          <Titulo
+            etiqueta="Disponibles hoy"
+            accion={
+              <Link href="/productos" className="text-sm font-semibold text-[#1a2150] hover:text-[#e8233b]">
+                Ver todo el catálogo →
+              </Link>
+            }
           >
-            Ver todo el catálogo
-          </Link>
+            Productos destacados
+          </Titulo>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {destacados.map((p, i) => (
+              <Reveal key={p.referencia} delay={i * 60}>
+                <TarjetaProducto p={p} />
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Marcas que distribuimos */}
+      <section className="mx-auto max-w-6xl px-6 py-14">
+        <div className="flex flex-col items-center gap-8 md:flex-row md:justify-between">
+          <div className="text-center md:text-left">
+            <p className="text-xs font-semibold uppercase tracking-wider text-[#e8233b]">Distribuidores oficiales</p>
+            <p className="mt-1 text-xl font-bold text-[#1a2150]">Marcas con respaldo y garantía</p>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            {[
+              { src: "/marcas/turboman.png", alt: "Turboman" },
+              { src: "/marcas/master-power.png", alt: "Master Power Turbo" },
+            ].map((m) => (
+              <Link
+                key={m.alt}
+                href="/marcas"
+                data-track={`inicio-marca-${m.alt.toLowerCase().replace(/\s+/g, "-")}`}
+                className="flex h-24 w-40 items-center sm:w-56 justify-center rounded-lg border border-slate-200 bg-white px-6 transition hover:shadow-md"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={m.src} alt={m.alt} className="max-h-14 w-full object-contain" />
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Llamado a la acción */}
-      <section className="mx-auto max-w-6xl px-8 py-10">
-        <Reveal>
-          <div className="flex flex-col items-center justify-between gap-6 rounded-3xl rounded-br-[5rem] bg-[#e8233b] p-10 text-white md:flex-row">
-            <div>
-              <h2 className="text-2xl font-bold">¿No encuentras tu turbo?</h2>
-              <p className="mt-2 text-white/80">
-                Escríbenos con la referencia o el vehículo y te ayudamos a encontrarlo.
-              </p>
-            </div>
-            <div className="flex flex-wrap justify-center gap-3">
-              <a
-                href={`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent("Hola, estoy buscando un turbo.")}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full bg-white px-6 py-3 font-semibold text-[#e8233b] transition hover:scale-105"
-              >
-                Escribir por WhatsApp
-              </a>
-              <Link
-                href="/nosotros"
-                className="rounded-full border-2 border-white px-6 py-3 font-semibold transition hover:bg-white hover:text-[#e8233b]"
-              >
-                Conócenos
-              </Link>
-            </div>
+      <section className="fondo-marca px-6 py-14 text-white">
+        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight md:text-3xl">¿No encuentras tu referencia?</h2>
+            <p className="mt-2 text-white/75">
+              Escríbenos con la referencia o el vehículo y un asesor te ayuda a encontrarla.
+            </p>
           </div>
-        </Reveal>
+          <div className="flex flex-wrap gap-3">
+            <a
+              href={`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent("Hola, estoy buscando un turbo.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track="inicio-cta-whatsapp"
+              className="inline-flex items-center gap-2 rounded-md bg-[#d91e34] px-6 py-3 font-semibold transition hover:bg-[#b8172b]"
+            >
+              <IconoWhatsApp className="h-5 w-5" />
+              Escribir por WhatsApp
+            </a>
+            <Link
+              href="/asistente"
+              className="rounded-md border border-white/50 px-6 py-3 font-semibold transition hover:bg-white hover:text-[#1a2150]"
+            >
+              Buscar por vehículo
+            </Link>
+          </div>
+        </div>
       </section>
     </>
   );

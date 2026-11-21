@@ -55,8 +55,8 @@ function Imagen({ paso, i }: { paso: Paso; i: number }) {
       : "from-[#e8233b] to-[#b3162c]";
   return (
     <div className={`flex h-full w-full flex-col items-center justify-center bg-gradient-to-br ${fondo} text-white`}>
-      <span className="text-8xl font-extrabold opacity-30">0{i + 1}</span>
-      <span className="mt-2 text-sm uppercase tracking-widest text-white/70">Foto aquí</span>
+      <span className="text-8xl font-bold opacity-30">0{i + 1}</span>
+      <span className="mt-2 text-sm uppercase tracking-wider text-white/70">Foto aquí</span>
     </div>
   );
 }
@@ -83,7 +83,7 @@ export default function Nosotros() {
   return (
     <section id="nosotros" className="bg-white py-16">
       <div className="mx-auto max-w-6xl px-8">
-        <h2 className="mb-2 text-3xl font-extrabold text-[#1a2150]">Nosotros</h2>
+        <h2 className="mb-2 text-3xl font-bold text-[#1a2150]">Nosotros</h2>
         <span className="block h-1 w-16 rounded-full bg-[var(--acento)] transition-colors duration-700" />
 
         <div className="mt-10 grid gap-12 md:grid-cols-2">
@@ -99,7 +99,7 @@ export default function Nosotros() {
                 className="flex min-h-[70vh] flex-col justify-center"
               >
                 {/* Imagen en móvil */}
-                <div className="mb-6 aspect-video overflow-hidden rounded-3xl md:hidden">
+                <div className="mb-6 aspect-video overflow-hidden rounded-xl md:hidden">
                   <Imagen paso={p} i={i} />
                 </div>
                 <div
@@ -107,7 +107,7 @@ export default function Nosotros() {
                     activo === i ? "translate-x-0 opacity-100" : "translate-x-4 opacity-30"
                   }`}
                 >
-                  <p className="text-sm font-semibold uppercase tracking-widest text-[var(--acento)]">
+                  <p className="text-sm font-semibold uppercase tracking-wider text-[var(--acento)]">
                     {p.etiqueta}
                   </p>
                   <h3 className="mt-2 text-3xl font-bold text-[#1a2150]">{p.titulo}</h3>
@@ -119,7 +119,7 @@ export default function Nosotros() {
 
           {/* Imagen fija que cambia con cada paso */}
           <div className="hidden md:block">
-            <div className="sticky top-28 aspect-square overflow-hidden rounded-3xl rounded-br-[6rem] shadow-xl">
+            <div className="sticky top-28 aspect-square overflow-hidden rounded-xl shadow-md">
               {pasos.map((p, i) => (
                 <div
                   key={p.titulo}

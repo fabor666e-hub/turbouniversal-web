@@ -19,7 +19,7 @@ export default function FormularioProducto({
   const [estado, enviar, enviando] = useActionState(accion, {});
 
   return (
-    <form action={enviar} className="space-y-5 rounded-2xl bg-white p-6 shadow-sm sm:p-8">
+    <form action={enviar} className="space-y-5 rounded-lg bg-white p-6 shadow-sm sm:p-8">
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="referencia" className={etiqueta}>Referencia *</label>
@@ -137,13 +137,13 @@ export default function FormularioProducto({
       <div className="flex flex-wrap gap-3">
         <button
           disabled={enviando}
-          className="rounded-full bg-[#e8233b] px-8 py-3 font-semibold text-white transition hover:brightness-90 disabled:opacity-60"
+          className="rounded-md bg-[#e8233b] px-8 py-3 font-semibold text-white transition hover:brightness-90 disabled:opacity-60"
         >
           {enviando ? "Guardando…" : "Guardar"}
         </button>
         <Link
           href="/panel/productos"
-          className="rounded-full border-2 border-[#1a2150] px-8 py-3 font-semibold text-[#1a2150] transition hover:bg-[#1a2150] hover:text-white"
+          className="rounded-md border-2 border-[#1a2150] px-8 py-3 font-semibold text-[#1a2150] transition hover:bg-[#1a2150] hover:text-white"
         >
           Cancelar
         </Link>

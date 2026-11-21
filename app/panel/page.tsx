@@ -62,7 +62,7 @@ function Lista({
 }) {
   const max = filas[0]?.[1] ?? 1;
   return (
-    <div className="rounded-2xl bg-white p-6 shadow-sm">
+    <div className="rounded-lg bg-white p-6 shadow-sm">
       <h2 className="font-bold text-[#1a2150]">{titulo}</h2>
       {filas.length === 0 ? (
         <p className="mt-3 text-sm text-slate-400">{vacio}</p>
@@ -95,7 +95,7 @@ export default async function Panel() {
   if (!autorizado) {
     return (
       <main className="mx-auto max-w-sm px-8 py-20">
-        <h1 className="text-2xl font-extrabold text-[#1a2150]">Panel privado</h1>
+        <h1 className="text-2xl font-bold text-[#1a2150]">Panel privado</h1>
         <form action={entrar} className="mt-6 space-y-3">
           <input
             name="clave"
@@ -103,7 +103,7 @@ export default async function Panel() {
             placeholder="Contraseña"
             className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-[#e8233b]"
           />
-          <button className="w-full rounded-full bg-[#1a2150] py-3 font-semibold text-white transition hover:bg-[#e8233b]">
+          <button className="w-full rounded-md bg-[#1a2150] py-3 font-semibold text-white transition hover:bg-[#e8233b]">
             Entrar
           </button>
         </form>
@@ -175,11 +175,11 @@ export default async function Panel() {
   return (
     <main className="mx-auto max-w-6xl px-8 py-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-extrabold text-[#1a2150]">Panel de datos</h1>
+        <h1 className="text-3xl font-bold text-[#1a2150]">Panel de datos</h1>
         <div className="flex items-center gap-5">
           <Link
             href="/panel/productos"
-            className="rounded-full bg-[#e8233b] px-5 py-2 text-sm font-semibold text-white transition hover:brightness-90"
+            className="rounded-md bg-[#e8233b] px-5 py-2 text-sm font-semibold text-white transition hover:brightness-90"
           >
             Administrar productos
           </Link>
@@ -193,8 +193,8 @@ export default async function Panel() {
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {resumen.map((r) => (
-          <div key={r.titulo} className="rounded-2xl bg-[#1a2150] p-6 text-white">
-            <p className="text-4xl font-extrabold">{r.valor}</p>
+          <div key={r.titulo} className="rounded-lg bg-[#1a2150] p-6 text-white">
+            <p className="text-4xl font-bold">{r.valor}</p>
             <p className="mt-1 text-sm text-white/70">{r.titulo}</p>
           </div>
         ))}
@@ -207,7 +207,7 @@ export default async function Panel() {
         <Lista titulo="Categorías más consultadas" filas={cats} vacio="Aún no hay datos." />
         <Lista titulo="Clics por botón" filas={clics} vacio="Aún no hay clics." />
 
-        <div className="rounded-2xl bg-white p-6 shadow-sm">
+        <div className="rounded-lg bg-white p-6 shadow-sm">
           <h2 className="font-bold text-[#1a2150]">Stock bajo (3 o menos)</h2>
           {stockBajo.length === 0 ? (
             <p className="mt-3 text-sm text-slate-400">Todo el stock está bien.</p>
@@ -228,7 +228,7 @@ export default async function Panel() {
         </div>
       </div>
 
-      <div className="mt-6 rounded-2xl bg-white p-6 shadow-sm">
+      <div className="mt-6 rounded-lg bg-white p-6 shadow-sm">
         <h2 className="font-bold text-[#1a2150]">Últimas cotizaciones</h2>
         {cotizaciones.length === 0 ? (
           <p className="mt-3 text-sm text-slate-400">Aún no hay cotizaciones.</p>

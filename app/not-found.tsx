@@ -10,12 +10,11 @@ export default function NoEncontrada() {
   return (
     <>
       <section
-        className="relative overflow-hidden bg-gradient-to-br from-[#1a2150] via-[#1a2150] to-[#2a3580] px-6 pb-28 pt-16 text-white"
-        style={{ clipPath: "polygon(0 0, 100% 0, 100% 90%, 0 100%)" }}
+        className="relative overflow-hidden fondo-marca border-b-4 border-[#e8233b] px-6 py-16 text-white"
       >
         <div className="relative mx-auto max-w-3xl text-center">
-          <p className="text-8xl font-extrabold text-[#e8233b] md:text-9xl">404</p>
-          <h1 className="mt-4 text-3xl font-extrabold md:text-4xl">
+          <p className="text-8xl font-bold text-[#e8233b] md:text-9xl">404</p>
+          <h1 className="mt-4 text-3xl font-bold md:text-4xl">
             Esta página se quedó sin turbo
           </h1>
           <p className="mt-3 text-lg text-white/70">
@@ -30,19 +29,19 @@ export default function NoEncontrada() {
         <div className="flex flex-wrap justify-center gap-3">
           <Link
             href="/"
-            className="rounded-full bg-[#1a2150] px-6 py-3 font-semibold text-white transition hover:bg-[#e8233b]"
+            className="rounded-md bg-[#1a2150] px-6 py-3 font-semibold text-white transition hover:bg-[#e8233b]"
           >
             Inicio
           </Link>
           <Link
             href="/productos"
-            className="rounded-full bg-[#e8233b] px-6 py-3 font-semibold text-white transition hover:brightness-90"
+            className="rounded-md bg-[#e8233b] px-6 py-3 font-semibold text-white transition hover:brightness-90"
           >
             Catálogo de productos
           </Link>
           <Link
             href="/asistente"
-            className="rounded-full border-2 border-[#1a2150] px-6 py-3 font-semibold text-[#1a2150] transition hover:bg-[#1a2150] hover:text-white"
+            className="rounded-md border-2 border-[#1a2150] px-6 py-3 font-semibold text-[#1a2150] transition hover:bg-[#1a2150] hover:text-white"
           >
             Asistente por vehículo
           </Link>
