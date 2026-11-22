@@ -19,6 +19,8 @@ type Fila = {
   precio: number;
   stock: number;
   imagen: string | null;
+  oem: string[];
+  garantia: string | null;
 };
 
 // Toda acción empieza aquí: sin sesión del panel no se escribe nada.
@@ -76,6 +78,15 @@ function leerFormulario(fd: FormData): { fila?: Fila; error?: string } {
   const imagen = String(fd.get("imagen") ?? "").trim();
   const precio = entero(fd.get("precio"));
   const stock = entero(fd.get("stock"));
+  const garantia = String(fd.get("garantia") ?? "").trim();
+  const oem = [
+    ...new Set(
+      String(fd.get("oem") ?? "")
+        .split(/[\r\n,;]+/)
+        .map((v) => v.trim().toUpperCase().replace(/\s+/g, " "))
+        .filter(Boolean)
+    ),
+  ];
   const vehiculos = [
     ...new Set(
       String(fd.get("vehiculos") ?? "")
@@ -95,9 +106,13 @@ function leerFormulario(fd: FormData): { fila?: Fila; error?: string } {
   if (stock === null) return { error: "El stock debe ser un número entero de 0 en adelante." };
   if (vehiculos.some((v) => !v.includes(" ")))
     return { error: 'Cada vehículo va en su propia línea con el formato "Marca Modelo" (ej. Chevrolet NPR).' };
+  if (oem.length > 20) return { error: "Máximo 20 números OEM por producto." };
+  if (oem.some((o) => !/^[A-Z0-9][A-Z0-9 .\/-]{1,39}$/.test(o)))
+    return { error: "Cada número OEM debe tener de 2 a 40 caracteres: letras, números, guiones, puntos, barras o espacios." };
+  if (garantia.length > 120) return { error: "La garantía debe tener máximo 120 caracteres." };
 
   return {
-    fila: { referencia, nombre, marca, categoria, vehiculos, precio, stock, imagen: imagen || null },
+    fila: { referencia, nombre, marca, categoria, vehiculos, precio, stock, imagen: imagen || null, oem, garantia: garantia || null },
   };
 }
 

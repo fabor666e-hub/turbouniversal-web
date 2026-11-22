@@ -6,6 +6,7 @@ import { NUMERO_WHATSAPP, SITIO, fotoDe, precio } from "@/lib/utils";
 import { datosEstructurados, mensajeCompartir } from "@/lib/reglas";
 import { IconoTurbo } from "../../components/Iconos";
 import RegistrarVista from "../../components/RegistrarVista";
+import { BotonAgregar } from "../../components/Comunes";
 
 export const dynamic = "force-dynamic";
 
@@ -40,7 +41,10 @@ export default async function PaginaProducto({
 
   const categoria = categorias.find((c) => c.slug === p.categoria);
   const foto = fotoDe(p);
-  const mensaje = `Hola, quiero cotizar: ${p.nombre} (Ref. ${p.referencia}).`;
+  const mensaje =
+    p.stock === 0
+      ? `Hola, ¿cuándo llega ${p.nombre} (Ref. ${p.referencia})?`
+      : `Hola, quiero cotizar: ${p.nombre} (Ref. ${p.referencia}).`;
   const linkWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
   const url = `${SITIO}/productos/${encodeURIComponent(p.referencia)}`;
   // Sin número: WhatsApp deja elegir a quién mandarlo (por ejemplo, el mecánico a su cliente)
@@ -103,15 +107,29 @@ export default async function PaginaProducto({
               <dt className="w-32 font-semibold text-[#1a2150]">Compatible con</dt>
               <dd>{p.vehiculos.join(" · ")}</dd>
             </div>
+            {p.oem && p.oem.length > 0 && (
+              <div className="flex gap-3">
+                <dt className="w-32 shrink-0 font-semibold text-[#1a2150]">Números OEM</dt>
+                <dd className="font-mono">{p.oem.join(" · ")}</dd>
+              </div>
+            )}
+            <div className="flex gap-3">
+              <dt className="w-32 shrink-0 font-semibold text-[#1a2150]">Garantía</dt>
+              <dd>{p.garantia ?? "Consúltala con un asesor"}</dd>
+            </div>
           </dl>
 
+          <div className="mt-8">
+            <BotonAgregar p={p} grande />
+          </div>
           <a
             href={linkWhatsApp}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-8 block rounded-md bg-green-700 py-4 text-center font-semibold text-white transition hover:bg-green-800"
+            data-track="ficha-whatsapp"
+            className="mt-3 block rounded-md bg-green-700 py-3 text-center font-semibold text-white transition hover:bg-green-800"
           >
-            Cotizar por WhatsApp
+            {p.stock === 0 ? "Preguntar por WhatsApp cuándo llega" : "Cotizar solo este por WhatsApp"}
           </a>
           <a
             href={linkCompartir}

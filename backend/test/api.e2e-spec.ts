@@ -198,6 +198,35 @@ describe('B4 · Administración de productos', () => {
     expect(r.body.precio).toBe(1600000);
   });
 
+  it('sin oem ni garantía, el producto queda con oem [] y garantía null', async () => {
+    const r = await api.get('/api/productos/TB-9999').expect(200);
+    expect(r.body.oem).toEqual([]);
+    expect(r.body.garantia).toBeNull();
+  });
+
+  it('PUT guarda números OEM (en mayúsculas, sin repetir) y garantía', async () => {
+    const { referencia, ...resto } = nuevo;
+    const r = await api
+      .put('/api/productos/TB-9999')
+      .set(admin())
+      .send({ ...resto, oem: ['ej-123456', 'EJ-123456', ' 777.88/9 '], garantia: '  6 meses  ' })
+      .expect(200);
+    expect(r.body.oem).toEqual(['EJ-123456', '777.88/9']);
+    expect(r.body.garantia).toBe('6 meses');
+  });
+
+  it('la búsqueda q encuentra el producto por su número OEM', async () => {
+    const r = await api.get('/api/productos?q=777.88').expect(200);
+    expect(r.body.map((p: { referencia: string }) => p.referencia)).toEqual(['TB-9999']);
+  });
+
+  it('un número OEM con símbolos raros o más de 20 números responde 400', async () => {
+    const { referencia, ...resto } = nuevo;
+    await api.put('/api/productos/TB-9999').set(admin()).send({ ...resto, oem: ['<script>'] }).expect(400);
+    const muchos = Array.from({ length: 21 }, (_, i) => `EJ-${i}0`);
+    await api.put('/api/productos/TB-9999').set(admin()).send({ ...resto, oem: muchos }).expect(400);
+  });
+
   it('PATCH stock con delta -1 sobre stock 0 lo deja en 0', async () => {
     const r = await api.patch('/api/productos/TB-1003/stock').set(admin()).send({ delta: -1 }).expect(200);
     expect(r.body.stock).toBe(0);

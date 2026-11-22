@@ -19,7 +19,7 @@ export class ProductosService {
       (p) =>
         (!filtro.categoria || p.categoria === filtro.categoria) &&
         (!filtro.marca || normalizar(p.marca) === normalizar(filtro.marca)) &&
-        (!q || normalizar([p.referencia, p.nombre, p.marca, ...p.vehiculos].join(' ')).includes(q)),
+        (!q || normalizar([p.referencia, p.nombre, p.marca, ...p.vehiculos, ...(p.oem ?? [])].join(' ')).includes(q)),
     );
   }
 
@@ -51,7 +51,7 @@ export class ProductosService {
 
   async crear(dto: CrearProductoDto): Promise<Producto> {
     try {
-      await this.repo.insert({ ...dto, imagen: dto.imagen ?? null });
+      await this.repo.insert({ ...dto, imagen: dto.imagen ?? null, oem: dto.oem ?? [], garantia: dto.garantia ?? null });
     } catch (e) {
       if (e instanceof QueryFailedError && (e as { driverError?: { code?: string } }).driverError?.code === '23505')
         throw new ErrorApi(
@@ -66,7 +66,10 @@ export class ProductosService {
 
   async actualizar(referencia: string, dto: ActualizarProductoDto): Promise<Producto> {
     const actual = await this.obtener(referencia);
-    await this.repo.update({ referencia: actual.referencia }, { ...dto, imagen: dto.imagen ?? null });
+    await this.repo.update(
+      { referencia: actual.referencia },
+      { ...dto, imagen: dto.imagen ?? null, oem: dto.oem ?? [], garantia: dto.garantia ?? null },
+    );
     return this.obtener(actual.referencia);
   }
 

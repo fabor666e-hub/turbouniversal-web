@@ -7,6 +7,8 @@ export type Producto = {
   precio: number; // en pesos colombianos
   stock: number;
   imagen?: string;
+  oem?: string[]; // números de parte originales o equivalentes
+  garantia?: string;
 };
 
 export const categorias = [

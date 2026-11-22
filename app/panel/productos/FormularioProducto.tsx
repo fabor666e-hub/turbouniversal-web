@@ -118,6 +118,33 @@ export default function FormularioProducto({
       </div>
 
       <div>
+        <label htmlFor="oem" className={etiqueta}>Números de parte OEM (opcional)</label>
+        <textarea
+          id="oem"
+          name="oem"
+          rows={3}
+          defaultValue={producto?.oem?.join("\n")}
+          placeholder={"Uno por línea: el número original o equivalente\n(el mismo que trae la placa del turbo)"}
+          className={campo}
+        />
+        <p className="mt-1 text-xs text-slate-400">
+          Los mecánicos buscan por este número: el buscador también lo encuentra.
+        </p>
+      </div>
+
+      <div>
+        <label htmlFor="garantia" className={etiqueta}>Garantía (opcional)</label>
+        <input
+          id="garantia"
+          name="garantia"
+          maxLength={120}
+          defaultValue={producto?.garantia}
+          placeholder="Ej. 6 meses por defecto de fábrica"
+          className={campo}
+        />
+      </div>
+
+      <div>
         <label htmlFor="imagen" className={etiqueta}>Foto (opcional)</label>
         <input
           id="imagen"

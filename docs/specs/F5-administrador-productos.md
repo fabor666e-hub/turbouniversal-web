@@ -18,6 +18,7 @@ Implementado y compilado sin errores. Los criterios que guardan datos se marcan 
 - [ ] Un vehículo sin modelo (ej. solo "Chevrolet") muestra un error.
 - [ ] El botón "+" sube el stock en 1 y "−" lo baja, sin pasar de 0.
 - [ ] "Borrar" pide confirmación y, al aceptar, el producto desaparece de la lista.
+- [ ] Se pueden escribir números de parte OEM (uno por línea, máximo 20) y la garantía; aparecen en la ficha del producto y el buscador encuentra el producto por OEM. (La API lo valida: pruebas B4 "PUT guarda números OEM…".)
 
 ## Fuera de alcance
 Subir fotos, carga masiva desde Excel, historial de cambios.

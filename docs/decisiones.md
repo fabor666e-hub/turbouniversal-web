@@ -30,6 +30,9 @@
 | 2026-11 | Rollback con Instant Rollback de Vercel y Rollback de Render | Vuelven en segundos a un despliegue que funcionaba sin recompilar; las migraciones solo agregan, así que un rollback de código no daña datos. |
 | 2026-11 | Next.js 16.4.6 (antes 16.3.8) | `npm audit` reportó vulnerabilidades críticas en 16.3.8; 16.4.6 es la versión corregida de la misma línea. |
 | 2026-11 | RLS en la tabla `migrations` de TypeORM | El Security Advisor de Supabase la marcó como expuesta a la clave pública; se protegió en producción y en una migración para las bases nuevas. |
+| 2026-11 | Las marcas sin productos en la barra llevan a WhatsApp | Un clic en "BMW" llevaba a 0 resultados: promesa rota en el inicio. Ahora la marca abre el catálogo solo si hay productos; si no, una conversación con un asesor con el mensaje listo. |
+| 2026-11 | Campos `oem` y `garantia` en Producto | Los mecánicos buscan por número de parte original y preguntan por garantía antes de comprar. Se agregaron primero al contrato y luego a la API (migración que solo agrega columnas), al administrador y a la ficha. No se inventaron números: los llena la empresa. |
+| 2026-11 | Espera de 1,5 s a la API y flujo programado que la despierta | En el plan gratis la API se duerme; 4 s de espera por página era demasiado. Un GitHub Actions llama `/api/salud` cada 10 min de 6 a. m. a 10 p. m. (hora de Colombia), dentro de las horas gratis de Render. |
 
 ## Rúbrica de las variantes (1 = bajo, 3 = alto)
 

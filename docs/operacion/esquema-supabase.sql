@@ -11,6 +11,8 @@ create table if not exists public.productos (
   precio integer not null default 0,
   stock integer not null default 0,
   imagen text,
+  oem text[] not null default '{}',
+  garantia text,
   creado_en timestamptz default now(),
   actualizado_en timestamptz not null default now()
 );

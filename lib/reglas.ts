@@ -11,7 +11,8 @@ export function buscarProductos(productos: Producto[], busqueda: string, categor
   return productos.filter(
     (p) =>
       (!categoria || p.categoria === categoria) &&
-      (!q || normalizar([p.referencia, p.nombre, p.marca, ...p.vehiculos].join(" ")).includes(q))
+      (!q ||
+        normalizar([p.referencia, p.nombre, p.marca, ...p.vehiculos, ...(p.oem ?? [])].join(" ")).includes(q))
   );
 }
 
@@ -123,7 +124,7 @@ export function datosEstructurados(p: Producto, url: string, imagen?: string) {
     "@type": "Product",
     name: p.nombre,
     sku: p.referencia,
-    mpn: p.referencia,
+    mpn: p.oem?.[0] ?? p.referencia,
     ...(imagen ? { image: imagen } : {}),
     brand: { "@type": "Brand", name: p.marca },
     description: `${p.nombre}, referencia ${p.referencia}. Compatible con ${p.vehiculos.join(", ")}.`,

@@ -34,10 +34,13 @@ Si algo cambia aquí, se cambia primero este documento y después el código.
   "vehiculos": ["Chevrolet NPR", "Kenworth"],
   "precio": 2400000,
   "stock": 2,
-  "imagen": null
+  "imagen": null,
+  "oem": ["EJEMPLO-123456"],
+  "garantia": "6 meses por defecto de fábrica"
 }
 ```
 Reglas: `referencia` en mayúsculas, 2–30 caracteres (letras, números y guiones), única. `nombre` 3–120 caracteres. `categoria` es uno de los slugs de `GET /api/categorias`. `precio` y `stock` enteros ≥ 0. Cada vehículo con formato "Marca Modelo".
+`oem` (opcional, por defecto `[]`): números de parte originales o equivalentes con los que el mecánico busca el repuesto; máximo 20, cada uno de 2 a 40 caracteres (letras, números, guiones, puntos, barras o espacios), sin repetir. `garantia` (opcional, `null` si no se informa): texto de hasta 120 caracteres.
 
 ### Cotización
 ```json
@@ -57,7 +60,7 @@ Reglas: `referencia` en mayúsculas, 2–30 caracteres (letras, números y guion
 Comprueba que la API y la base de datos responden. **200** `{ "estado": "ok", "baseDeDatos": "ok" }`
 
 ### `GET /api/productos`
-Parámetros opcionales: `q` (texto, ignora mayúsculas y tildes; busca en referencia, nombre, marca y vehículos), `categoria` (slug), `marca`.
+Parámetros opcionales: `q` (texto, ignora mayúsculas y tildes; busca en referencia, nombre, marca, vehículos y números OEM), `categoria` (slug), `marca`.
 **200** `Producto[]` ordenado por referencia.
 
 ### `GET /api/productos/:referencia`

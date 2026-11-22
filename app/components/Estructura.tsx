@@ -23,6 +23,7 @@ const enlaces = [
 export function Header() {
   const { totalUnidades, setAbierto } = usarCotizacion();
   const pathname = usePathname();
+  const [menu, setMenu] = useState(false);
   const activo = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
@@ -98,21 +99,51 @@ export function Header() {
             >
               Contacto
             </a>
+            {/* Botón ☰ del menú en celular y tableta */}
+            <button
+              type="button"
+              onClick={() => setMenu((v) => !v)}
+              aria-expanded={menu}
+              aria-controls="menu-movil"
+              aria-label={menu ? "Cerrar menú" : "Abrir menú"}
+              className="flex h-11 w-11 items-center justify-center rounded-md border border-slate-300 text-[#1a2150] lg:hidden"
+            >
+              <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                {menu ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+              </svg>
+            </button>
           </div>
         </div>
 
-        {/* Menú en celular */}
-        <nav className="mt-3 flex flex-wrap justify-center gap-x-5 gap-y-1 text-sm font-medium text-[#1a2150] lg:hidden">
-          {enlaces.map((e) => (
-            <Link
-              key={e.href}
-              href={e.href}
-              className={activo(e.href) ? "font-semibold text-[#e8233b]" : ""}
+        {/* Menú desplegable en celular y tableta */}
+        {menu && (
+          <nav
+            id="menu-movil"
+            aria-label="Menú principal"
+            className="mx-auto mt-3 flex max-w-6xl flex-col border-t border-slate-200 pt-2 text-base font-medium text-[#1a2150] lg:hidden"
+          >
+            {enlaces.map((e) => (
+              <Link
+                key={e.href}
+                href={e.href}
+                onClick={() => setMenu(false)}
+                aria-current={activo(e.href) ? "page" : undefined}
+                className={`border-l-4 px-3 py-3 ${
+                  activo(e.href) ? "border-[#e8233b] font-semibold text-[#e8233b]" : "border-transparent"
+                }`}
+              >
+                {e.texto}
+              </Link>
+            ))}
+            <a
+              href="#contacto"
+              onClick={() => setMenu(false)}
+              className="mt-2 rounded-md bg-[#d91e34] px-3 py-3 text-center font-semibold text-white sm:hidden"
             >
-              {e.texto}
-            </Link>
-          ))}
-        </nav>
+              Contacto
+            </a>
+          </nav>
+        )}
       </header>
     </>
   );
@@ -261,38 +292,10 @@ export function Footer() {
   );
 }
 
+// Solo WhatsApp flota; Instagram y Facebook están en el pie de página
 export function WhatsAppFlotante() {
   return (
-    <div className="fixed bottom-6 right-6 z-30 flex flex-col items-end gap-3">
-      <div className="flex gap-3">
-        <a
-          data-track="instagram"
-          href={INSTAGRAM}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Instagram de Turboman"
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#1a2150] shadow-lg transition hover:bg-[#d91e34] hover:text-white"
-        >
-          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="3" width="18" height="18" rx="5" />
-            <circle cx="12" cy="12" r="4" />
-            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
-          </svg>
-        </a>
-        <a
-          data-track="facebook"
-          href={FACEBOOK}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Facebook de Turboman"
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#1a2150] shadow-lg transition hover:bg-[#d91e34] hover:text-white"
-        >
-          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
-            <path d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H7v4h3v8h4v-8h3l1-4h-4V8z" />
-          </svg>
-        </a>
-      </div>
-
+    <div className="fixed bottom-6 right-6 z-30">
       <a
         data-track="whatsapp-flotante"
         href={`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent("Hola, necesito ayuda con una cotización.")}`}

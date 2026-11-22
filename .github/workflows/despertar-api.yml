@@ -1,0 +1,20 @@
+# Mantiene despierta la API de Render (plan gratis: se duerme a los 15 min sin uso
+# y la primera visita tarda ~50 s). Llama /api/salud cada 10 minutos de 6 a. m. a 10 p. m.
+# (hora de Colombia). Fuera de ese horario se deja dormir para no gastar horas del plan.
+# Nota: GitHub pausa los flujos programados si el repositorio pasa 60 días sin cambios.
+name: Despertar API
+
+on:
+  schedule:
+    - cron: "*/10 11-23,0-3 * * *" # 11:00–03:59 UTC = 6 a. m. – 10:59 p. m. en Colombia
+  workflow_dispatch:
+
+jobs:
+  salud:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Llamar /api/salud
+        run: |
+          curl --silent --show-error --max-time 90 --retry 2 --retry-delay 5 \
+            https://turbouniversal-api-evth.onrender.com/api/salud

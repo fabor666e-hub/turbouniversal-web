@@ -6,6 +6,7 @@ import { DataSource } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
 import { Inicial1764000000000 } from './base-de-datos/migraciones/1764000000000-Inicial';
 import { RlsMigraciones1764100000000 } from './base-de-datos/migraciones/1764100000000-RlsMigraciones';
+import { OemGarantia1764200000000 } from './base-de-datos/migraciones/1764200000000-OemGarantia';
 import { sembrar } from './base-de-datos/semilla';
 import { config } from './config';
 import { Cotizacion } from './cotizaciones/cotizacion.entity';
@@ -27,7 +28,7 @@ import { SaludController } from './salud/salud.controller';
           url: baseDeDatos.url,
           ssl: baseDeDatos.ssl ? { rejectUnauthorized: false } : false,
           entities: [Producto, Evento, Cotizacion],
-          migrations: [Inicial1764000000000, RlsMigraciones1764100000000],
+          migrations: [Inicial1764000000000, RlsMigraciones1764100000000, OemGarantia1764200000000],
           migrationsRun: true, // crea las tablas al arrancar
           synchronize: false, // nunca cambia la base sin una migración
         };

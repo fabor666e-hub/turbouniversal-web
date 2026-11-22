@@ -54,6 +54,26 @@ export class ActualizarProductoDto {
   @IsString()
   @MaxLength(500)
   imagen?: string | null;
+
+  @IsOptional()
+  @IsArray({ message: 'Los números OEM deben ser una lista.' })
+  @ArrayMaxSize(20, { message: 'Máximo 20 números OEM por producto.' })
+  @Transform(({ value }) =>
+    Array.isArray(value)
+      ? [...new Set(value.map((v) => String(v).trim().toUpperCase().replace(/\s+/g, ' ')).filter(Boolean))]
+      : value,
+  )
+  @Matches(/^[A-Z0-9][A-Z0-9 .\/-]{1,39}$/, {
+    each: true,
+    message: 'Cada número OEM debe tener de 2 a 40 caracteres: letras, números, guiones, puntos, barras o espacios.',
+  })
+  oem?: string[];
+
+  @IsOptional()
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() || null : value))
+  @IsString({ message: 'La garantía debe ser un texto.' })
+  @MaxLength(120, { message: 'La garantía debe tener máximo 120 caracteres.' })
+  garantia?: string | null;
 }
 
 export class CrearProductoDto extends ActualizarProductoDto {

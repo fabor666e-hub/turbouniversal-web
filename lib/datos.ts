@@ -11,6 +11,8 @@ type Fila = {
   precio: number;
   stock: number;
   imagen: string | null;
+  oem?: string[] | null; // puede faltar si la base aún no tiene la columna
+  garantia?: string | null;
 };
 
 const mapear = (f: Fila) => ({
@@ -22,12 +24,15 @@ const mapear = (f: Fila) => ({
   precio: f.precio,
   stock: f.stock,
   imagen: f.imagen ?? undefined,
+  oem: f.oem ?? [],
+  garantia: f.garantia ?? undefined,
 });
 
 // Orden: 1) API en Render  2) Supabase directo  3) datos locales.
-// La API tiene 4 s para responder (en el plan gratis tarda ~50 s en despertar);
-// si no alcanza, la página usa Supabase y no se queda esperando.
-const LECTURA = { espera: 4000, next: { revalidate: 60, tags: ["productos"] } };
+// La API tiene 1,5 s para responder; despierta normalmente responde en menos de 0,5 s.
+// Si está dormida (plan gratis de Render: ~50 s en despertar), la página usa Supabase
+// y no deja esperando al cliente. El flujo .github/workflows/despertar-api.yml la mantiene despierta.
+const LECTURA = { espera: 1500, next: { revalidate: 60, tags: ["productos"] } };
 
 export async function obtenerProductos(): Promise<Producto[]> {
   if (API_URL) {

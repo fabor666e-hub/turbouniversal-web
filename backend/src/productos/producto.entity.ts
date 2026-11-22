@@ -26,6 +26,13 @@ export class Producto {
   @Column({ type: 'text', nullable: true })
   imagen: string | null;
 
+  // Números de parte originales o equivalentes (el mecánico busca por ellos)
+  @Column({ type: 'text', array: true, default: () => "'{}'" })
+  oem: string[];
+
+  @Column({ type: 'text', nullable: true })
+  garantia: string | null;
+
   @CreateDateColumn({ name: 'creado_en', type: 'timestamptz', select: false })
   creadoEn: Date;
 

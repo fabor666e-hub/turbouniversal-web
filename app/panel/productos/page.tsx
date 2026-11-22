@@ -40,7 +40,7 @@ export default async function AdminProductos({
   const buscado = normalizar(q.trim());
   const lista = buscado
     ? todos.filter((p) =>
-        normalizar([p.referencia, p.nombre, p.marca, ...(p.vehiculos ?? [])].join(" ")).includes(buscado)
+        normalizar([p.referencia, p.nombre, p.marca, ...(p.vehiculos ?? []), ...(p.oem ?? [])].join(" ")).includes(buscado)
       )
     : todos;
   const nombreCategoria = (slug: string) => categorias.find((c) => c.slug === slug)?.nombre ?? slug;

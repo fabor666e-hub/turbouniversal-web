@@ -28,5 +28,13 @@ Como **mecánico o dueño de vehículo**, quiero buscar un repuesto por referenc
 - [x] La página de cada producto tiene dirección canónica y vista previa para compartir (Open Graph).
 - [x] El botón "Compartir este producto" abre WhatsApp sin número fijo, con el nombre, la referencia y el enlace del producto.
 
+### Revisión crítica (nov. 2026)
+- [x] La barra de marcas no lleva a búsquedas vacías: si la marca tiene productos abre el catálogo; si no, abre WhatsApp con "Busco un turbo o repuesto para <marca>".
+- [x] La ficha del producto tiene "Agregar a cotización" (el mismo flujo de las tarjetas) y, si está agotado, "Preguntar por WhatsApp cuándo llega".
+- [x] La ficha muestra los números OEM (si los hay) y la garantía ("Consúltala con un asesor" si no se informó).
+- [x] El buscador encuentra un producto por su número OEM.
+- [x] En celular el menú es un botón ☰ que despliega los enlaces; solo flota el botón de WhatsApp.
+- [x] Nosotros usa el encabezado de las demás páginas y muestra sus 4 bloques en filas de imagen y texto, sin espacios vacíos.
+
 ## Fuera de alcance
 Fotos reales por producto (la empresa las carga desde el administrador con el campo "Foto"), subir archivos de imagen.

@@ -45,6 +45,11 @@ test.describe("F1 · Catálogo y buscador", () => {
     expect(refs(buscarProductos(productos, "duster", "cartridge"))).toEqual(["TB-2002"]);
   });
 
+  test("encuentra un producto por su número OEM", () => {
+    const conOem = [...productos, { ...ref("TB-2001"), referencia: "TB-X", oem: ["EJ-123456"] }];
+    expect(refs(buscarProductos(conOem, "ej-123456"))).toEqual(["TB-X"]);
+  });
+
   test("una búsqueda sin coincidencias devuelve una lista vacía", () => {
     expect(buscarProductos(productos, "ferrari")).toEqual([]);
   });

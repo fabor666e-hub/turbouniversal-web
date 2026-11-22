@@ -28,8 +28,19 @@ export default async function EditarProducto({
     .maybeSingle();
   if (!data) notFound();
 
-  const raw = data as Producto & { vehiculos: string[] | null; imagen: string | null };
-  const producto: Producto = { ...raw, vehiculos: raw.vehiculos ?? [], imagen: raw.imagen ?? undefined };
+  const raw = data as Producto & {
+    vehiculos: string[] | null;
+    imagen: string | null;
+    oem?: string[] | null;
+    garantia?: string | null;
+  };
+  const producto: Producto = {
+    ...raw,
+    vehiculos: raw.vehiculos ?? [],
+    imagen: raw.imagen ?? undefined,
+    oem: raw.oem ?? [],
+    garantia: raw.garantia ?? undefined,
+  };
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10 sm:px-8">

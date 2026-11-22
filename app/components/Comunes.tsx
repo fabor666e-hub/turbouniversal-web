@@ -81,9 +81,25 @@ export function EtiquetaStock({ stock }: { stock: number }) {
   return <span className="rounded px-2 py-0.5 text-xs font-semibold text-green-700 bg-green-50 ring-1 ring-green-200">Disponible ({stock})</span>;
 }
 
-export function TarjetaProducto({ p }: { p: Producto }) {
+// Botón "Agregar a cotización": en las tarjetas y en la ficha del producto (grande)
+export function BotonAgregar({ p, grande = false }: { p: Producto; grande?: boolean }) {
   const { agregar, cantidadDe } = usarCotizacion();
   const enCotizacion = cantidadDe(p.referencia);
+  return (
+    <button
+      onClick={() => agregar(p)}
+      disabled={p.stock === 0}
+      data-track={grande ? "ficha-agregar" : undefined}
+      className={`w-full rounded-md font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-slate-300 ${
+        grande ? "py-4" : "mt-3 py-2.5 text-sm"
+      } ${enCotizacion > 0 ? "bg-green-700 hover:bg-green-800" : "bg-[#1a2150] hover:bg-[#d91e34]"}`}
+    >
+      {enCotizacion > 0 ? `✓ En cotización (${enCotizacion})` : "Agregar a cotización"}
+    </button>
+  );
+}
+
+export function TarjetaProducto({ p }: { p: Producto }) {
   const foto = fotoDe(p);
 
   return (
@@ -114,17 +130,7 @@ export function TarjetaProducto({ p }: { p: Producto }) {
       <p className="mt-3 text-lg font-bold text-[#1a2150]">
         {precio(p.precio)}
       </p>
-      <button
-        onClick={() => agregar(p)}
-        disabled={p.stock === 0}
-        className={`mt-3 w-full rounded-md py-2.5 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-slate-300 ${
-          enCotizacion > 0
-            ? "bg-green-700 hover:bg-green-800"
-            : "bg-[#1a2150] hover:bg-[#d91e34]"
-        }`}
-      >
-        {enCotizacion > 0 ? `✓ En cotización (${enCotizacion})` : "Agregar a cotización"}
-      </button>
+      <BotonAgregar p={p} />
     </div>
   );
 }

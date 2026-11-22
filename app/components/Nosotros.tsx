@@ -1,150 +1,128 @@
-"use client";
+import Link from "next/link";
+import { categorias } from "@/data/productos";
+import { NUMERO_WHATSAPP } from "@/lib/utils";
+import { Reveal } from "./Comunes";
+import { IconoWhatsApp } from "./Iconos";
 
-import { useEffect, useRef, useState } from "react";
-
-type Paso = {
+type Bloque = {
+  etiqueta: string;
   titulo: string;
   texto: string;
-  etiqueta: string;
-  src?: string; // ruta de la foto en /public, ej: "/nosotros-1.jpg"
+  src: string; // foto en /public
+  alt: string;
 };
 
 // EDITA estos textos. Para usar fotos reales, cambia src por la ruta de la foto en /public
-const pasos: Paso[] = [
+const bloques: Bloque[] = [
   {
     etiqueta: "Quiénes somos",
     titulo: "Importadora Turbo Universal",
-    src: "/nosotros/1-bodega.jpg",
     texto:
       "Somos una empresa colombiana especializada en la comercialización y distribución de turboalimentadores y repuestos para sistemas de turbo.",
+    src: "/nosotros/1-bodega.jpg",
+    alt: "Bodega con turboalimentadores organizados en estanterías",
   },
   {
     etiqueta: "Turboman",
     titulo: "Calidad de equipo original",
-    src: "/nosotros/2-turbo.jpg",
     texto:
-      "Turboman es nuestra marca registrada en Colombia de turboalimentadores completos con calidad de equipo original.",
+      "Turboman es nuestra marca registrada en Colombia de turboalimentadores completos con calidad de equipo original. También somos distribuidores oficiales de Master Power.",
+    src: "/nosotros/2-turbo.jpg",
+    alt: "Turboalimentador nuevo",
   },
   {
     etiqueta: "Cobertura",
     titulo: "Para cualquier tipo de vehículo",
-    src: "/nosotros/3-carretera.jpg",
     texto:
-      "Vehículos agrícolas, maquinaria pesada y cualquier tipo de vehículo: encuentra el turbo que necesitas por referencia, marca o vehículo.",
+      "Vehículos livianos, de carga, agrícolas y maquinaria pesada: encuentra el turbo que necesitas por referencia, marca o vehículo.",
+    src: "/nosotros/3-carretera.jpg",
+    alt: "Camión de carga en carretera",
   },
   {
     etiqueta: "Cotiza fácil",
     titulo: "Rápido y sin complicaciones",
-    src: "/nosotros/4-cotizacion-whatsapp.jpg",
     texto:
       "Arma tu cotización en línea, revisa la disponibilidad de cada producto y envíala directo a un asesor por WhatsApp.",
+    src: "/nosotros/4-cotizacion-whatsapp.jpg",
+    alt: "Asesor respondiendo una cotización por WhatsApp",
   },
 ];
 
-function Imagen({ paso, i }: { paso: Paso; i: number }) {
-  if (paso.src) {
-    return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img src={paso.src} alt={paso.titulo} className="h-full w-full object-cover" />
-    );
-  }
-  // Relleno mientras no haya foto: alterna azul y rojo de la marca
-  const fondo =
-    i % 2 === 0
-      ? "from-[#1a2150] to-[#2a3580]"
-      : "from-[#e8233b] to-[#b3162c]";
-  return (
-    <div className={`flex h-full w-full flex-col items-center justify-center bg-gradient-to-br ${fondo} text-white`}>
-      <span className="text-8xl font-bold opacity-30">0{i + 1}</span>
-      <span className="mt-2 text-sm uppercase tracking-wider text-white/70">Foto aquí</span>
-    </div>
-  );
-}
+// Solo datos que el sitio ya muestra y se pueden comprobar
+const cifras = [
+  { valor: "4", texto: "sedes: Bogotá, Medellín, Cali y Duitama" },
+  { valor: "2", texto: "marcas oficiales: Turboman y Master Power" },
+  { valor: String(categorias.length), texto: "líneas de producto, del turbo completo al actuador" },
+];
 
 export default function Nosotros() {
-  const [activo, setActivo] = useState(0);
-  const refs = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entradas) => {
-        entradas.forEach((e) => {
-          if (e.isIntersecting) {
-            setActivo(Number((e.target as HTMLElement).dataset.i));
-          }
-        });
-      },
-      { rootMargin: "-45% 0px -45% 0px" }
-    );
-    refs.current.forEach((el) => el && obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
-
   return (
-    <section id="nosotros" className="bg-white py-16">
-      <div className="mx-auto max-w-6xl px-8">
-        <h2 className="mb-2 text-3xl font-bold text-[#1a2150]">Nosotros</h2>
-        <span className="block h-1 w-16 rounded-full bg-[var(--acento)] transition-colors duration-700" />
+    <main>
+      <section className="fondo-marca border-b-4 border-[#e8233b] px-6 py-14 text-center text-white">
+        <Reveal>
+          <p className="text-sm font-semibold uppercase tracking-widest text-white/70">Quiénes somos</p>
+          <h1 className="mt-2 text-4xl font-bold md:text-5xl">Nosotros</h1>
+          <p className="mx-auto mt-3 max-w-2xl text-lg text-white/70">
+            Turboalimentadores y repuestos con calidad de equipo original, con atención directa en cuatro ciudades.
+          </p>
+        </Reveal>
+      </section>
 
-        <div className="mt-10 grid gap-12 md:grid-cols-2">
-          {/* Textos que van pasando al hacer scroll */}
-          <div>
-            {pasos.map((p, i) => (
-              <div
-                key={p.titulo}
-                data-i={i}
-                ref={(el) => {
-                  refs.current[i] = el;
-                }}
-                className="flex min-h-[70vh] flex-col justify-center"
-              >
-                {/* Imagen en móvil */}
-                <div className="mb-6 aspect-video overflow-hidden rounded-xl md:hidden">
-                  <Imagen paso={p} i={i} />
-                </div>
-                <div
-                  className={`transition-all duration-500 ${
-                    activo === i ? "translate-x-0 opacity-100" : "translate-x-4 opacity-30"
-                  }`}
-                >
-                  <p className="text-sm font-semibold uppercase tracking-wider text-[var(--acento)]">
-                    {p.etiqueta}
-                  </p>
-                  <h3 className="mt-2 text-3xl font-bold text-[#1a2150]">{p.titulo}</h3>
-                  <p className="mt-4 text-lg text-slate-600">{p.texto}</p>
-                </div>
+      <section className="border-b border-slate-200 bg-white">
+        <ul className="mx-auto grid max-w-6xl gap-px bg-slate-200 sm:grid-cols-3">
+          {cifras.map((c) => (
+            <li key={c.texto} className="flex items-center gap-4 bg-white px-6 py-6">
+              <span className="text-4xl font-bold text-[#d91e34]">{c.valor}</span>
+              <span className="text-sm text-slate-600">{c.texto}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="mx-auto max-w-6xl space-y-14 px-6 py-14 sm:px-8 md:space-y-20">
+        {bloques.map((b, i) => (
+          <Reveal key={b.titulo}>
+            <div className="grid items-center gap-8 md:grid-cols-2 md:gap-12">
+              <div className={`overflow-hidden rounded-lg border border-slate-200 ${i % 2 ? "md:order-2" : ""}`}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={b.src} alt={b.alt} loading="lazy" className="aspect-[4/3] w-full object-cover" />
               </div>
-            ))}
-          </div>
-
-          {/* Imagen fija que cambia con cada paso */}
-          <div className="hidden md:block">
-            <div className="sticky top-28 aspect-square overflow-hidden rounded-xl shadow-md">
-              {pasos.map((p, i) => (
-                <div
-                  key={p.titulo}
-                  className={`absolute inset-0 transition-all duration-700 ${
-                    activo === i ? "scale-100 opacity-100" : "scale-105 opacity-0"
-                  }`}
-                >
-                  <Imagen paso={p} i={i} />
-                </div>
-              ))}
-              {/* Indicador de pasos */}
-              <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 gap-2">
-                {pasos.map((p, i) => (
-                  <span
-                    key={p.titulo}
-                    className={`h-2 rounded-full bg-white transition-all duration-500 ${
-                      activo === i ? "w-8" : "w-2 opacity-50"
-                    }`}
-                  />
-                ))}
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-widest text-[#d91e34]">{b.etiqueta}</p>
+                <h2 className="mt-2 text-2xl font-bold tracking-tight text-[#1a2150] md:text-3xl">{b.titulo}</h2>
+                <p className="mt-4 text-lg text-slate-600">{b.texto}</p>
               </div>
             </div>
+          </Reveal>
+        ))}
+      </section>
+
+      <section className="fondo-marca px-6 py-12 text-white">
+        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+          <div>
+            <h2 className="text-2xl font-bold">¿Buscas un turbo o un repuesto?</h2>
+            <p className="mt-1 text-white/70">Búscalo en el catálogo o escríbenos con la referencia o el vehículo.</p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/productos"
+              className="rounded-md bg-[#d91e34] px-6 py-3 font-semibold text-white transition hover:bg-[#b8172b]"
+            >
+              Ver catálogo
+            </Link>
+            <a
+              href={`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent("Hola, quiero información sobre un turbo.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track="nosotros-whatsapp"
+              className="inline-flex items-center gap-2 rounded-md border border-white/40 px-6 py-3 font-semibold text-white transition hover:bg-white hover:text-[#1a2150]"
+            >
+              <IconoWhatsApp className="h-4 w-4" />
+              Escribir por WhatsApp
+            </a>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </main>
   );
-}
+}

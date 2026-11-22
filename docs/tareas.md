@@ -72,6 +72,15 @@ Ciclo de cada tarea: implementar UNA → probar en el navegador → commit → m
 - [x] 6.4 Exportar cotizaciones a CSV desde el panel
 - [x] 6.5 `metadataBase` con el dominio real (`turbouniversal-web.vercel.app`)
 
+## Revisión crítica como cliente (nov. 2026)
+- [x] 7.1 Barra de marcas sin búsquedas vacías (catálogo o WhatsApp según la marca)
+- [x] 7.2 "Agregar a cotización" en la ficha del producto
+- [x] 7.3 Menú ☰ en celular; solo flota WhatsApp
+- [x] 7.4 Nosotros rediseñado (encabezado estándar, filas compactas, cifras comprobables)
+- [x] 7.5 Espera de la API en 1,5 s y flujo programado que la mantiene despierta (`despertar-api.yml`)
+- [x] 7.6 Campos OEM y garantía: contrato, API (migración `OemGarantia`), administrador, ficha y buscador
+- [ ] 7.7 La empresa: fotos reales, precios reales, números OEM, un solo número de contacto, correo propio y políticas de envío, pago y garantía
+
 ## Pendientes
 - [ ] 3.2 Reemplazar las fotos de Nosotros que muestran logotipos de otras marcas
 - [x] 3.4 Política de tratamiento de datos (Ley 1581) en `/privacidad`, enlazada desde la cotización y el pie (falta que la empresa ponga su NIT)
