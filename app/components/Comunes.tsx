@@ -119,8 +119,8 @@ export function TarjetaProducto({ p }: { p: Producto }) {
         disabled={p.stock === 0}
         className={`mt-3 w-full rounded-md py-2.5 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-slate-300 ${
           enCotizacion > 0
-            ? "bg-green-600 hover:bg-green-700"
-            : "bg-[#1a2150] hover:bg-[#e8233b]"
+            ? "bg-green-700 hover:bg-green-800"
+            : "bg-[#1a2150] hover:bg-[#d91e34]"
         }`}
       >
         {enCotizacion > 0 ? `✓ En cotización (${enCotizacion})` : "Agregar a cotización"}

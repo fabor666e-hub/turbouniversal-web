@@ -14,7 +14,7 @@ Ejemplos: "Encuentra tu turbo en segundos", "Arma tu cotización en línea", "Es
 | Tarjetas | Blanco | `#ffffff` |
 | Texto | Slate 800 | `#1e293b` |
 | Texto secundario | Slate 500 | `#64748b` |
-| WhatsApp | Verde | `#16a34a` |
+| WhatsApp | Verde | `#15803d` (botones) |
 | Estados de stock | Verde / Ámbar / Rojo | Disponible / Pocas unidades / Agotado |
 
 Solo se usan el rojo y el azul como colores de marca; se alternan entre categorías y el acento dinámico (`--acento`) cambia con transición suave.
@@ -25,8 +25,8 @@ Solo se usan el rojo y el azul como colores de marca; se alternan entre categor�
 | Blanco sobre azul `#1a2150` | 15.25:1 | Cumple |
 | Azul `#1a2150` sobre fondo `#f8fafc` | 14.57:1 | Cumple |
 | Slate 500 sobre blanco | 4.76:1 | Cumple |
-| Blanco sobre rojo `#e8233b` | 4.44:1 | Cumple solo para texto grande o negrita ≥ 18,7 px. **Pendiente:** usar `#d91e34` (5.02:1) en botones con texto pequeño. |
-| Blanco sobre verde `#16a34a` | 3.30:1 | **Pendiente:** usar `#15803d` (5.02:1) en botones de WhatsApp. |
+| Blanco sobre rojo `#e8233b` | 4.44:1 | Cumple solo para texto grande. **Corregido (nov. 2026):** todo botón o insignia con texto blanco usa `#d91e34` (5.02:1); `#e8233b` queda para acentos sin texto. |
+| Blanco sobre verde `#16a34a` | 3.30:1 | **Corregido (nov. 2026):** los botones de WhatsApp usan `#15803d` (green-700, 5.02:1) y `#166534` al pasar el mouse. |
 
 ## Tipografía
 Geist (Google Fonts, cargada con `next/font`). Títulos en 700–800 (`font-bold`, `font-extrabold`), texto en 400, etiquetas en mayúsculas con `tracking-widest`.

@@ -137,7 +137,7 @@ export default function FormularioProducto({
       <div className="flex flex-wrap gap-3">
         <button
           disabled={enviando}
-          className="rounded-md bg-[#e8233b] px-8 py-3 font-semibold text-white transition hover:brightness-90 disabled:opacity-60"
+          className="rounded-md bg-[#d91e34] px-8 py-3 font-semibold text-white transition hover:brightness-90 disabled:opacity-60"
         >
           {enviando ? "Guardando…" : "Guardar"}
         </button>

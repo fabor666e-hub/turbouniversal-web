@@ -169,7 +169,7 @@ export default function Asistente({ productos }: { productos: Producto[] }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-track="asistente_whatsapp"
-                className="mt-5 inline-block rounded-md bg-green-600 px-6 py-3 font-semibold text-white transition hover:bg-green-700"
+                className="mt-5 inline-block rounded-md bg-green-700 px-6 py-3 font-semibold text-white transition hover:bg-green-800"
               >
                 Preguntar por WhatsApp
               </a>
@@ -189,7 +189,7 @@ export default function Asistente({ productos }: { productos: Producto[] }) {
         {paso > 1 && (
           <button
             onClick={reiniciar}
-            className="rounded-md bg-[#e8233b] px-5 py-2 text-sm font-semibold text-white transition hover:brightness-90"
+            className="rounded-md bg-[#d91e34] px-5 py-2 text-sm font-semibold text-white transition hover:brightness-90"
           >
             Empezar de nuevo
           </button>

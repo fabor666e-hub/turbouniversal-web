@@ -107,7 +107,7 @@ export default function PuntosDeVenta() {
                       href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(consulta)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-md bg-[#1a2150] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#e8233b]"
+                      className="inline-flex items-center gap-2 rounded-md bg-[#1a2150] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#d91e34]"
                     >
                       <IconoUbicacion className="h-4 w-4" />
                       Cómo llegar
@@ -116,7 +116,7 @@ export default function PuntosDeVenta() {
                       href={`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(`Hola, quiero información sobre la ${s.nombre} (${s.ciudad}).`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-md border-2 border-green-700 px-6 py-3 text-sm font-semibold text-green-700 transition hover:bg-green-700 hover:text-white"
+                      className="inline-flex items-center gap-2 rounded-md border-2 border-green-700 px-6 py-3 text-sm font-semibold text-green-700 transition hover:bg-green-800 hover:text-white"
                     >
                       <IconoWhatsApp className="h-4 w-4" />
                       Escribir por WhatsApp

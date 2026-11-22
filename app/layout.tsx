@@ -4,6 +4,7 @@ import "./globals.css";
 import { Proveedor } from "./components/Cotizacion";
 import { Header, Footer, PanelCotizacion, WhatsAppFlotante } from "./components/Estructura";
 import RastreoClics from "./components/RastreoClics";
+import { SITIO } from "@/lib/utils";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://turboman-web.vercel.app"),
+  metadataBase: new URL(SITIO),
   title: "Turbo Universal | Turboalimentadores Turboman",
   description:
     "Importadora Turbo Universal: turboalimentadores y repuestos con calidad de equipo original en Colombia. Busca, revisa disponibilidad y cotiza en línea.",

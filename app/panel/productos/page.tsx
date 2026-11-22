@@ -54,7 +54,7 @@ export default async function AdminProductos({
         <h1 className="text-3xl font-bold text-[#1a2150]">Productos</h1>
         <Link
           href="/panel/productos/nuevo"
-          className="rounded-md bg-[#e8233b] px-6 py-3 font-semibold text-white transition hover:brightness-90"
+          className="rounded-md bg-[#d91e34] px-6 py-3 font-semibold text-white transition hover:brightness-90"
         >
           + Nuevo producto
         </Link>
@@ -78,7 +78,7 @@ export default async function AdminProductos({
           placeholder="Buscar por referencia, nombre, marca o vehículo"
           className="w-full rounded-md border border-slate-300 bg-white px-5 py-3 outline-none focus:border-[#e8233b]"
         />
-        <button className="rounded-md bg-[#1a2150] px-6 py-3 font-semibold text-white transition hover:bg-[#e8233b]">
+        <button className="rounded-md bg-[#1a2150] px-6 py-3 font-semibold text-white transition hover:bg-[#d91e34]">
           Buscar
         </button>
       </form>

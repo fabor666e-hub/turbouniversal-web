@@ -65,7 +65,14 @@ Ciclo de cada tarea: implementar UNA → probar en el navegador → commit → m
 - [ ] 5.14 Cambiar `PANEL_CLAVE` por una clave propia en Render y Vercel (hallazgo A-04)
 - [ ] 5.15 Revisar la URL de producción antes del demo day (checklist del runbook)
 
+## Mejoras (nov. 2026)
+- [x] 6.1 Contraste AA: botones con texto blanco en `#d91e34` y verde `#15803d`
+- [x] 6.2 SEO: `sitemap.xml`, `robots.txt`, datos estructurados de producto, canónica y Open Graph
+- [x] 6.3 Botón "Compartir este producto" por WhatsApp
+- [x] 6.4 Exportar cotizaciones a CSV desde el panel
+- [x] 6.5 `metadataBase` con el dominio real (`turbouniversal-web.vercel.app`)
+
 ## Pendientes
 - [ ] 3.2 Reemplazar las fotos de Nosotros que muestran logotipos de otras marcas
-- [ ] 3.4 Política de tratamiento de datos (Ley 1581) publicada en el sitio (la casilla en la cotización ya está)
+- [x] 3.4 Política de tratamiento de datos (Ley 1581) en `/privacidad`, enlazada desde la cotización y el pie (falta que la empresa ponga su NIT)
 - [ ] 3.5 Confirmar con la empresa el número de WhatsApp, la dirección de Medellín y teléfono y horario de Cali y Duitama

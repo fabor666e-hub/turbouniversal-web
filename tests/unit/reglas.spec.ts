@@ -8,6 +8,9 @@ import {
   cambiarCantidad,
   compatiblesCon,
   cotizacionLista,
+  cotizacionesACsv,
+  datosEstructurados,
+  mensajeCompartir,
   estadoStock,
   marcasDeVehiculos,
   mensajeWhatsApp,
@@ -125,5 +128,56 @@ test.describe("F3 · Asistente por vehículo", () => {
 
   test("un vehículo que no existe no devuelve productos", () => {
     expect(compatiblesCon(productos, "Ferrari", "F40")).toEqual([]);
+  });
+});
+
+test.describe("F1 · SEO y compartir", () => {
+  const url = "https://turbouniversal-web.vercel.app/productos/TB-1002";
+
+  test("los datos estructurados llevan referencia, marca, precio en COP y disponibilidad", () => {
+    const d = datosEstructurados(ref("TB-1002"), url);
+    expect(d["@type"]).toBe("Product");
+    expect(d.sku).toBe("TB-1002");
+    expect(d.brand.name).toBe("Turboman");
+    expect(d.offers).toMatchObject({ priceCurrency: "COP", price: 2400000, url });
+    expect(d.offers.availability).toBe("https://schema.org/LimitedAvailability"); // stock 2
+    expect(datosEstructurados(ref("TB-1003"), url).offers.availability).toBe("https://schema.org/OutOfStock");
+    expect(datosEstructurados(ref("TB-2001"), url).offers.availability).toBe("https://schema.org/InStock");
+  });
+
+  test("el mensaje para compartir lleva nombre, referencia, vehículos y enlace", () => {
+    const m = mensajeCompartir(ref("TB-1002"), url);
+    expect(m).toContain("Turboalimentador HX35 (Ref. TB-1002)");
+    expect(m).toContain("Chevrolet NPR");
+    expect(m).toContain(url);
+  });
+});
+
+test.describe("F4 · Exportar cotizaciones", () => {
+  const base = {
+    id: 7,
+    nombre: "José Pérez",
+    telefono: "3103080416",
+    total: 2580000,
+    creadoEn: "2026-11-22T17:00:00.000Z",
+    items: [
+      { referencia: "TB-1002", nombre: "Turboalimentador HX35", cantidad: 1, precio: 2400000 },
+      { referencia: "TB-3001", nombre: 'Kit "HX35"', cantidad: 1, precio: 180000 },
+    ],
+  };
+
+  test("una fila por producto, separador ; y BOM para que Excel lea las tildes", () => {
+    const csv = cotizacionesACsv([base]);
+    expect(csv.startsWith("\uFEFF")).toBe(true);
+    const filas = csv.slice(1).split("\r\n");
+    expect(filas).toHaveLength(3);
+    expect(filas[0]).toContain('"Cotización";"Fecha";"Cliente"');
+    expect(filas[1]).toContain('"José Pérez";"3103080416";"TB-1002"');
+    expect(filas[2]).toContain('"Kit ""HX35"""'); // comillas escapadas
+  });
+
+  test("un valor que empieza con = no se vuelve fórmula en Excel", () => {
+    const csv = cotizacionesACsv([{ ...base, nombre: "=HYPERLINK(\"x\")" }]);
+    expect(csv).toContain(`"'=HYPERLINK(""x"")"`);
   });
 });

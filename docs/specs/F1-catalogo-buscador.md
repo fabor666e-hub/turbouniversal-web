@@ -21,5 +21,12 @@ Como **mecánico o dueño de vehículo**, quiero buscar un repuesto por referenc
 - [x] Las páginas Nosotros, Marcas (con logos de Turboman y Master Power) y Puntos de venta (Bogotá y Medellín con mapa) abren desde el menú.
 - [x] A 390 px de ancho no hay desplazamiento horizontal en el inicio ni en el catálogo.
 
+### SEO y compartir (agregado en nov. 2026: el catálogo anterior era un flipbook que Google no podía leer)
+- [x] `/sitemap.xml` lista las páginas públicas y una dirección por producto.
+- [x] `/robots.txt` permite el sitio público, bloquea `/panel` y `/prototipo` y apunta al sitemap.
+- [x] La página de cada producto incluye datos estructurados `schema.org/Product` con referencia, marca, precio en COP y disponibilidad según el stock.
+- [x] La página de cada producto tiene dirección canónica y vista previa para compartir (Open Graph).
+- [x] El botón "Compartir este producto" abre WhatsApp sin número fijo, con el nombre, la referencia y el enlace del producto.
+
 ## Fuera de alcance
-Fotos reales por producto (pendiente de la empresa), sitemap y datos estructurados.
+Fotos reales por producto (la empresa las carga desde el administrador con el campo "Foto"), subir archivos de imagen.

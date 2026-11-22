@@ -193,7 +193,7 @@ export default async function Panel() {
             placeholder="Contraseña"
             className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-[#e8233b]"
           />
-          <button className="w-full rounded-md bg-[#1a2150] py-3 font-semibold text-white transition hover:bg-[#e8233b]">
+          <button className="w-full rounded-md bg-[#1a2150] py-3 font-semibold text-white transition hover:bg-[#d91e34]">
             Entrar
           </button>
         </form>
@@ -256,7 +256,7 @@ export default async function Panel() {
         <div className="flex items-center gap-5">
           <Link
             href="/panel/productos"
-            className="rounded-md bg-[#e8233b] px-5 py-2 text-sm font-semibold text-white transition hover:brightness-90"
+            className="rounded-md bg-[#d91e34] px-5 py-2 text-sm font-semibold text-white transition hover:brightness-90"
           >
             Administrar productos
           </Link>
@@ -306,7 +306,18 @@ export default async function Panel() {
       </div>
 
       <div className="mt-6 rounded-lg bg-white p-6 shadow-sm">
-        <h2 className="font-bold text-[#1a2150]">Últimas cotizaciones</h2>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="font-bold text-[#1a2150]">Últimas cotizaciones</h2>
+          {cotizaciones.length > 0 && (
+            <a
+              href="/panel/exportar"
+              download
+              className="rounded-md border-2 border-[#1a2150] px-4 py-2 text-sm font-semibold text-[#1a2150] transition hover:bg-[#1a2150] hover:text-white"
+            >
+              Descargar para Excel (CSV)
+            </a>
+          )}
+        </div>
         {cotizaciones.length === 0 ? (
           <p className="mt-3 text-sm text-slate-400">Aún no hay cotizaciones.</p>
         ) : (

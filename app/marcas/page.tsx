@@ -91,7 +91,7 @@ export default async function Marcas() {
                       <Link
                         href={`/productos?q=${encodeURIComponent(m.nombre)}`}
                         data-track={`marcas-${normalizar(m.nombre)}`}
-                        className="inline-block rounded-md bg-[#1a2150] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#e8233b]"
+                        className="inline-block rounded-md bg-[#1a2150] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#d91e34]"
                       >
                         Ver {total} producto{total > 1 ? "s" : ""} →
                       </Link>
@@ -101,7 +101,7 @@ export default async function Marcas() {
                         target="_blank"
                         rel="noopener noreferrer"
                         data-track={`marcas-${normalizar(m.nombre)}-whatsapp`}
-                        className="inline-block rounded-md border-2 border-green-600 px-6 py-3 text-sm font-semibold text-green-700 transition hover:bg-green-600 hover:text-white"
+                        className="inline-block rounded-md border-2 border-green-700 px-6 py-3 text-sm font-semibold text-green-700 transition hover:bg-green-700 hover:text-white"
                       >
                         Consultar por WhatsApp
                       </a>

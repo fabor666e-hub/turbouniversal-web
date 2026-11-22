@@ -102,3 +102,77 @@ export function compatiblesCon(productos: Producto[], marca: string, modelo: str
     })
   );
 }
+
+// ── SEO y compartir (F1) ────────────────────────────────────────────────────
+
+// Mensaje para compartir un producto por WhatsApp con cualquier contacto.
+export function mensajeCompartir(p: Producto, url: string): string {
+  return `Mira este repuesto en Turbo Universal: ${p.nombre} (Ref. ${p.referencia}), compatible con ${p.vehiculos.join(", ")}. ${url}`;
+}
+
+const DISPONIBILIDAD: Record<EstadoStock, string> = {
+  agotado: "https://schema.org/OutOfStock",
+  pocas: "https://schema.org/LimitedAvailability",
+  disponible: "https://schema.org/InStock",
+};
+
+// Datos estructurados (schema.org/Product) para que Google muestre precio y disponibilidad.
+export function datosEstructurados(p: Producto, url: string, imagen?: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: p.nombre,
+    sku: p.referencia,
+    mpn: p.referencia,
+    ...(imagen ? { image: imagen } : {}),
+    brand: { "@type": "Brand", name: p.marca },
+    description: `${p.nombre}, referencia ${p.referencia}. Compatible con ${p.vehiculos.join(", ")}.`,
+    offers: {
+      "@type": "Offer",
+      url,
+      priceCurrency: "COP",
+      price: p.precio,
+      availability: DISPONIBILIDAD[estadoStock(p.stock)],
+      itemCondition: "https://schema.org/NewCondition",
+      seller: { "@type": "Organization", name: "Importadora Turbo Universal" },
+    },
+  };
+}
+
+// ── F4 · Panel: exportar cotizaciones ───────────────────────────────────────
+
+type FilaCotizacion = {
+  id: number;
+  nombre: string;
+  telefono: string;
+  items: { referencia: string; nombre: string; cantidad: number; precio: number }[];
+  total: number;
+  creadoEn: string;
+};
+
+// Una celda CSV segura: comillas dobles escapadas y sin fórmulas (evita inyección en Excel).
+function celda(valor: string | number): string {
+  let t = String(valor);
+  if (/^[=+\-@\t\r]/.test(t)) t = `'${t}`;
+  return `"${t.replace(/"/g, '""')}"`;
+}
+
+// CSV con separador ";" (Excel en español lo abre en columnas) y una fila por producto cotizado.
+export function cotizacionesACsv(cotizaciones: FilaCotizacion[]): string {
+  const encabezado = ["Cotización", "Fecha", "Cliente", "Teléfono", "Referencia", "Producto", "Cantidad", "Precio unitario", "Subtotal", "Total cotización"];
+  const filas = cotizaciones.flatMap((c) =>
+    c.items.map((i) => [
+      c.id,
+      new Date(c.creadoEn).toLocaleString("es-CO", { timeZone: "America/Bogota" }),
+      c.nombre,
+      c.telefono,
+      i.referencia,
+      i.nombre,
+      i.cantidad,
+      i.precio,
+      i.cantidad * i.precio,
+      c.total,
+    ])
+  );
+  return "﻿" + [encabezado, ...filas].map((f) => f.map(celda).join(";")).join("\r\n");
+}

@@ -87,7 +87,7 @@ export function Header() {
             >
               Mi cotización
               {totalUnidades > 0 && (
-                <span className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#e8233b] text-xs font-bold text-white">
+                <span className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#d91e34] text-xs font-bold text-white">
                   {totalUnidades}
                 </span>
               )}
@@ -252,6 +252,10 @@ export function Footer() {
       </div>
       <p className="mx-auto mt-12 max-w-6xl border-t border-white/10 pt-6 text-center text-xs text-white/50">
         © {new Date().getFullYear()} Importadora Turbo Universal. Todos los derechos reservados.
+        {" · "}
+        <Link href="/privacidad" className="underline hover:text-white">
+          Política de tratamiento de datos
+        </Link>
       </p>
     </footer>
   );
@@ -267,7 +271,7 @@ export function WhatsAppFlotante() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Instagram de Turboman"
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#1a2150] shadow-lg transition hover:bg-[#e8233b] hover:text-white"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#1a2150] shadow-lg transition hover:bg-[#d91e34] hover:text-white"
         >
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
             <rect x="3" y="3" width="18" height="18" rx="5" />
@@ -281,7 +285,7 @@ export function WhatsAppFlotante() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Facebook de Turboman"
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#1a2150] shadow-lg transition hover:bg-[#e8233b] hover:text-white"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#1a2150] shadow-lg transition hover:bg-[#d91e34] hover:text-white"
         >
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
             <path d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H7v4h3v8h4v-8h3l1-4h-4V8z" />
@@ -295,7 +299,7 @@ export function WhatsAppFlotante() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Escríbenos por WhatsApp"
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-green-600 text-white shadow-lg transition"
+        className="flex h-14 w-14 items-center justify-center rounded-full bg-green-700 text-white shadow-lg transition"
       >
         <IconoWhatsApp className="h-7 w-7" />
       </a>
@@ -435,13 +439,16 @@ export function PanelCotizacion() {
               />
               <span>
                 Autorizo a Turbo Universal a usar mi nombre y teléfono solo para responder esta
-                cotización (Ley 1581 de 2012).
+                cotización (Ley 1581 de 2012).{" "}
+                <Link href="/privacidad" target="_blank" className="font-semibold text-[#1a2150] underline">
+                  Ver política de datos
+                </Link>
               </span>
             </label>
             <button
               onClick={enviarWhatsApp}
               disabled={!formularioCompleto}
-              className="w-full rounded-md bg-green-600 py-3 font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+              className="w-full rounded-md bg-green-700 py-3 font-semibold text-white transition hover:bg-green-800 disabled:cursor-not-allowed disabled:bg-slate-300"
             >
               Enviar cotización por WhatsApp
             </button>

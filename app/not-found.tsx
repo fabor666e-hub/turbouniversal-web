@@ -29,13 +29,13 @@ export default function NoEncontrada() {
         <div className="flex flex-wrap justify-center gap-3">
           <Link
             href="/"
-            className="rounded-md bg-[#1a2150] px-6 py-3 font-semibold text-white transition hover:bg-[#e8233b]"
+            className="rounded-md bg-[#1a2150] px-6 py-3 font-semibold text-white transition hover:bg-[#d91e34]"
           >
             Inicio
           </Link>
           <Link
             href="/productos"
-            className="rounded-md bg-[#e8233b] px-6 py-3 font-semibold text-white transition hover:brightness-90"
+            className="rounded-md bg-[#d91e34] px-6 py-3 font-semibold text-white transition hover:brightness-90"
           >
             Catálogo de productos
           </Link>

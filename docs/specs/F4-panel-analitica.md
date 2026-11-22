@@ -15,6 +15,8 @@ Como **administrador de la empresa**, quiero ver qué buscan, miran y cotizan lo
 - [x] Se ve la tabla de últimas cotizaciones con fecha, cliente, teléfono, productos y total.
 - [x] "Salir" cierra la sesión.
 - [x] La página no aparece en Google (`noindex`).
+- [x] "Descargar para Excel (CSV)" baja las últimas 100 cotizaciones, una fila por producto, separadas por ";" y con tildes correctas.
+- [x] Sin sesión, `/panel/exportar` responde 401 (acceso cruzado).
 
 ## Fuera de alcance
 Filtro por fechas, usuarios separados con Supabase Auth, gráficas avanzadas.

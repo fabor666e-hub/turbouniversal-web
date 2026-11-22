@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { categorias } from "@/data/productos";
 import { obtenerProducto } from "@/lib/datos";
-import { NUMERO_WHATSAPP, fotoDe, precio } from "@/lib/utils";
+import { NUMERO_WHATSAPP, SITIO, fotoDe, precio } from "@/lib/utils";
+import { datosEstructurados, mensajeCompartir } from "@/lib/reglas";
 import { IconoTurbo } from "../../components/Iconos";
 import RegistrarVista from "../../components/RegistrarVista";
 
@@ -19,6 +20,12 @@ export async function generateMetadata({
   return {
     title: `${p.nombre} | Turbo Universal`,
     description: `${p.nombre}, referencia ${p.referencia}. Compatible con ${p.vehiculos.join(", ")}. Cotiza en Turbo Universal.`,
+    alternates: { canonical: `/productos/${encodeURIComponent(p.referencia)}` },
+    openGraph: {
+      title: `${p.nombre} · Ref. ${p.referencia}`,
+      description: `Compatible con ${p.vehiculos.join(", ")}. Cotiza en Turbo Universal.`,
+      url: `/productos/${encodeURIComponent(p.referencia)}`,
+    },
   };
 }
 
@@ -35,6 +42,10 @@ export default async function PaginaProducto({
   const foto = fotoDe(p);
   const mensaje = `Hola, quiero cotizar: ${p.nombre} (Ref. ${p.referencia}).`;
   const linkWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
+  const url = `${SITIO}/productos/${encodeURIComponent(p.referencia)}`;
+  // Sin número: WhatsApp deja elegir a quién mandarlo (por ejemplo, el mecánico a su cliente)
+  const linkCompartir = `https://wa.me/?text=${encodeURIComponent(mensajeCompartir(p, url))}`;
+  const jsonLd = datosEstructurados(p, url, foto ? new URL(foto, SITIO).toString() : undefined);
 
   const estado =
     p.stock === 0
@@ -46,6 +57,11 @@ export default async function PaginaProducto({
   return (
     <main className="mx-auto max-w-5xl px-8 py-12">
       <RegistrarVista referencia={p.referencia} />
+      {/* Datos para Google: nombre, referencia, marca, precio y disponibilidad */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
       <p className="mb-6 text-sm text-slate-400">
         <Link href="/productos" className="hover:text-[#e8233b]">← Volver al catálogo</Link>
         {" · "}
@@ -93,9 +109,18 @@ export default async function PaginaProducto({
             href={linkWhatsApp}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-8 block rounded-md bg-green-600 py-4 text-center font-semibold text-white transition hover:bg-green-700"
+            className="mt-8 block rounded-md bg-green-700 py-4 text-center font-semibold text-white transition hover:bg-green-800"
           >
             Cotizar por WhatsApp
+          </a>
+          <a
+            href={linkCompartir}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-track="compartir-producto"
+            className="mt-3 block rounded-md border-2 border-[#1a2150] py-3 text-center font-semibold text-[#1a2150] transition hover:bg-[#1a2150] hover:text-white"
+          >
+            Compartir este producto
           </a>
           <p className="mt-3 text-center text-xs text-slate-400">
             Precio de ejemplo. La disponibilidad final se confirma con un asesor.

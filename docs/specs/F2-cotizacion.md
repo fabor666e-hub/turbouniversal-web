@@ -18,6 +18,10 @@ Como **cliente**, quiero armar una lista con varios repuestos y enviarla de una 
 - [x] Al enviar, se abre WhatsApp con cada producto (cantidad, nombre, referencia), el nombre y el teléfono.
 - [x] La cotización enviada aparece en "Últimas cotizaciones" del panel.
 - [x] El panel informa que los datos se usan solo para responder la cotización.
+- [x] El envío exige marcar la autorización de datos (Ley 1581), y el teléfono debe tener de 7 a 15 dígitos.
+- [x] La casilla enlaza a `/privacidad` (se abre en otra pestaña para no perder la cotización); el pie de página también.
+- [x] `/privacidad` explica responsable, datos que se recogen, finalidad, derechos, cómo ejercerlos (plazos de 10 y 15 días hábiles) y vigencia.
+- [x] Si el navegador bloquea la ventana nueva, WhatsApp se abre en la misma pestaña.
 
 ## Fuera de alcance
-Pagos en línea, descuentos, cálculo de envío, casilla de política de datos (pendiente).
+Pagos en línea, descuentos, cálculo de envío. El texto legal de `/privacidad` es un modelo: la empresa debe completar su NIT y revisarlo con su asesor.

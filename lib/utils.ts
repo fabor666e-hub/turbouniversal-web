@@ -42,3 +42,6 @@ export const fotoCategoria = (slug: string): string | undefined =>
 // Foto del producto; si no tiene, la de su categoría
 export const fotoDe = (p: Producto): string | undefined =>
   (p as unknown as { imagen?: string }).imagen ?? fotoCategoria(p.categoria);
+
+// Dirección pública del sitio (enlaces absolutos: sitemap, Google, compartir)
+export const SITIO = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://turbouniversal-web.vercel.app").replace(/\/+$/, "");
