@@ -23,7 +23,8 @@ export class CotizacionesService {
     for (const [referencia, cantidad] of pedidas) {
       const p = encontrados.find((x) => x.referencia === referencia);
       if (!p) throw noEncontrado(`No existe el producto ${referencia}.`);
-      if (cantidad > p.stock)
+      // Stock null = disponibilidad a consultar: no se limita aquí (la confirma el asesor)
+      if (p.stock !== null && cantidad > p.stock)
         throw new ErrorApi(
           HttpStatus.CONFLICT,
           'STOCK_INSUFICIENTE',
@@ -31,10 +32,17 @@ export class CotizacionesService {
           [p.referencia],
         );
       // El precio SIEMPRE sale de la base de datos, nunca del navegador
-      items.push({ referencia, nombre: p.nombre, cantidad, precio: p.precio, subtotal: p.precio * cantidad });
+      items.push({
+        referencia,
+        nombre: p.nombre,
+        cantidad,
+        precio: p.precio,
+        subtotal: p.precio === null ? null : p.precio * cantidad,
+      });
     }
 
-    const total = items.reduce((s, i) => s + i.subtotal, 0);
+    // Total de los productos con precio conocido; los "a consultar" los cotiza el asesor
+    const total = items.reduce((s, i) => s + (i.subtotal ?? 0), 0);
     return this.cotizaciones.save(this.cotizaciones.create({ nombre: dto.nombre, telefono: dto.telefono, items, total }));
   }
 

@@ -17,11 +17,13 @@ export class Producto {
   @Column({ type: 'text', array: true, default: () => "'{}'" })
   vehiculos: string[];
 
-  @Column({ type: 'integer' })
-  precio: number;
+  // null = precio a consultar con un asesor
+  @Column({ type: 'integer', nullable: true })
+  precio: number | null;
 
-  @Column({ type: 'integer' })
-  stock: number;
+  // null = disponibilidad a consultar (no se conoce el inventario)
+  @Column({ type: 'integer', nullable: true })
+  stock: number | null;
 
   @Column({ type: 'text', nullable: true })
   imagen: string | null;

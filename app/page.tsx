@@ -41,7 +41,8 @@ function Titulo({ etiqueta, children, accion }: { etiqueta: string; children: Re
 
 export default async function Inicio() {
   const productos = await obtenerProductos();
-  const destacados = productos.filter((p) => p.stock > 0).slice(0, 4);
+  // Destacados: los que no están agotados (con stock conocido o a consultar)
+  const destacados = productos.filter((p) => p.stock === null || p.stock > 0).slice(0, 4);
 
   return (
     <>

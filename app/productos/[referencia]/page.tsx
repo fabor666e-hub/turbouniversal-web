@@ -52,7 +52,9 @@ export default async function PaginaProducto({
   const jsonLd = datosEstructurados(p, url, foto ? new URL(foto, SITIO).toString() : undefined);
 
   const estado =
-    p.stock === 0
+    p.stock === null
+      ? { texto: "Consulta disponibilidad", clases: "bg-slate-100 text-[#1a2150]" }
+      : p.stock === 0
       ? { texto: "Agotado", clases: "bg-red-100 text-red-700" }
       : p.stock <= 3
       ? { texto: `Pocas unidades (${p.stock})`, clases: "bg-amber-100 text-amber-700" }
@@ -92,7 +94,11 @@ export default async function PaginaProducto({
           <h1 className="mt-4 text-3xl font-bold text-[#1a2150]">{p.nombre}</h1>
           <p className="mt-1 text-slate-400">Referencia {p.referencia}</p>
 
-          <p className="mt-6 text-4xl font-bold text-[#e8233b]">{precio(p.precio)}</p>
+          {p.precio === null ? (
+            <p className="mt-6 text-2xl font-bold text-[#1a2150]">Precio a consultar</p>
+          ) : (
+            <p className="mt-6 text-4xl font-bold text-[#e8233b]">{precio(p.precio)}</p>
+          )}
 
           <dl className="mt-6 space-y-3 text-sm">
             <div className="flex gap-3">
@@ -141,7 +147,7 @@ export default async function PaginaProducto({
             Compartir este producto
           </a>
           <p className="mt-3 text-center text-xs text-slate-400">
-            Precio de ejemplo. La disponibilidad final se confirma con un asesor.
+            El precio y la disponibilidad finales los confirma un asesor.
           </p>
         </div>
       </div>

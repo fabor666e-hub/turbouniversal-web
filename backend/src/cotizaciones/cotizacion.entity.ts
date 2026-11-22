@@ -4,8 +4,8 @@ export type ItemCotizacion = {
   referencia: string;
   nombre: string;
   cantidad: number;
-  precio: number;
-  subtotal: number;
+  precio: number | null; // null = precio a consultar
+  subtotal: number | null; // null si el precio está a consultar
 };
 
 @Entity('cotizaciones')

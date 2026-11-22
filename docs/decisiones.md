@@ -33,6 +33,9 @@
 | 2026-11 | Las marcas sin productos en la barra llevan a WhatsApp | Un clic en "BMW" llevaba a 0 resultados: promesa rota en el inicio. Ahora la marca abre el catálogo solo si hay productos; si no, una conversación con un asesor con el mensaje listo. |
 | 2026-11 | Campos `oem` y `garantia` en Producto | Los mecánicos buscan por número de parte original y preguntan por garantía antes de comprar. Se agregaron primero al contrato y luego a la API (migración que solo agrega columnas), al administrador y a la ficha. No se inventaron números: los llena la empresa. |
 | 2026-11 | Espera de 1,5 s a la API y flujo programado que la despierta | En el plan gratis la API se duerme; 4 s de espera por página era demasiado. Un GitHub Actions llama `/api/salud` cada 10 min de 6 a. m. a 10 p. m. (hora de Colombia), dentro de las horas gratis de Render. |
+| 2026-11 | Precio y stock pueden ser `null` ("a consultar") | El catálogo real de la empresa no publica precios ni inventario. Inventar valores engañaría al cliente; con `null` el producto se muestra y se cotiza, y el asesor confirma precio y disponibilidad. La regla crítica de stock sigue aplicando cuando el stock se conoce. |
+| 2026-11 | Catálogo real (37 turbos de Flipsnack) en lugar de los 12 de ejemplo; datos de prueba aparte | La página debe mostrar lo que la empresa vende. Las pruebas necesitan precios y stock fijos para probar las reglas, así que usan `data/productos-prueba.ts` (front, con `PRODUCTOS_DE_PRUEBA=1`) y `backend/test/datos-prueba.ts` (API). |
+| 2026-11 | Marcas de varias palabras (Land Rover, John Deere, Case New Holland) | El asistente partía "Land Rover Evoque" en marca "Land". Se agregó una lista de marcas compuestas en el front y en la API. |
 
 ## Rúbrica de las variantes (1 = bajo, 3 = alto)
 

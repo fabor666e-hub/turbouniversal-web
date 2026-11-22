@@ -1,4 +1,5 @@
-import { productos as locales, type Producto } from "@/data/productos";
+import { productos as catalogo, type Producto } from "@/data/productos";
+import { productosDePrueba } from "@/data/productos-prueba";
 import { supabase } from "./supabase";
 import { API_URL, ErrorApi, pedirApi } from "./api";
 
@@ -8,8 +9,8 @@ type Fila = {
   marca: string;
   categoria: string;
   vehiculos: string[] | null;
-  precio: number;
-  stock: number;
+  precio: number | null;
+  stock: number | null;
   imagen: string | null;
   oem?: string[] | null; // puede faltar si la base aún no tiene la columna
   garantia?: string | null;
@@ -21,12 +22,16 @@ const mapear = (f: Fila) => ({
   marca: f.marca,
   categoria: f.categoria,
   vehiculos: f.vehiculos ?? [],
-  precio: f.precio,
-  stock: f.stock,
+  precio: f.precio ?? null,
+  stock: f.stock ?? null,
   imagen: f.imagen ?? undefined,
   oem: f.oem ?? [],
   garantia: f.garantia ?? undefined,
 });
+
+// Respaldo local: el catálogo real. Las pruebas e2e y el CI usan datos de prueba con precio y
+// stock fijos (PRODUCTOS_DE_PRUEBA=1, sin Supabase ni API) para probar las reglas de negocio.
+const locales: Producto[] = process.env.PRODUCTOS_DE_PRUEBA === "1" ? productosDePrueba : catalogo;
 
 // Orden: 1) API en Render  2) Supabase directo  3) datos locales.
 // La API tiene 1,5 s para responder; despierta normalmente responde en menos de 0,5 s.

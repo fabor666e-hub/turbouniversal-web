@@ -78,25 +78,24 @@ export default function FormularioProducto({
           </select>
         </div>
         <div>
-          <label htmlFor="precio" className={etiqueta}>Precio (COP) *</label>
+          <label htmlFor="precio" className={etiqueta}>Precio (COP)</label>
           <input
             id="precio"
             name="precio"
-            required
             inputMode="numeric"
-            defaultValue={producto?.precio}
-            placeholder="2850000"
+            defaultValue={producto?.precio ?? ""}
+            placeholder="Vacío = Precio a consultar"
             className={campo}
           />
         </div>
         <div>
-          <label htmlFor="stock" className={etiqueta}>Stock *</label>
+          <label htmlFor="stock" className={etiqueta}>Stock</label>
           <input
             id="stock"
             name="stock"
-            required
             inputMode="numeric"
-            defaultValue={producto?.stock ?? 0}
+            defaultValue={producto?.stock ?? ""}
+            placeholder="Vacío = Consulta disponibilidad"
             className={campo}
           />
         </div>

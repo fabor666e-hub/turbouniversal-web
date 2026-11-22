@@ -1,7 +1,8 @@
 // Pruebas unitarias de las reglas de negocio del front (lib/reglas.ts).
 // Cada bloque corresponde a una spec: docs/specs/F1, F2 y F3.
 import { expect, test } from "@playwright/test";
-import { productos } from "@/data/productos";
+import { productosDePrueba as productos } from "@/data/productos-prueba";
+import { productos as catalogoReal } from "@/data/productos";
 import {
   agregarItem,
   buscarProductos,
@@ -11,6 +12,7 @@ import {
   cotizacionesACsv,
   datosEstructurados,
   mensajeCompartir,
+  hayPreciosPorConsultar,
   estadoStock,
   marcasDeVehiculos,
   mensajeWhatsApp,
@@ -145,9 +147,9 @@ test.describe("F1 · SEO y compartir", () => {
     expect(d.sku).toBe("TB-1002");
     expect(d.brand.name).toBe("Turboman");
     expect(d.offers).toMatchObject({ priceCurrency: "COP", price: 2400000, url });
-    expect(d.offers.availability).toBe("https://schema.org/LimitedAvailability"); // stock 2
-    expect(datosEstructurados(ref("TB-1003"), url).offers.availability).toBe("https://schema.org/OutOfStock");
-    expect(datosEstructurados(ref("TB-2001"), url).offers.availability).toBe("https://schema.org/InStock");
+    expect(d.offers?.availability).toBe("https://schema.org/LimitedAvailability"); // stock 2
+    expect(datosEstructurados(ref("TB-1003"), url).offers?.availability).toBe("https://schema.org/OutOfStock");
+    expect(datosEstructurados(ref("TB-2001"), url).offers?.availability).toBe("https://schema.org/InStock");
   });
 
   test("el mensaje para compartir lleva nombre, referencia, vehículos y enlace", () => {
@@ -184,5 +186,71 @@ test.describe("F4 · Exportar cotizaciones", () => {
   test("un valor que empieza con = no se vuelve fórmula en Excel", () => {
     const csv = cotizacionesACsv([{ ...base, nombre: "=HYPERLINK(\"x\")" }]);
     expect(csv).toContain(`"'=HYPERLINK(""x"")"`);
+  });
+});
+
+test.describe('Precio y stock "a consultar" (null)', () => {
+  const consultar = () => ref("TB-9001");
+
+  test("el estado de stock null es consultar", () => {
+    expect(estadoStock(null)).toBe("consultar");
+  });
+
+  test("un producto a consultar se puede agregar hasta 99 unidades", () => {
+    let items = agregarItem([], consultar());
+    expect(items[0].cantidad).toBe(1);
+    items = cambiarCantidad(items, "TB-9001", 200);
+    expect(items[0].cantidad).toBe(99);
+  });
+
+  test("el total solo suma los precios conocidos y avisa que hay precios por consultar", () => {
+    let items = agregarItem([], consultar());
+    expect(hayPreciosPorConsultar(items)).toBe(true);
+    expect(totalPrecio(items)).toBe(0);
+    items = agregarItem(items, ref("TB-3001")); // 190.000
+    expect(totalPrecio(items)).toBe(190000);
+    expect(hayPreciosPorConsultar(agregarItem([], ref("TB-3001")))).toBe(false);
+  });
+
+  test("sin precio no se declara oferta en los datos para Google", () => {
+    const d = datosEstructurados(consultar(), "https://x/productos/TB-9001");
+    expect(d).not.toHaveProperty("offers");
+    expect(d.sku).toBe("TB-9001");
+  });
+
+  test('en el CSV el precio aparece como "A consultar" y sin subtotal', () => {
+    const csv = cotizacionesACsv([
+      { id: 1, nombre: "Ana", telefono: "300", total: 0, creadoEn: "2026-11-22T17:00:00.000Z",
+        items: [{ referencia: "TB-9001", nombre: "Turbo a consultar", cantidad: 2, precio: null }] },
+    ]);
+    expect(csv).toContain('"2";"A consultar";""');
+  });
+});
+
+test.describe("Catálogo real de la empresa (data/productos.ts)", () => {
+  test("trae los turbos del catálogo, con referencias únicas y vehículos válidos", () => {
+    expect(catalogoReal.length).toBeGreaterThanOrEqual(37);
+    const refsReales = catalogoReal.map((p) => p.referencia);
+    expect(new Set(refsReales).size).toBe(refsReales.length);
+    for (const p of catalogoReal) {
+      expect(p.referencia).toMatch(/^[A-Z0-9][A-Z0-9-]{1,29}$/);
+      expect(p.vehiculos.length).toBeGreaterThan(0);
+      for (const v of p.vehiculos) expect(v).toMatch(/^\S+\s+\S/);
+    }
+  });
+
+  test("el buscador encuentra JF-158 por referencia y por vehículo", () => {
+    expect(refs(buscarProductos(catalogoReal, "jf-158"))).toEqual(["JF-158"]);
+    expect(refs(buscarProductos(catalogoReal, "evoque"))).toEqual(["JF-158"]);
+  });
+
+  test("las marcas de dos o más palabras no se parten (Land Rover, John Deere, Case New Holland)", () => {
+    expect(partirVehiculo("Land Rover Evoque")).toEqual({ marca: "Land Rover", modelo: "Evoque" });
+    expect(partirVehiculo("John Deere")).toEqual({ marca: "John Deere", modelo: "Todos los modelos" });
+    const marcas = marcasDeVehiculos(catalogoReal);
+    expect(marcas).toContain("Land Rover");
+    expect(marcas).toContain("Case New Holland");
+    expect(marcas).not.toContain("Land");
+    expect(marcas).not.toContain("John");
   });
 });

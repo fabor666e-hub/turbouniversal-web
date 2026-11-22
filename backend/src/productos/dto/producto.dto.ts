@@ -40,15 +40,19 @@ export class ActualizarProductoDto {
   @MaxLength(60, { each: true, message: 'Cada vehículo debe tener máximo 60 caracteres.' })
   vehiculos: string[];
 
+  // null o sin enviar = "precio a consultar"
+  @IsOptional()
   @IsInt({ message: 'El precio debe ser un número entero.' })
   @Min(0, { message: 'El precio debe ser mayor o igual a 0.' })
   @Max(1_000_000_000, { message: 'El precio es demasiado alto.' })
-  precio: number;
+  precio?: number | null;
 
+  // null o sin enviar = "disponibilidad a consultar"
+  @IsOptional()
   @IsInt({ message: 'El stock debe ser un número entero.' })
   @Min(0, { message: 'El stock debe ser mayor o igual a 0.' })
   @Max(100_000, { message: 'El stock es demasiado alto.' })
-  stock: number;
+  stock?: number | null;
 
   @IsOptional()
   @IsString()

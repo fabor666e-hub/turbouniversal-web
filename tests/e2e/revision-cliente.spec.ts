@@ -56,3 +56,14 @@ test("Nosotros tiene encabezado y sus cuatro bloques", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1, name: "Nosotros" })).toBeVisible();
   await expect(page.locator("main").getByRole("heading", { level: 2 })).toHaveCount(5); // 4 bloques + llamado final
 });
+
+test('un producto sin precio ni stock dice "Precio a consultar" y se puede cotizar', async ({ page }) => {
+  await ir(page, "/productos/TB-9001");
+  await expect(page.getByText("Precio a consultar").first()).toBeVisible();
+  await expect(page.getByText("Consulta disponibilidad").first()).toBeVisible();
+  await page.getByRole("button", { name: "Agregar a cotización" }).click();
+  const panel = page.locator("aside");
+  await expect(panel.locator('[data-ref="TB-9001"]')).toContainText("A consultar");
+  await expect(panel.getByText("Un asesor te responde por WhatsApp")).toBeVisible();
+  await expect(panel.getByText("Total estimado")).toHaveCount(0);
+});

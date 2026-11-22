@@ -22,6 +22,8 @@ Como **cliente**, quiero armar una lista con varios repuestos y enviarla de una 
 - [x] La casilla enlaza a `/privacidad` (se abre en otra pestaña para no perder la cotización); el pie de página también.
 - [x] `/privacidad` explica responsable, datos que se recogen, finalidad, derechos, cómo ejercerlos (plazos de 10 y 15 días hábiles) y vigencia.
 - [x] Si el navegador bloquea la ventana nueva, WhatsApp se abre en la misma pestaña.
+- [x] Un producto con precio "a consultar" se puede agregar (hasta 99 unidades si su stock también es a consultar); en la lista dice "A consultar" y no suma al total.
+- [x] Si todos los productos de la lista están a consultar, en lugar del total aparece "Un asesor te responde por WhatsApp con el precio y la disponibilidad".
 
 ## Fuera de alcance
 Pagos en línea, descuentos, cálculo de envío. El texto legal de `/privacidad` es un modelo: la empresa debe completar su NIT y revisarlo con su asesor.

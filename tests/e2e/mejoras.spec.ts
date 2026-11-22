@@ -10,9 +10,10 @@ test("la casilla de la cotización enlaza a la política de datos", async ({ pag
   const nueva = context.waitForEvent("page");
   await page.locator("aside").getByRole("link", { name: "Ver política de datos" }).click();
   const politica = await nueva;
+  await politica.waitForLoadState("networkidle");
   await expect(politica).toHaveURL(/\/privacidad$/);
   await expect(politica.getByRole("heading", { level: 1 })).toHaveText("Política de tratamiento de datos");
-  await expect(politica.getByText("10 días hábiles")).toBeVisible();
+  await expect(politica.getByText("10 días hábiles").filter({ visible: true }).first()).toBeVisible();
 });
 
 test("el pie de página enlaza a la política de datos", async ({ page }) => {

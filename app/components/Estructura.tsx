@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { FACEBOOK, INSTAGRAM, LINK_CATALOGO, NUMERO_WHATSAPP, precio } from "@/lib/utils";
 import { usarCotizacion } from "./Cotizacion";
 import { guardarCotizacion } from "@/lib/rastreo";
-import { cotizacionLista, mensajeWhatsApp } from "@/lib/reglas";
+import { cotizacionLista, hayPreciosPorConsultar, mensajeWhatsApp, tope } from "@/lib/reglas";
 import { IconoCorreo, IconoReloj, IconoTelefono, IconoUbicacion, IconoWhatsApp } from "./Iconos";
 
 
@@ -312,6 +312,8 @@ export function WhatsAppFlotante() {
 
 export function PanelCotizacion() {
   const { items, abierto, setAbierto, totalPrecio, cambiar, quitar } = usarCotizacion();
+  const conPreciosPorConsultar = hayPreciosPorConsultar(items);
+  const todosPorConsultar = items.length > 0 && items.every((i) => i.p.precio === null);
   const [nombre, setNombre] = useState("");
   const [telefono, setTelefono] = useState("");
   const [aceptaDatos, setAceptaDatos] = useState(false);
@@ -400,13 +402,15 @@ export function PanelCotizacion() {
                       <button
                         onClick={() => cambiar(p.referencia, 1)}
                         aria-label="Agregar una unidad"
-                        disabled={cantidad >= p.stock}
+                        disabled={cantidad >= tope(p)}
                         className="h-8 w-8 rounded-full border border-slate-300 font-bold hover:bg-slate-200 disabled:opacity-30"
                       >
                         +
                       </button>
                     </div>
-                    <span className="font-bold text-[#e8233b]">{precio(p.precio * cantidad)}</span>
+                    <span className={p.precio === null ? "text-sm font-semibold text-slate-500" : "font-bold text-[#e8233b]"}>
+                      {p.precio === null ? "A consultar" : precio(p.precio * cantidad)}
+                    </span>
                   </div>
                 </li>
               ))}
@@ -416,10 +420,23 @@ export function PanelCotizacion() {
 
         {items.length > 0 && (
           <div className="space-y-3 border-t bg-white p-6">
-            <div className="flex justify-between text-lg font-bold text-[#1a2150]">
-              <span>Total estimado</span>
-              <span>{precio(totalPrecio)}</span>
-            </div>
+            {todosPorConsultar ? (
+              <p className="rounded-md bg-slate-100 px-3 py-2 text-sm text-[#1a2150]">
+                Un asesor te responde por WhatsApp con el <strong>precio y la disponibilidad</strong> de cada producto.
+              </p>
+            ) : (
+              <>
+                <div className="flex justify-between text-lg font-bold text-[#1a2150]">
+                  <span>Total estimado</span>
+                  <span>{precio(totalPrecio)}</span>
+                </div>
+                {conPreciosPorConsultar && (
+                  <p className="text-xs text-slate-500">
+                    Sin incluir los productos con precio a consultar: el asesor te los cotiza.
+                  </p>
+                )}
+              </>
+            )}
             <input
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
@@ -456,7 +473,7 @@ export function PanelCotizacion() {
               Enviar cotización por WhatsApp
             </button>
             <p className="text-center text-xs text-slate-400">
-              Precios de ejemplo; la disponibilidad final se confirma con un asesor.
+              El precio y la disponibilidad finales los confirma un asesor.
             </p>
           </div>
         )}

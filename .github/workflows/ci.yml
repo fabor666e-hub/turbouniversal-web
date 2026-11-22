@@ -21,6 +21,8 @@ jobs:
       # Sin variables de Supabase ni de la API: el sitio usa los datos locales
       # (data/productos.ts) y las pruebas siempre dan el mismo resultado.
       NEXT_TELEMETRY_DISABLED: "1"
+      # El build y las e2e usan los datos de prueba (precios y stock fijos) de data/productos-prueba.ts
+      PRODUCTOS_DE_PRUEBA: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

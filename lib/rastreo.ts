@@ -31,7 +31,7 @@ export function guardarCotizacion(datos: {
   nombre: string;
   telefono: string;
   aceptaDatos: boolean;
-  items: { referencia: string; nombre: string; cantidad: number; precio: number }[];
+  items: { referencia: string; nombre: string; cantidad: number; precio: number | null }[];
   total: number;
 }) {
   const directo = () => {

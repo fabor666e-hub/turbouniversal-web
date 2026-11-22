@@ -3,7 +3,7 @@ import { defineConfig, devices } from "@playwright/test";
 // Un solo ejecutor para las dos clases de pruebas:
 //   npm test       → pruebas unitarias (tests/unit), sin navegador
 //   npm run e2e    → pruebas de extremo a extremo (tests/e2e), con el sitio compilado
-// Las e2e corren con los datos locales de data/productos.ts (sin Supabase ni API),
+// Las e2e corren con los datos de prueba de data/productos-prueba.ts (sin Supabase ni API),
 // así siempre dan el mismo resultado.
 const PUERTO = 3100;
 
@@ -31,6 +31,6 @@ export default defineConfig({
         url: `http://localhost:${PUERTO}`,
         reuseExistingServer: !process.env.CI,
         timeout: 60_000,
-        env: { PANEL_CLAVE: "clave-de-prueba" },
+        env: { PANEL_CLAVE: "clave-de-prueba", PRODUCTOS_DE_PRUEBA: "1" },
       },
 });

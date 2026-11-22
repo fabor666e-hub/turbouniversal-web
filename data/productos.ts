@@ -4,8 +4,8 @@ export type Producto = {
   marca: string;
   categoria: string; // slug de la categoría
   vehiculos: string[];
-  precio: number; // en pesos colombianos
-  stock: number;
+  precio: number | null; // en pesos colombianos; null = "Precio a consultar"
+  stock: number | null; // null = "Consulta disponibilidad" (no se publica el inventario)
   imagen?: string;
   oem?: string[]; // números de parte originales o equivalentes
   garantia?: string;
@@ -22,18 +22,45 @@ export const categorias = [
   { slug: "caracol-escape", nombre: "Caracol de escape" },
 ];
 
-// DATOS DE EJEMPLO: reemplázalos por los productos reales de la empresa
+// Turbos reales del catálogo de la empresa (Flipsnack "Turbo Alimentadores", nov. 2026).
+// Precio y stock en null = "a consultar": el catálogo no los publica. La empresa los llena
+// desde el administrador (/panel/productos). Mismos datos que backend/src/base-de-datos/semilla.ts.
 export const productos: Producto[] = [
-  { referencia: "TB-1001", nombre: "Turboalimentador CAT 3116", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Caterpillar 3116", "Maquinaria pesada"], precio: 2850000, stock: 6 },
-  { referencia: "TB-1002", nombre: "Turboalimentador HX35", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Chevrolet NPR", "Kenworth"], precio: 2400000, stock: 2 },
-  { referencia: "TB-1003", nombre: "Turboalimentador GT1749V", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Renault Duster", "Nissan Frontier"], precio: 1950000, stock: 0 },
-  { referencia: "TB-2001", nombre: "Cartridge HX35", marca: "Turboman", categoria: "cartridge", vehiculos: ["Chevrolet NPR", "Kenworth"], precio: 780000, stock: 12 },
-  { referencia: "TB-2002", nombre: "Cartridge GT1749V", marca: "Turboman", categoria: "cartridge", vehiculos: ["Renault Duster"], precio: 690000, stock: 3 },
-  { referencia: "TB-3001", nombre: "Kit de reparación HX35", marca: "Turboman", categoria: "kit-reparacion", vehiculos: ["Chevrolet NPR"], precio: 190000, stock: 25 },
-  { referencia: "TB-3002", nombre: "Kit de reparación CAT 3116", marca: "Turboman", categoria: "kit-reparacion", vehiculos: ["Caterpillar 3116"], precio: 230000, stock: 8 },
-  { referencia: "TB-4001", nombre: "Conjunto rotor HX35", marca: "Turboman", categoria: "conjunto-rotor", vehiculos: ["Chevrolet NPR", "Kenworth"], precio: 420000, stock: 5 },
-  { referencia: "TB-5001", nombre: "Actuador electrónico GT1749V", marca: "Turboman", categoria: "actuador-electronico", vehiculos: ["Renault Duster", "Nissan Frontier"], precio: 860000, stock: 1 },
-  { referencia: "TB-6001", nombre: "Geometría variable GT1749V", marca: "Turboman", categoria: "geometria-variable", vehiculos: ["Renault Duster"], precio: 540000, stock: 7 },
-  { referencia: "TB-7001", nombre: "Caracol de admisión HX35", marca: "Turboman", categoria: "caracol-admision", vehiculos: ["Chevrolet NPR"], precio: 480000, stock: 4 },
-  { referencia: "TB-8001", nombre: "Caracol de escape HX35", marca: "Turboman", categoria: "caracol-escape", vehiculos: ["Chevrolet NPR", "Kenworth"], precio: 510000, stock: 0 },
+  { referencia: "JF-158", nombre: "Turbo Land Rover Evoque K03", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Land Rover Evoque"], precio: null, stock: null },
+  { referencia: "JF-027", nombre: "Turbo NPR 3.5 modelo 1995", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Chevrolet NPR 3.5"], precio: null, stock: null },
+  { referencia: "JF-093", nombre: "Turbo LUV D-Max 2.5", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Chevrolet LUV D-Max 2.5"], precio: null, stock: null },
+  { referencia: "JF-018", nombre: "Turbo Mazda T 4.5", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Mazda T 4.5"], precio: null, stock: null },
+  { referencia: "JF-153", nombre: "Turbo Perkins 210 DTI", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Perkins 210 DTI"], precio: null, stock: null },
+  { referencia: "JF-063", nombre: "Turbo Perkins Pajarita GT2556S", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Perkins Pajarita"], precio: null, stock: null },
+  { referencia: "JF-154", nombre: "Turbo Perkins 1006T", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Perkins 1006T"], precio: null, stock: null },
+  { referencia: "JF-008", nombre: "Turbo Perkins Pajarita", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Perkins Pajarita"], precio: null, stock: null },
+  { referencia: "JF-009", nombre: "Turbo Perkins Pajarita", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Perkins Pajarita"], precio: null, stock: null },
+  { referencia: "JF-011", nombre: "Turbo Perkins Pajarita", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Perkins Pajarita"], precio: null, stock: null },
+  { referencia: "JF-057", nombre: "Turbo Toyota Super Delta CT12B", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Toyota Super Delta"], precio: null, stock: null },
+  { referencia: "JF-039", nombre: "Turbo Toyota Vigo 2.5 CT16 completo homologado", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Toyota Vigo 2.5"], precio: null, stock: null },
+  { referencia: "JF-148", nombre: "Turbo Cummins 6CT manguera HX40/H1E sin pestaña", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Cummins 6CT"], precio: null, stock: null },
+  { referencia: "JF-070", nombre: "Turbo Cummins 6BT AA", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Cummins 6BT"], precio: null, stock: null },
+  { referencia: "JF-150", nombre: "Turbo Caterpillar 3116 sin válvula", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Caterpillar 3116"], precio: null, stock: null },
+  { referencia: "JF-092", nombre: "Turbo Cummins 4BT 3.9 L HX30W", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Cummins 4BT 3.9"], precio: null, stock: null },
+  { referencia: "JF-032", nombre: "Turbo Cummins 6BT-160 HX35/H1C", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Cummins 6BT-160"], precio: null, stock: null },
+  { referencia: "JF-069", nombre: "Turbo Cummins 4BTA Case New Holland Elite", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Cummins 4BTA", "Case New Holland"], precio: null, stock: null },
+  { referencia: "JF-017", nombre: "Turbo Cummins 6BT-180 H1C plato separado", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Cummins 6BT-180"], precio: null, stock: null },
+  { referencia: "JF-059", nombre: "Turbo Cummins 6BT-190 HX35W", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Cummins 6BT-190"], precio: null, stock: null },
+  { referencia: "JF-071", nombre: "Turbo Cummins 6BT pestaña HX35", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Cummins 6BT"], precio: null, stock: null },
+  { referencia: "JF-155", nombre: "Turbo Cummins KTA 19", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Cummins KTA 19"], precio: null, stock: null },
+  { referencia: "JF-058", nombre: "Turbo Cummins QSB 3.8", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Cummins QSB 3.8"], precio: null, stock: null },
+  { referencia: "JF-073", nombre: "Turbo Cummins M11/L10-300 HX50", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Cummins M11", "Cummins L10-300"], precio: null, stock: null },
+  { referencia: "JF-078", nombre: "Turbo Foton BJ49 2.8 L GT22", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Foton BJ49 2.8"], precio: null, stock: null },
+  { referencia: "JF-157", nombre: "Turbo Ford Escape / Focus", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Ford Escape", "Ford Focus"], precio: null, stock: null },
+  { referencia: "JF-149", nombre: "Turbo Hitachi EX200 motor 6BD1", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Hitachi EX200", "Isuzu 6BD1"], precio: null, stock: null },
+  { referencia: "JF-061", nombre: "Turbo Nissan Frontier NP300", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Nissan Frontier NP300"], precio: null, stock: null },
+  { referencia: "JF-026", nombre: "Turbo Isuzu NPR 3.9 modelo 1998", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Isuzu NPR 3.9"], precio: null, stock: null },
+  { referencia: "JF-077", nombre: "Turbo FTR IHI", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Chevrolet FTR"], precio: null, stock: null },
+  { referencia: "JF-147", nombre: "Turbo Hyundai H100 Grand Starex GT1749", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Hyundai H100", "Hyundai Grand Starex"], precio: null, stock: null },
+  { referencia: "JF-030", nombre: "Turbo Isuzu NKR-NHR I, II y III", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Isuzu NKR", "Isuzu NHR"], precio: null, stock: null },
+  { referencia: "JF-151", nombre: "Turbo JMC motor Isuzu", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["JMC Isuzu"], precio: null, stock: null },
+  { referencia: "JF-049", nombre: "Turbo John Deere TA34/TB03", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["John Deere"], precio: null, stock: null },
+  { referencia: "JF-031", nombre: "Turbo Iveco Daily GT1752S", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Iveco Daily"], precio: null, stock: null },
+  { referencia: "JF-156", nombre: "Turbo Kia Sorento 2.2", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Kia Sorento 2.2"], precio: null, stock: null },
+  { referencia: "KOMATSU-PC300", nombre: "Turbo Komatsu PC300", marca: "Turboman", categoria: "turboalimentadores", vehiculos: ["Komatsu PC300"], precio: null, stock: null },
 ];

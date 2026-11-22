@@ -49,7 +49,7 @@ export default async function VarianteC() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="mb-6 text-2xl font-bold text-[#1a2150]">Más consultados</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {productos.filter((p) => p.stock > 0).slice(0, 4).map((p) => (
+          {productos.filter((p) => p.stock === null || p.stock > 0).slice(0, 4).map((p) => (
             <TarjetaProducto key={p.referencia} p={p} />
           ))}
         </div>

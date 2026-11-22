@@ -2,7 +2,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import { ErrorApi, noEncontrado } from '../comun/errores';
-import { normalizar } from '../comun/texto';
+import { normalizar, partirVehiculo } from '../comun/texto';
 import { CATEGORIAS } from './categorias';
 import { ActualizarProductoDto, CrearProductoDto, FiltroProductosDto } from './dto/producto.dto';
 import { Producto } from './producto.entity';
@@ -34,15 +34,15 @@ export class ProductosService {
     return CATEGORIAS.map((c) => ({ ...c, cantidad: todos.filter((p) => p.categoria === c.slug).length }));
   }
 
-  // "Chevrolet NPR" -> { marca: "Chevrolet", modelos: ["NPR"] }
+  // "Chevrolet NPR" -> { marca: "Chevrolet", modelos: ["NPR"] } (respeta marcas compuestas como "Land Rover")
   async vehiculos() {
     const todos = await this.repo.find({ select: { vehiculos: true, referencia: true } });
     const mapa = new Map<string, Set<string>>();
     for (const p of todos)
       for (const v of p.vehiculos) {
-        const [marca, ...resto] = v.trim().split(/\s+/);
+        const { marca, modelo } = partirVehiculo(v);
         if (!mapa.has(marca)) mapa.set(marca, new Set());
-        mapa.get(marca)!.add(resto.join(' ') || 'Todos los modelos');
+        mapa.get(marca)!.add(modelo);
       }
     return [...mapa.entries()]
       .sort(([a], [b]) => a.localeCompare(b, 'es'))
@@ -51,7 +51,14 @@ export class ProductosService {
 
   async crear(dto: CrearProductoDto): Promise<Producto> {
     try {
-      await this.repo.insert({ ...dto, imagen: dto.imagen ?? null, oem: dto.oem ?? [], garantia: dto.garantia ?? null });
+      await this.repo.insert({
+        ...dto,
+        precio: dto.precio ?? null,
+        stock: dto.stock ?? null,
+        imagen: dto.imagen ?? null,
+        oem: dto.oem ?? [],
+        garantia: dto.garantia ?? null,
+      });
     } catch (e) {
       if (e instanceof QueryFailedError && (e as { driverError?: { code?: string } }).driverError?.code === '23505')
         throw new ErrorApi(
@@ -68,14 +75,21 @@ export class ProductosService {
     const actual = await this.obtener(referencia);
     await this.repo.update(
       { referencia: actual.referencia },
-      { ...dto, imagen: dto.imagen ?? null, oem: dto.oem ?? [], garantia: dto.garantia ?? null },
+      {
+        ...dto,
+        precio: dto.precio ?? null,
+        stock: dto.stock ?? null,
+        imagen: dto.imagen ?? null,
+        oem: dto.oem ?? [],
+        garantia: dto.garantia ?? null,
+      },
     );
     return this.obtener(actual.referencia);
   }
 
   async cambiarStock(referencia: string, delta: number): Promise<Producto> {
     const actual = await this.obtener(referencia);
-    await this.repo.update({ referencia: actual.referencia }, { stock: Math.max(0, actual.stock + delta) });
+    await this.repo.update({ referencia: actual.referencia }, { stock: Math.max(0, (actual.stock ?? 0) + delta) });
     return this.obtener(actual.referencia);
   }
 

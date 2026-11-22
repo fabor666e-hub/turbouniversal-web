@@ -16,8 +16,8 @@ type Fila = {
   marca: string;
   categoria: string;
   vehiculos: string[];
-  precio: number;
-  stock: number;
+  precio: number | null; // null = a consultar
+  stock: number | null;
   imagen: string | null;
   oem: string[];
   garantia: string | null;
@@ -62,12 +62,14 @@ async function porApi(ruta: string, init: RequestInit): Promise<Resultado> {
 
 const json = (cuerpo: unknown) => JSON.stringify(cuerpo);
 
-// "2.850.000", "2850000" o "2 850 000" -> 2850000. Devuelve null si no es un entero >= 0.
-function entero(valor: FormDataEntryValue | null): number | null {
+// "2.850.000", "2850000" o "2 850 000" -> 2850000.
+// Vacío -> null ("a consultar"). Escrito pero no es un entero >= 0 -> undefined (error).
+function entero(valor: FormDataEntryValue | null): number | null | undefined {
   const t = String(valor ?? "").trim();
-  if (!/^\d[\d.,\s]*$/.test(t)) return null;
+  if (t === "") return null;
+  if (!/^\d[\d.,\s]*$/.test(t)) return undefined;
   const n = Number(t.replace(/[.,\s]/g, ""));
-  return Number.isSafeInteger(n) && n >= 0 ? n : null;
+  return Number.isSafeInteger(n) && n >= 0 ? n : undefined;
 }
 
 function leerFormulario(fd: FormData): { fila?: Fila; error?: string } {
@@ -102,8 +104,9 @@ function leerFormulario(fd: FormData): { fila?: Fila; error?: string } {
     return { error: "El nombre debe tener entre 3 y 120 caracteres." };
   if (!marca) return { error: "Escribe la marca." };
   if (!categorias.some((c) => c.slug === categoria)) return { error: "Elige una categoría." };
-  if (precio === null) return { error: "El precio debe ser un número entero sin decimales (ej. 2850000)." };
-  if (stock === null) return { error: "El stock debe ser un número entero de 0 en adelante." };
+  // Vacío = "a consultar" (null); escrito pero inválido = error
+  if (precio === undefined) return { error: "El precio debe ser un número entero sin decimales (ej. 2850000), o déjalo vacío." };
+  if (stock === undefined) return { error: "El stock debe ser un número entero de 0 en adelante, o déjalo vacío." };
   if (vehiculos.some((v) => !v.includes(" ")))
     return { error: 'Cada vehículo va en su propia línea con el formato "Marca Modelo" (ej. Chevrolet NPR).' };
   if (oem.length > 20) return { error: "Máximo 20 números OEM por producto." };
@@ -195,7 +198,7 @@ export async function cambiarStock(fd: FormData) {
   const db = cliente();
   const { data } = await db.from("productos").select("stock").eq("referencia", referencia).maybeSingle();
   if (!data) return;
-  const nuevo = Math.max(0, (data.stock as number) + delta);
+  const nuevo = Math.max(0, ((data.stock as number | null) ?? 0) + delta);
   await db.from("productos").update({ stock: nuevo }).eq("referencia", referencia);
   actualizarSitio();
 }

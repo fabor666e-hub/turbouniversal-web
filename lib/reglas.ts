@@ -16,10 +16,11 @@ export function buscarProductos(productos: Producto[], busqueda: string, categor
   );
 }
 
-export type EstadoStock = "agotado" | "pocas" | "disponible";
+export type EstadoStock = "agotado" | "pocas" | "disponible" | "consultar";
 
-// 0 = Agotado · 1 a 3 = Pocas unidades · 4 o más = Disponible
-export function estadoStock(stock: number): EstadoStock {
+// null = Consulta disponibilidad · 0 = Agotado · 1 a 3 = Pocas unidades · 4 o más = Disponible
+export function estadoStock(stock: number | null): EstadoStock {
+  if (stock === null) return "consultar";
   if (stock <= 0) return "agotado";
   if (stock <= 3) return "pocas";
   return "disponible";
@@ -29,13 +30,17 @@ export function estadoStock(stock: number): EstadoStock {
 
 export type Item = { p: Producto; cantidad: number };
 
+// Máximo de unidades que se pueden cotizar: el stock, o 99 (límite de la API) si el stock es a consultar.
+export const CANTIDAD_MAXIMA = 99;
+export const tope = (p: Producto) => (p.stock === null ? CANTIDAD_MAXIMA : Math.min(p.stock, CANTIDAD_MAXIMA));
+
 // REGLA CRÍTICA (front): nunca se cotiza más que el stock disponible.
 export function agregarItem(items: Item[], p: Producto): Item[] {
-  if (p.stock <= 0) return items;
+  if (p.stock !== null && p.stock <= 0) return items;
   const existe = items.find((i) => i.p.referencia === p.referencia);
   if (existe) {
     return items.map((i) =>
-      i.p.referencia === p.referencia ? { ...i, cantidad: Math.min(i.cantidad + 1, p.stock) } : i
+      i.p.referencia === p.referencia ? { ...i, cantidad: Math.min(i.cantidad + 1, tope(p)) } : i
     );
   }
   return [...items, { p, cantidad: 1 }];
@@ -45,13 +50,15 @@ export function agregarItem(items: Item[], p: Producto): Item[] {
 export function cambiarCantidad(items: Item[], referencia: string, delta: number): Item[] {
   return items
     .map((i) =>
-      i.p.referencia === referencia ? { ...i, cantidad: Math.min(i.cantidad + delta, i.p.stock) } : i
+      i.p.referencia === referencia ? { ...i, cantidad: Math.min(i.cantidad + delta, tope(i.p)) } : i
     )
     .filter((i) => i.cantidad > 0);
 }
 
 export const totalUnidades = (items: Item[]) => items.reduce((s, i) => s + i.cantidad, 0);
-export const totalPrecio = (items: Item[]) => items.reduce((s, i) => s + i.cantidad * i.p.precio, 0);
+// Total de los productos con precio conocido; los "a consultar" los cotiza el asesor.
+export const totalPrecio = (items: Item[]) => items.reduce((s, i) => s + i.cantidad * (i.p.precio ?? 0), 0);
+export const hayPreciosPorConsultar = (items: Item[]) => items.some((i) => i.p.precio === null);
 
 // Nombre de 2+ letras, teléfono de 7 a 15 dígitos y autorización de datos (Ley 1581).
 export function cotizacionLista(nombre: string, telefono: string, aceptaDatos: boolean): boolean {
@@ -72,10 +79,18 @@ export function mensajeWhatsApp(items: Item[], nombre: string, telefono: string)
 
 // ── F3 · Asistente por vehículo ─────────────────────────────────────────────
 
-// "Chevrolet NPR" -> marca "Chevrolet", modelo "NPR"
+// Marcas de vehículo o motor de más de una palabra (mismo listado que backend/src/comun/texto.ts)
+export const MARCAS_COMPUESTAS = ["Case New Holland", "New Holland", "John Deere", "Land Rover", "Mercedes Benz"];
+
+// "Chevrolet NPR" -> marca "Chevrolet", modelo "NPR"; "Land Rover Evoque" -> "Land Rover", "Evoque"
 export function partirVehiculo(v: string) {
-  const [marca, ...resto] = v.trim().split(" ");
-  return { marca, modelo: resto.join(" ") || "Todos los modelos" };
+  const limpio = v.trim().replace(/\s+/g, " ");
+  const minusculas = limpio.toLowerCase();
+  const compuesta = MARCAS_COMPUESTAS.find(
+    (m) => minusculas === m.toLowerCase() || minusculas.startsWith(m.toLowerCase() + " ")
+  );
+  const marca = compuesta ?? limpio.split(" ")[0];
+  return { marca, modelo: limpio.slice(marca.length).trim() || "Todos los modelos" };
 }
 
 export function marcasDeVehiculos(productos: Producto[]): string[] {
@@ -111,14 +126,16 @@ export function mensajeCompartir(p: Producto, url: string): string {
   return `Mira este repuesto en Turbo Universal: ${p.nombre} (Ref. ${p.referencia}), compatible con ${p.vehiculos.join(", ")}. ${url}`;
 }
 
-const DISPONIBILIDAD: Record<EstadoStock, string> = {
+const DISPONIBILIDAD: Record<Exclude<EstadoStock, "consultar">, string> = {
   agotado: "https://schema.org/OutOfStock",
   pocas: "https://schema.org/LimitedAvailability",
   disponible: "https://schema.org/InStock",
 };
 
 // Datos estructurados (schema.org/Product) para que Google muestre precio y disponibilidad.
+// Sin precio publicado no se declara oferta (Google la exige con precio): solo el producto.
 export function datosEstructurados(p: Producto, url: string, imagen?: string) {
+  const estado = estadoStock(p.stock);
   return {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -128,15 +145,19 @@ export function datosEstructurados(p: Producto, url: string, imagen?: string) {
     ...(imagen ? { image: imagen } : {}),
     brand: { "@type": "Brand", name: p.marca },
     description: `${p.nombre}, referencia ${p.referencia}. Compatible con ${p.vehiculos.join(", ")}.`,
-    offers: {
-      "@type": "Offer",
-      url,
-      priceCurrency: "COP",
-      price: p.precio,
-      availability: DISPONIBILIDAD[estadoStock(p.stock)],
-      itemCondition: "https://schema.org/NewCondition",
-      seller: { "@type": "Organization", name: "Importadora Turbo Universal" },
-    },
+    ...(p.precio === null
+      ? {}
+      : {
+          offers: {
+            "@type": "Offer",
+            url,
+            priceCurrency: "COP",
+            price: p.precio,
+            ...(estado === "consultar" ? {} : { availability: DISPONIBILIDAD[estado] }),
+            itemCondition: "https://schema.org/NewCondition",
+            seller: { "@type": "Organization", name: "Importadora Turbo Universal" },
+          },
+        }),
   };
 }
 
@@ -146,7 +167,7 @@ type FilaCotizacion = {
   id: number;
   nombre: string;
   telefono: string;
-  items: { referencia: string; nombre: string; cantidad: number; precio: number }[];
+  items: { referencia: string; nombre: string; cantidad: number; precio: number | null }[];
   total: number;
   creadoEn: string;
 };
@@ -170,8 +191,8 @@ export function cotizacionesACsv(cotizaciones: FilaCotizacion[]): string {
       i.referencia,
       i.nombre,
       i.cantidad,
-      i.precio,
-      i.cantidad * i.precio,
+      i.precio ?? "A consultar",
+      i.precio === null ? "" : i.cantidad * i.precio,
       c.total,
     ])
   );

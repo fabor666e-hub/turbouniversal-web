@@ -120,7 +120,7 @@ export default async function AdminProductos({
                       <input type="hidden" name="referencia" value={p.referencia} />
                       <input type="hidden" name="delta" value="-1" />
                       <button
-                        disabled={p.stock === 0}
+                        disabled={!p.stock}
                         aria-label={`Restar una unidad a ${p.referencia}`}
                         className="h-8 w-8 rounded-full border border-slate-300 font-bold transition hover:bg-slate-100 disabled:opacity-30"
                       >
@@ -129,10 +129,17 @@ export default async function AdminProductos({
                     </form>
                     <span
                       className={`w-8 text-center font-bold ${
-                        p.stock === 0 ? "text-red-600" : p.stock <= 3 ? "text-amber-600" : "text-[#1a2150]"
+                        p.stock === null
+                          ? "text-slate-400"
+                          : p.stock === 0
+                          ? "text-red-600"
+                          : p.stock <= 3
+                          ? "text-amber-600"
+                          : "text-[#1a2150]"
                       }`}
+                      title={p.stock === null ? "Disponibilidad a consultar" : undefined}
                     >
-                      {p.stock}
+                      {p.stock ?? "—"}
                     </span>
                     <form action={cambiarStock}>
                       <input type="hidden" name="referencia" value={p.referencia} />

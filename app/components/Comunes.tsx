@@ -72,8 +72,10 @@ export function TurboAnimado() {
   );
 }
 
-export function EtiquetaStock({ stock }: { stock: number }) {
+export function EtiquetaStock({ stock }: { stock: number | null }) {
   const estado = estadoStock(stock);
+  if (estado === "consultar")
+    return <span className="rounded px-2 py-0.5 text-xs font-semibold text-[#1a2150] bg-slate-100 ring-1 ring-slate-200">Consulta disponibilidad</span>;
   if (estado === "agotado")
     return <span className="rounded px-2 py-0.5 text-xs font-semibold text-red-700 bg-red-50 ring-1 ring-red-200">Agotado</span>;
   if (estado === "pocas")
@@ -127,7 +129,7 @@ export function TarjetaProducto({ p }: { p: Producto }) {
         {p.nombre}
       </Link>
       <p className="mt-1 flex-1 text-sm text-slate-500">{p.vehiculos.join(" · ")}</p>
-      <p className="mt-3 text-lg font-bold text-[#1a2150]">
+      <p className={`mt-3 font-bold ${p.precio === null ? "text-base text-slate-500" : "text-lg text-[#1a2150]"}`}>
         {precio(p.precio)}
       </p>
       <BotonAgregar p={p} />

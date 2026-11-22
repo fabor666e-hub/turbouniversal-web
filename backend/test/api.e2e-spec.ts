@@ -7,6 +7,9 @@ import { DataSource } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { AppModule } from '../src/app.module';
 import { configurarApp } from '../src/configurar-app';
+import { Producto } from '../src/productos/producto.entity';
+import { PRODUCTOS_INICIALES } from '../src/base-de-datos/semilla';
+import { PRODUCTOS_PRUEBA } from './datos-prueba';
 
 process.env.JWT_SECRETO ??= 'secreto-de-prueba';
 process.env.PANEL_CLAVE ??= 'clave-de-prueba';
@@ -27,6 +30,21 @@ beforeAll(async () => {
   app = configurarApp(modulo.createNestApplication());
   await app.init();
   api = request(app.getHttpServer());
+
+  // La semilla cargó los turbos reales; las pruebas usan datos de prueba con precio y stock fijos
+  const repo = app.get(DataSource).getRepository(Producto);
+  semillaCargada = await repo.count();
+  await repo.clear();
+  await repo.insert(PRODUCTOS_PRUEBA);
+});
+
+let semillaCargada = 0;
+
+describe('Semilla', () => {
+  it('una base vacía arranca con los turbos reales del catálogo de la empresa', () => {
+    expect(semillaCargada).toBe(PRODUCTOS_INICIALES.length);
+    expect(PRODUCTOS_INICIALES.length).toBeGreaterThanOrEqual(37);
+  });
 });
 
 afterAll(async () => {
@@ -41,9 +59,9 @@ describe('B1 · Productos y catálogo', () => {
     expect(r.body).toEqual({ estado: 'ok', baseDeDatos: 'ok' });
   });
 
-  it('devuelve los 12 productos iniciales ordenados por referencia', async () => {
+  it('devuelve todos los productos ordenados por referencia', async () => {
     const r = await api.get('/api/productos').expect(200);
-    expect(r.body).toHaveLength(12);
+    expect(r.body).toHaveLength(PRODUCTOS_PRUEBA.length);
     const refs = r.body.map((p: { referencia: string }) => p.referencia);
     expect(refs).toEqual([...refs].sort());
   });
@@ -240,6 +258,39 @@ describe('B4 · Administración de productos', () => {
   });
 });
 
+describe('Precio y stock "a consultar"', () => {
+  it('un producto sin precio ni stock se devuelve con null en ambos', async () => {
+    const r = await api.get('/api/productos/TB-9001').expect(200);
+    expect(r.body.precio).toBeNull();
+    expect(r.body.stock).toBeNull();
+  });
+
+  it('cotizar un producto a consultar no limita la cantidad y no suma al total', async () => {
+    const r = await api
+      .post('/api/cotizaciones')
+      .send({ nombre: 'Ana', telefono: '3001234567', aceptaDatos: true, items: [{ referencia: 'TB-9001', cantidad: 50 }, { referencia: 'TB-3001', cantidad: 2 }] })
+      .expect(201);
+    const consultar = r.body.items.find((i: { referencia: string }) => i.referencia === 'TB-9001');
+    expect(consultar).toMatchObject({ cantidad: 50, precio: null, subtotal: null });
+    expect(r.body.total).toBe(190000 * 2);
+  });
+
+  it('crear o editar sin precio ni stock los deja a consultar (null)', async () => {
+    const r = await api
+      .post('/api/productos')
+      .set(admin())
+      .send({ referencia: 'TB-9002', nombre: 'Turbo sin precio', marca: 'Turboman', categoria: 'turboalimentadores', vehiculos: ['Komatsu PC200'] })
+      .expect(201);
+    expect(r.body).toMatchObject({ precio: null, stock: null });
+  });
+
+  it('PATCH stock +1 sobre un stock a consultar lo deja en 1', async () => {
+    const r = await api.patch('/api/productos/TB-9002/stock').set(admin()).send({ delta: 1 }).expect(200);
+    expect(r.body.stock).toBe(1);
+    await api.delete('/api/productos/TB-9002').set(admin()).expect(204);
+  });
+});
+
 describe('B2 · Cotizaciones', () => {
   const base = { nombre: 'Camila Pérez', telefono: '300 123 4567', aceptaDatos: true };
 
@@ -288,7 +339,7 @@ describe('B2 · Cotizaciones', () => {
   it('la cotización aparece en GET /api/cotizaciones con token (y sin token da 401)', async () => {
     await api.get('/api/cotizaciones').expect(401);
     const r = await api.get('/api/cotizaciones').set(admin()).expect(200);
-    expect(r.body.length).toBe(2);
+    expect(r.body.length).toBe(3); // 2 de este bloque + 1 del bloque "a consultar"
     expect(r.body[0].nombre).toBe('Camila Pérez');
   });
 });
@@ -311,7 +362,9 @@ describe('B3 · Eventos y panel', () => {
   it('el resumen sin token responde 401 y con token trae totales, listas y stock bajo', async () => {
     await api.get('/api/panel/resumen').expect(401);
     const r = await api.get('/api/panel/resumen').set(admin()).expect(200);
-    expect(r.body.totales).toEqual({ vistas: 1, busquedas: 1, agregados: 0, cotizaciones: 2 });
+    expect(r.body.totales).toEqual({ vistas: 1, busquedas: 1, agregados: 0, cotizaciones: 3 });
+    // el stock bajo no incluye productos con stock a consultar (null)
+    expect(r.body.stockBajo.map((p: { referencia: string }) => p.referencia)).not.toContain('TB-9001');
     expect(r.body.masBuscados[0]).toEqual({ valor: 'npr', cantidad: 1 });
     expect(r.body.masAgregados).toEqual([]);
     expect(r.body.vehiculosAsistente[0].valor).toBe('modelo:Chevrolet NPR');

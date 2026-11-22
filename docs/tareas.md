@@ -79,6 +79,10 @@ Ciclo de cada tarea: implementar UNA → probar en el navegador → commit → m
 - [x] 7.4 Nosotros rediseñado (encabezado estándar, filas compactas, cifras comprobables)
 - [x] 7.5 Espera de la API en 1,5 s y flujo programado que la mantiene despierta (`despertar-api.yml`)
 - [x] 7.6 Campos OEM y garantía: contrato, API (migración `OemGarantia`), administrador, ficha y buscador
+- [x] 7.8 Precio y stock "a consultar" (null): contrato, API (migración `PrecioStockConsultar`), base, tarjetas, ficha, cotización, Google, CSV y administrador
+- [x] 7.9 Los 37 turbos reales del catálogo de Flipsnack reemplazan los 12 de ejemplo (front, semilla de la API, Supabase prod y dev); las pruebas usan `data/productos-prueba.ts`
+- [ ] 7.10 Fotos de los 37 turbos (capturas con zoom en `fotos-turbos/`)
+- [ ] 7.11 Confirmar con la empresa: referencia del Komatsu PC300 (el catálogo no la trae) y el tipo de turbo de JF-030 (en el catálogo dice "RHFA")
 - [ ] 7.7 La empresa: fotos reales, precios reales, números OEM, un solo número de contacto, correo propio y políticas de envío, pago y garantía
 
 ## Pendientes

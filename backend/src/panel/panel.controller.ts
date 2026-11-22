@@ -42,7 +42,7 @@ export class PanelController {
       clics: await this.top('clic'),
       vehiculosAsistente: await this.top('asistente', `AND detalle LIKE 'modelo:%'`),
       stockBajo: await this.db.query(
-        `SELECT referencia, nombre, stock FROM productos WHERE stock <= 3 ORDER BY stock, referencia`,
+        `SELECT referencia, nombre, stock FROM productos WHERE stock IS NOT NULL AND stock <= 3 ORDER BY stock, referencia`,
       ),
     };
   }

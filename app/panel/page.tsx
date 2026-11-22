@@ -133,10 +133,10 @@ async function datosDesdeSupabase(): Promise<Datos | null> {
     busquedas: contar(eventos, "busqueda"),
     categorias: contar(eventos, "categoria"),
     clics: contar(eventos, "clic"),
+    // Solo productos con stock conocido (null = a consultar)
     stockBajo: productos
-      .filter((p) => p.stock <= 3)
-      .sort((a, b) => a.stock - b.stock)
-      .map(({ referencia, nombre, stock }) => ({ referencia, nombre, stock })),
+      .flatMap((p) => (p.stock !== null && p.stock <= 3 ? [{ referencia: p.referencia, nombre: p.nombre, stock: p.stock }] : []))
+      .sort((a, b) => a.stock - b.stock),
     cotizaciones,
   };
 }

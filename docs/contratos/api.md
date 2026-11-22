@@ -39,7 +39,7 @@ Si algo cambia aquí, se cambia primero este documento y después el código.
   "garantia": "6 meses por defecto de fábrica"
 }
 ```
-Reglas: `referencia` en mayúsculas, 2–30 caracteres (letras, números y guiones), única. `nombre` 3–120 caracteres. `categoria` es uno de los slugs de `GET /api/categorias`. `precio` y `stock` enteros ≥ 0. Cada vehículo con formato "Marca Modelo".
+Reglas: `referencia` en mayúsculas, 2–30 caracteres (letras, números y guiones), única. `nombre` 3–120 caracteres. `categoria` es uno de los slugs de `GET /api/categorias`. `precio` y `stock` enteros ≥ 0, o `null` = **a consultar** (el catálogo de la empresa no publica precio ni inventario; si no se envían en POST/PUT quedan en `null`). Cada vehículo con formato "Marca Modelo".
 `oem` (opcional, por defecto `[]`): números de parte originales o equivalentes con los que el mecánico busca el repuesto; máximo 20, cada uno de 2 a 40 caracteres (letras, números, guiones, puntos, barras o espacios), sin repetir. `garantia` (opcional, `null` si no se informa): texto de hasta 120 caracteres.
 
 ### Cotización
@@ -48,7 +48,10 @@ Reglas: `referencia` en mayúsculas, 2–30 caracteres (letras, números y guion
   "id": 15,
   "nombre": "Camila Pérez",
   "telefono": "3001234567",
-  "items": [{ "referencia": "TB-1002", "nombre": "Turboalimentador HX35", "cantidad": 1, "precio": 2400000, "subtotal": 2400000 }],
+  "items": [
+    { "referencia": "TB-1002", "nombre": "Turboalimentador HX35", "cantidad": 1, "precio": 2400000, "subtotal": 2400000 },
+    { "referencia": "JF-158", "nombre": "Turbo Land Rover Evoque K03", "cantidad": 1, "precio": null, "subtotal": null }
+  ],
   "total": 2400000,
   "creadoEn": "2026-11-20T23:10:00.000Z"
 }
@@ -79,6 +82,8 @@ Cuerpo:
 { "nombre": "Camila Pérez", "telefono": "3001234567", "aceptaDatos": true, "items": [{ "referencia": "TB-1002", "cantidad": 1 }] }
 ```
 - El **servidor** toma el nombre y el precio de cada producto de la base de datos y calcula el total: el navegador no puede cambiar precios.
+- Un producto con precio `null` queda en la cotización con `precio` y `subtotal` en `null` y **no suma** al total (lo cotiza el asesor).
+- `STOCK_INSUFICIENTE` solo aplica a productos con stock conocido; con stock `null` la disponibilidad la confirma el asesor.
 - `nombre` 2–80 caracteres; `telefono` 7–15 dígitos; `aceptaDatos` debe ser `true` (Ley 1581); 1 a 30 ítems; `cantidad` entero 1–99.
 **201** `Cotización` · **400** `VALIDACION` · **404** `NO_ENCONTRADO` (referencia inexistente) · **409** `STOCK_INSUFICIENTE`
 
@@ -98,7 +103,7 @@ Cuerpo: `Producto` completo. **201** `Producto` · **400** · **409** `REFERENCI
 Cuerpo: `Producto` sin `referencia` (no se puede cambiar). **200** `Producto` · **400** · **404**
 
 ### 🔒 `PATCH /api/productos/:referencia/stock`
-Cuerpo `{ "delta": 1 }` o `{ "delta": -1 }`. El stock nunca baja de 0. **200** `Producto` · **404**
+Cuerpo `{ "delta": 1 }` o `{ "delta": -1 }`. El stock nunca baja de 0; un stock `null` se toma como 0. **200** `Producto` · **404**
 
 ### 🔒 `DELETE /api/productos/:referencia`
 **204** sin cuerpo · **404**
@@ -120,3 +125,4 @@ Cuerpo `{ "delta": 1 }` o `{ "delta": -1 }`. El stock nunca baja de 0. **200** `
   "stockBajo": [{ "referencia": "TB-5001", "nombre": "Actuador electrónico GT1749V", "stock": 1 }]
 }
 ```
+`stockBajo` solo incluye productos con stock conocido (no `null`) de 3 o menos.

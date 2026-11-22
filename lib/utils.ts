@@ -27,12 +27,15 @@ export const colores: Record<string, string> = {
 export const normalizar = (t: string) =>
   t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-export const precio = (n: number) =>
-  new Intl.NumberFormat("es-CO", {
-    style: "currency",
-    currency: "COP",
-    maximumFractionDigits: 0,
-  }).format(n);
+// null = el producto no tiene precio publicado
+export const precio = (n: number | null) =>
+  n === null
+    ? "Precio a consultar"
+    : new Intl.NumberFormat("es-CO", {
+        style: "currency",
+        currency: "COP",
+        maximumFractionDigits: 0,
+      }).format(n);
 
 // Foto de la categoría (si tiene)
 export const fotoCategoria = (slug: string): string | undefined =>
