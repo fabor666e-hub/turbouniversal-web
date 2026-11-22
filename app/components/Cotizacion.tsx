@@ -4,6 +4,12 @@ import { createContext, useContext, useEffect, useState, type CSSProperties, typ
 import type { Producto } from "@/data/productos";
 import { ROJO } from "@/lib/utils";
 import { registrar } from "@/lib/rastreo";
+import {
+  agregarItem,
+  cambiarCantidad,
+  totalPrecio as sumaPrecio,
+  totalUnidades as sumaUnidades,
+} from "@/lib/reglas";
 
 export type ItemCotizacion = { p: Producto; cantidad: number };
 
@@ -67,35 +73,17 @@ export function Proveedor({ children }: { children: ReactNode }) {
   }, [items, cargado]);
 
   const cantidadDe = (ref: string) => items.find((i) => i.p.referencia === ref)?.cantidad ?? 0;
-  const totalUnidades = items.reduce((s, i) => s + i.cantidad, 0);
-  const totalPrecio = items.reduce((s, i) => s + i.cantidad * i.p.precio, 0);
+  const totalUnidades = sumaUnidades(items);
+  const totalPrecio = sumaPrecio(items);
 
   const agregar = (p: Producto) => {
     registrar("agregar_cotizacion", p.referencia);
-    setItems((prev) => {
-      const existe = prev.find((i) => i.p.referencia === p.referencia);
-      if (existe) {
-        return prev.map((i) =>
-          i.p.referencia === p.referencia
-            ? { ...i, cantidad: Math.min(i.cantidad + 1, p.stock) }
-            : i
-        );
-      }
-      return [...prev, { p, cantidad: 1 }];
-    });
+    setItems((prev) => agregarItem(prev, p));
     setAbierto(true);
   };
 
   const cambiar = (ref: string, delta: number) => {
-    setItems((prev) =>
-      prev
-        .map((i) =>
-          i.p.referencia === ref
-            ? { ...i, cantidad: Math.min(i.cantidad + delta, i.p.stock) }
-            : i
-        )
-        .filter((i) => i.cantidad > 0)
-    );
+    setItems((prev) => cambiarCantidad(prev, ref, delta));
   };
 
   const quitar = (ref: string) =>

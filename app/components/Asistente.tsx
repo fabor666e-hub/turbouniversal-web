@@ -5,15 +5,10 @@ import { categorias, type Producto } from "@/data/productos";
 import { registrar } from "@/lib/rastreo";
 import { NUMERO_WHATSAPP } from "@/lib/utils";
 import { TarjetaProducto } from "./Comunes";
+import { compatiblesCon, marcasDeVehiculos, modelosDeMarca } from "@/lib/reglas";
 
 const ROJO = "#e8233b";
 const AZUL = "#1a2150";
-
-// "Chevrolet NPR" -> marca "Chevrolet", modelo "NPR"
-function partir(v: string) {
-  const [marca, ...resto] = v.trim().split(" ");
-  return { marca, modelo: resto.join(" ") || "Todos los modelos" };
-}
 
 function Opcion({
   texto,
@@ -42,33 +37,14 @@ export default function Asistente({ productos }: { productos: Producto[] }) {
   const [tipo, setTipo] = useState(""); // slug de categoría, "" = todos
 
   // Paso 1: marcas que existen en los datos reales
-  const marcas = useMemo(() => {
-    const s = new Set<string>();
-    productos.forEach((p) => p.vehiculos.forEach((v) => s.add(partir(v).marca)));
-    return [...s].sort();
-  }, [productos]);
+  const marcas = useMemo(() => marcasDeVehiculos(productos), [productos]);
 
   // Paso 2: modelos de la marca elegida
-  const modelos = useMemo(() => {
-    const s = new Set<string>();
-    productos.forEach((p) =>
-      p.vehiculos.forEach((v) => {
-        const x = partir(v);
-        if (x.marca === marca) s.add(x.modelo);
-      })
-    );
-    return [...s].sort();
-  }, [productos, marca]);
+  const modelos = useMemo(() => modelosDeMarca(productos, marca), [productos, marca]);
 
   // Productos compatibles con marca + modelo
   const compatibles = useMemo(
-    () =>
-      productos.filter((p) =>
-        p.vehiculos.some((v) => {
-          const x = partir(v);
-          return x.marca === marca && x.modelo === modelo;
-        })
-      ),
+    () => compatiblesCon(productos, marca, modelo),
     [productos, marca, modelo]
   );
 

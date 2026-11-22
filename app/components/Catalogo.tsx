@@ -9,6 +9,7 @@ import {
 } from "@/lib/utils";
 import { Reveal, TarjetaProducto } from "./Comunes";
 import { usarCotizacion } from "./Cotizacion";
+import { buscarProductos } from "@/lib/reglas";
 import { registrar } from "@/lib/rastreo";
 
 export default function Catalogo({
@@ -60,12 +61,7 @@ export default function Catalogo({
   };
 
   const q = normalizar(busqueda.trim());
-  const lista = productos.filter(
-    (p) =>
-      (!categoria || p.categoria === categoria) &&
-      (!q ||
-        normalizar([p.referencia, p.nombre, p.marca, ...p.vehiculos].join(" ")).includes(q))
-  );
+  const lista = buscarProductos(productos, busqueda, categoria ?? "");
   const nombreCat = categorias.find((c) => c.slug === categoria)?.nombre;
 
   const titulo = q

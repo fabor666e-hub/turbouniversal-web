@@ -4,6 +4,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { DataSource } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
 import { AppModule } from '../src/app.module';
 import { configurarApp } from '../src/configurar-app';
 
@@ -112,6 +113,49 @@ describe('B4 · Autenticación', () => {
     await api.patch('/api/productos/TB-1001/stock').send({ delta: 1 }).expect(401);
     await api.delete('/api/productos/TB-1001').expect(401);
     await api.get('/api/productos/TB-1001').expect(200); // sigue existiendo
+  });
+});
+
+// Acceso cruzado: nadie que no sea el administrador puede leer ni cambiar datos del panel,
+// aunque fabrique o reutilice un token.
+describe('Acceso cruzado · rutas del administrador', () => {
+  const rutas = (h: Record<string, string>) => [
+    api.get('/api/panel/resumen').set(h),
+    api.get('/api/cotizaciones').set(h),
+    api.post('/api/productos').set(h).send({}),
+    api.patch('/api/productos/TB-1001/stock').set(h).send({ delta: -1 }),
+    api.delete('/api/productos/TB-1001').set(h),
+  ];
+
+  it('un token firmado con otro secreto responde 401 en todas las rutas', async () => {
+    const falso = new JwtService({ secret: 'secreto-de-otro-equipo' }).sign({ rol: 'admin' });
+    for (const r of rutas({ Authorization: `Bearer ${falso}` })) {
+      expect((await r).status).toBe(401);
+    }
+  });
+
+  it('un token válido pero sin rol admin responde 401', async () => {
+    const sinRol = new JwtService({ secret: process.env.JWT_SECRETO }).sign({ rol: 'cliente' });
+    for (const r of rutas({ Authorization: `Bearer ${sinRol}` })) {
+      expect((await r).status).toBe(401);
+    }
+  });
+
+  it('un token vencido responde 401', async () => {
+    const vencido = new JwtService({ secret: process.env.JWT_SECRETO }).sign(
+      { rol: 'admin', exp: Math.floor(Date.now() / 1000) - 60 },
+    );
+    expect((await api.get('/api/panel/resumen').set({ Authorization: `Bearer ${vencido}` })).status).toBe(401);
+  });
+
+  it('la PANEL_CLAVE no sirve como token ni el token sin "Bearer"', async () => {
+    expect((await api.get('/api/panel/resumen').set({ Authorization: `Bearer ${process.env.PANEL_CLAVE}` })).status).toBe(401);
+    expect((await api.get('/api/panel/resumen').set({ Authorization: token })).status).toBe(401);
+  });
+
+  it('nada de lo anterior cambió el stock de TB-1001', async () => {
+    const r = await api.get('/api/productos/TB-1001').expect(200);
+    expect(r.body.stock).toBe(6);
   });
 });
 
@@ -240,6 +284,7 @@ describe('B3 · Eventos y panel', () => {
     const r = await api.get('/api/panel/resumen').set(admin()).expect(200);
     expect(r.body.totales).toEqual({ vistas: 1, busquedas: 1, agregados: 0, cotizaciones: 2 });
     expect(r.body.masBuscados[0]).toEqual({ valor: 'npr', cantidad: 1 });
+    expect(r.body.masAgregados).toEqual([]);
     expect(r.body.vehiculosAsistente[0].valor).toBe('modelo:Chevrolet NPR');
     expect(r.body.stockBajo.every((p: { stock: number }) => p.stock <= 3)).toBe(true);
     expect(r.body.stockBajo.map((p: { referencia: string }) => p.referencia)).toContain('TB-5001');

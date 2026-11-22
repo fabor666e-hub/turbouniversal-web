@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { FACEBOOK, INSTAGRAM, LINK_CATALOGO, NUMERO_WHATSAPP, precio } from "@/lib/utils";
 import { usarCotizacion } from "./Cotizacion";
 import { guardarCotizacion } from "@/lib/rastreo";
+import { cotizacionLista, mensajeWhatsApp } from "@/lib/reglas";
 import { IconoCorreo, IconoReloj, IconoTelefono, IconoUbicacion, IconoWhatsApp } from "./Iconos";
 
 
@@ -308,38 +309,31 @@ export function PanelCotizacion() {
   const [telefono, setTelefono] = useState("");
   const [aceptaDatos, setAceptaDatos] = useState(false);
 
-  const digitos = telefono.replace(/\D/g, "").length;
-  const formularioCompleto =
-    nombre.trim().length > 1 && digitos >= 7 && digitos <= 15 && aceptaDatos;
+  const formularioCompleto = cotizacionLista(nombre, telefono, aceptaDatos);
 
   const enviarWhatsApp = () => {
-    const lineas = items.map(
-      (i) => `• ${i.cantidad} x ${i.p.nombre} (Ref. ${i.p.referencia})`
-    );
-    const mensaje = [
-      "Hola, quiero cotizar los siguientes productos:",
-      "",
-      ...lineas,
-      "",
-      `Nombre: ${nombre}`,
-      `Teléfono: ${telefono}`,
-    ].join("\n");
-    guardarCotizacion({
-      nombre: nombre.trim(),
-      telefono: telefono.trim(),
-      aceptaDatos,
-      items: items.map((i) => ({
-        referencia: i.p.referencia,
-        nombre: i.p.nombre,
-        cantidad: i.cantidad,
-        precio: i.p.precio,
-      })),
-      total: totalPrecio,
-    });
-    window.open(
-      `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensaje)}`,
-      "_blank"
-    );
+    const mensaje = mensajeWhatsApp(items, nombre, telefono);
+    // Primero se abre WhatsApp (si el navegador bloquea la ventana nueva, se abre en esta misma).
+    const url = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
+    const ventana = window.open(url, "_blank");
+    if (!ventana) window.location.assign(url);
+
+    try {
+      guardarCotizacion({
+        nombre: nombre.trim(),
+        telefono: telefono.trim(),
+        aceptaDatos,
+        items: items.map((i) => ({
+          referencia: i.p.referencia,
+          nombre: i.p.nombre,
+          cantidad: i.cantidad,
+          precio: i.p.precio,
+        })),
+        total: totalPrecio,
+      });
+    } catch (e) {
+      console.error("Cotización:", e); // guardar nunca debe impedir que se abra WhatsApp
+    }
   };
 
   return (
@@ -373,7 +367,7 @@ export function PanelCotizacion() {
           ) : (
             <ul className="space-y-4">
               {items.map(({ p, cantidad }) => (
-                <li key={p.referencia} className="rounded-xl bg-slate-50 p-4">
+                <li key={p.referencia} data-ref={p.referencia} className="rounded-xl bg-slate-50 p-4">
                   <div className="flex justify-between gap-2">
                     <div>
                       <p className="font-semibold text-[#1a2150]">{p.nombre}</p>
@@ -390,6 +384,7 @@ export function PanelCotizacion() {
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => cambiar(p.referencia, -1)}
+                        aria-label="Quitar una unidad"
                         className="h-8 w-8 rounded-full border border-slate-300 font-bold hover:bg-slate-200"
                       >
                         −
@@ -397,6 +392,7 @@ export function PanelCotizacion() {
                       <span className="w-6 text-center font-semibold">{cantidad}</span>
                       <button
                         onClick={() => cambiar(p.referencia, 1)}
+                        aria-label="Agregar una unidad"
                         disabled={cantidad >= p.stock}
                         className="h-8 w-8 rounded-full border border-slate-300 font-bold hover:bg-slate-200 disabled:opacity-30"
                       >

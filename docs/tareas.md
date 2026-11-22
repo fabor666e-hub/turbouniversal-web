@@ -48,7 +48,24 @@ Ciclo de cada tarea: implementar UNA → probar en el navegador → commit → m
 - [x] 4.10 B5 · Despliegue en Render: https://turbouniversal-api-evth.onrender.com/api (Supabase por Session pooler)
 - [x] 4.11 Conectar el front a la API (`NEXT_PUBLIC_API_URL`), con respaldo a Supabase directo si la API no responde
 
+## Calidad y operación (U5)
+- [x] 5.1 Reglas de negocio de F1–F3 en `lib/reglas.ts` y pruebas unitarias (`tests/unit`)
+- [x] 5.2 Pruebas e2e de F1–F3 con Playwright (`tests/e2e`), incluida la regla crítica
+- [x] 5.3 Pruebas de acceso cruzado en el front (panel) y en la API (tokens falsos, vencidos, sin rol)
+- [x] 5.4 CI en GitHub Actions (`.github/workflows/ci.yml`): front y back
+- [ ] 5.5 Proteger `main` en GitHub (PR obligatorio + CI en verde)
+- [x] 5.6 Auditoría propia (`docs/calidad/interventoria.md`): 14 hallazgos, 11 corregidos
+- [ ] 5.7 Registrar los issues de la interventoría cruzada y sus correcciones
+- [ ] 5.8 Crear Supabase `turboman-dev` con `docs/operacion/esquema-supabase.sql` y variables por entorno en Vercel
+- [ ] 5.9 Redirect URLs en Supabase (prod y dev)
+- [ ] 5.10 Evidencia de un PR → preview → producción y de un rollback (`docs/operacion/evidencias/`)
+- [x] 5.11 Runbook de despliegue (`docs/operacion/despliegue.md`)
+- [x] 5.12 Arquitectura desplegada con Mermaid y equivalentes AWS
+- [x] 5.13 README, decisiones y bitácora (métricas y riesgos) al día
+- [ ] 5.14 Cambiar `PANEL_CLAVE` por una clave propia en Render y Vercel (hallazgo A-04)
+- [ ] 5.15 Revisar la URL de producción antes del demo day (checklist del runbook)
+
 ## Pendientes
 - [ ] 3.2 Reemplazar las fotos de Nosotros que muestran logotipos de otras marcas
-- [ ] 3.4 Política de tratamiento de datos (Ley 1581) y casilla en la cotización
+- [ ] 3.4 Política de tratamiento de datos (Ley 1581) publicada en el sitio (la casilla en la cotización ya está)
 - [ ] 3.5 Confirmar con la empresa el número de WhatsApp, la dirección de Medellín y teléfono y horario de Cali y Duitama

@@ -21,6 +21,15 @@
 | 2026-11 | Contrato de la API antes del código (docs/contratos/api.md) | Método SDD: front y back se ponen de acuerdo en un documento; las specs B1 a B5 tienen criterios verificables con curl o Postman. |
 | 2026-11 | La API en Render usa la base de Supabase (no una base nueva en Render) | La base gratuita de Render vence a los 30 días; Supabase ya tiene los datos y solo se pausa por inactividad. Se conecta por el Session pooler (IPv4) con SSL. |
 | 2026-11 | El front pasa por la API y Supabase queda como respaldo | La API valida y calcula precios en el servidor. Render gratis tarda ~50 s en despertar: las lecturas esperan 4 s y luego leen Supabase directo; eventos y cotizaciones se guardan directo si la API falla. Las escrituras del administrador no se repiten en Supabase si la API tarda, para no duplicar cambios. |
+| 2026-11 | Playwright para pruebas unitarias y e2e del front | Un solo ejecutor para las dos clases de prueba y para el navegador. Vitest no se pudo instalar (conflicto de dependencias de npm con su complemento de navegador); Playwright ya estaba en el entorno y corre TypeScript con los alias `@/`. |
+| 2026-11 | Reglas de negocio del front en `lib/reglas.ts` | Separarlas de los componentes de React permite probarlas sin navegador; los componentes solo llaman esas funciones. |
+| 2026-11 | Las e2e corren con los datos locales (sin Supabase ni API) | Resultados repetibles en el CI y sin tocar la base de producción. La parte de base de datos se prueba en `backend/test` contra un PostgreSQL desechable del CI. |
+| 2026-11 | Regla crítica = precio y total calculados en el servidor y nunca más que el stock; acceso cruzado = sin clave nadie ve ni cambia datos del panel | Son las dos reglas cuyo fallo causa daño real (precios alterados, ventas sin inventario, exposición de datos de clientes). Se prueban en el front y en la API. |
+| 2026-11 | CI en GitHub Actions y `main` protegida | Un despliegue roto llegó a producción por subir archivos a medias; con PR obligatorio y CI en verde eso ya no puede pasar. |
+| 2026-11 | Entornos separados: Supabase `turboman` (prod) y `turboman-dev` (dev y previews) | Los previews de cada PR y el trabajo local no deben escribir en la base real. Los previews no usan la API de Render porque esa API está conectada a producción. |
+| 2026-11 | Rollback con Instant Rollback de Vercel y Rollback de Render | Vuelven en segundos a un despliegue que funcionaba sin recompilar; las migraciones solo agregan, así que un rollback de código no daña datos. |
+| 2026-11 | Next.js 16.4.6 (antes 16.3.8) | `npm audit` reportó vulnerabilidades críticas en 16.3.8; 16.4.6 es la versión corregida de la misma línea. |
+| 2026-11 | RLS en la tabla `migrations` de TypeORM | El Security Advisor de Supabase la marcó como expuesta a la clave pública; se protegió en producción y en una migración para las bases nuevas. |
 
 ## Rúbrica de las variantes (1 = bajo, 3 = alto)
 

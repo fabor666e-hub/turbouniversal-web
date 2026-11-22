@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import type { Producto } from "@/data/productos";
 import { fotoDe, precio } from "@/lib/utils";
+import { estadoStock } from "@/lib/reglas";
 import { usarCotizacion } from "./Cotizacion";
 import { IconoTurbo } from "./Iconos";
 
@@ -72,9 +73,10 @@ export function TurboAnimado() {
 }
 
 export function EtiquetaStock({ stock }: { stock: number }) {
-  if (stock === 0)
+  const estado = estadoStock(stock);
+  if (estado === "agotado")
     return <span className="rounded px-2 py-0.5 text-xs font-semibold text-red-700 bg-red-50 ring-1 ring-red-200">Agotado</span>;
-  if (stock <= 3)
+  if (estado === "pocas")
     return <span className="rounded px-2 py-0.5 text-xs font-semibold text-amber-700 bg-amber-50 ring-1 ring-amber-200">Pocas unidades ({stock})</span>;
   return <span className="rounded px-2 py-0.5 text-xs font-semibold text-green-700 bg-green-50 ring-1 ring-green-200">Disponible ({stock})</span>;
 }
@@ -85,7 +87,7 @@ export function TarjetaProducto({ p }: { p: Producto }) {
   const foto = fotoDe(p);
 
   return (
-    <div className="flex h-full flex-col rounded-lg border border-slate-200 bg-white p-4 transition duration-300 hover:border-slate-300 hover:shadow-md">
+    <div data-ref={p.referencia} className="flex h-full flex-col rounded-lg border border-slate-200 bg-white p-4 transition duration-300 hover:border-slate-300 hover:shadow-md">
       <div className="mb-4 flex aspect-[4/3] items-center justify-center overflow-hidden rounded-md bg-slate-50">
         {foto ? (
           // eslint-disable-next-line @next/next/no-img-element
